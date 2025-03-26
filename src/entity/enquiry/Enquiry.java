@@ -3,7 +3,7 @@ package entity.enquiry;
 import entity.btoProject.BTOProject;
 
 public class Enquiry {
-    private int id;
+    public int id;
     private String applicantNRIC;
     private BTOProject project;
     private String message;
@@ -15,7 +15,7 @@ public class Enquiry {
         System.out.println("Successfully edited the enquiry message!");
     }
 
-    public void view(int enqID) {
+    public void view() {
         System.out.println("Enquiry details: ");
         System.out.println("ID: "+this.id);
         System.out.println("Applicant NRIC:" +this.applicantNRIC);

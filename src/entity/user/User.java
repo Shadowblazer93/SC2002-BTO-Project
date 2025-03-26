@@ -22,5 +22,6 @@ public class User {
         
         this.password = newPassword;
         System.out.println("Password successfully changed.");
+        // logout afterwards
     }
 }
