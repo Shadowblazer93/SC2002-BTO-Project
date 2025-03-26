@@ -1,4 +1,6 @@
-package user;
+package entity.enquiry;
+
+import entity.btoProject.BTOProject;
 
 public class Enquiry {
     private int id;

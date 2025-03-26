@@ -1,4 +1,4 @@
-package user;
+package entity.btoProject;
 
 import java.time.LocalDate;
 
