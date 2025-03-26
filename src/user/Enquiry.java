@@ -1,3 +1,5 @@
+package src.user;
+
 public class Enquiry {
     private int id;
     private String applicantNRIC;
