@@ -1,3 +1,4 @@
+package user;
 public class Applicant extends User { 
     private BTOProject appliedProject;
     private String applicationStatus;
