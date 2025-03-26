@@ -1,4 +1,4 @@
-package user;
+package entity.user;
 import java.util.Scanner;
 
 public class User {

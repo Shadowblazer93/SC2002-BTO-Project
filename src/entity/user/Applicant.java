@@ -1,4 +1,8 @@
-package user;
+package entity.user;
+
+import entity.btoProject.BTOProject;
+import entity.enquiry.Enquiry;
+
 public class Applicant extends User { 
     private BTOProject appliedProject;
     private String applicationStatus;

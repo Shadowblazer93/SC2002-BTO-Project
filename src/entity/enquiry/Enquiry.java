@@ -1,4 +1,4 @@
-package src.user;
+package user;
 
 public class Enquiry {
     private int id;
