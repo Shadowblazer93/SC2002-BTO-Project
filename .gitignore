@@ -1,0 +1,6 @@
+.vscode/
+
+# Compiled files
+bin/
+
+lib/
