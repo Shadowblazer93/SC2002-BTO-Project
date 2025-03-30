@@ -1,14 +1,10 @@
 package controller;
 
+import entity.user.User;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
-
-import entity.user.User;
-import entity.user.Applicant;
-import entity.user.Manager;
-import entity.user.Officer;
 
 public class LoginController {
 
@@ -31,13 +27,16 @@ public class LoginController {
 
         try {
             if(validateLogin(applicantFile, nric, password)){
-                System.out.println("Login successful as Applicant.");            }
+                System.out.println("Login successful as Applicant.");      
+                currentUser = new Applicant(nric, password);    
+            }
             else if (validateLogin(managerFile, nric, password)){
                 System.out.println("Login successful as Manager");
+                currentUser = new Manager(nric, password);
             }
             else if (validateLogin(officerFile, nric, password)) {
                 System.out.println("Login successful as Officer.");
-                // Redirect to Officer menu
+                currentUser = new Officer(nric, password);
             }
             else{
                 System.out.println("Invalid credentials, please try again!");
