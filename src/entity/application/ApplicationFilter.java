@@ -1,6 +1,6 @@
 package entity.application;
 
-import btoProject.BTOProject;
+import entity.project.BTOProject;
 
 public interface ApplicationFilter {
     

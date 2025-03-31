@@ -1,6 +1,6 @@
 package entity.user;
 
-import entity.btoProject.BTOProject;
+import entity.project.BTOProject;
 
 public class Officer extends User{
     private String officerName;

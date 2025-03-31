@@ -1,6 +1,7 @@
 package entity.user;
 import java.util.Scanner;
 
+// Change to interface ?
 public class User {
     private String UserID;
     private String password;
@@ -23,5 +24,9 @@ public class User {
         this.password = newPassword;
         System.out.println("Password successfully changed.");
         // logout afterwards
+    }
+
+    public String getUserID() {
+        return UserID;
     }
 }

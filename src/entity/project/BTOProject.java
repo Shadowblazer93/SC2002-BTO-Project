@@ -1,8 +1,8 @@
-package entity.btoProject;
+package entity.project;
 
-import java.time.LocalDate;
-
+import entity.user.Manager;
 import enums.FlatType;
+import java.time.LocalDate;
 
 public class BTOProject {
     private String projectName;
@@ -14,14 +14,21 @@ public class BTOProject {
     private Manager managerInCharge;
     private int availableOfficerSlots;
 
-    public BTOProject(String projectName, String neighbourhood, FlatType flatType, LocalDate openingDate, LocalDate closingDate, Manager managerInCharge) {
+    public BTOProject(String projectName, Manager manager) {
         this.projectName = projectName;
-        this.neighbourhood = neighbourhood;
-        this.flatType = flatType;
         this.numUnits = 0;
-        this.openingDate = openingDate;
-        this.closingDate = closingDate;
-        this.managerInCharge = managerInCharge;
         this.availableOfficerSlots = 10;    // Max 10
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public void setNeighbourhood(String neighbourhood) {
+        this.neighbourhood = neighbourhood;
     }
 }

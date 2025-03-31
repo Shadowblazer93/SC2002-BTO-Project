@@ -1,6 +1,6 @@
 package entity.enquiry;
 
-import entity.btoProject.BTOProject;
+import entity.project.BTOProject;
 
 public class Enquiry {
     public int id;

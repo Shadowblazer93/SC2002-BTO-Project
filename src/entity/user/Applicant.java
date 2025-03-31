@@ -1,7 +1,8 @@
 package entity.user;
 
-import entity.btoProject.BTOProject;
 import entity.enquiry.Enquiry;
+import entity.project.BTOProject;
+import java.util.Scanner;
 
 public class Applicant extends User { 
     private BTOProject appliedProject;
