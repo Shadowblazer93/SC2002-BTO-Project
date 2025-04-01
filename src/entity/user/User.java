@@ -1,13 +1,15 @@
 package entity.user;
 import java.util.Scanner;
 
+import enums.UserRole;
+
 // Change to interface ?
 public class User {
     private String UserID;
     private String password;
     private int age;
     private String maritalStatus;
-    // private UserRole role;
+    private UserRole userRole;
 
     public boolean login(String NRIC,String loginPass) {
         if (NRIC.equals(UserID)&&loginPass.equals(password)) {return true;}

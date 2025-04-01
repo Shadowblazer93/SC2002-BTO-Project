@@ -1,6 +1,7 @@
 package entity.enquiry;
 
 import entity.project.BTOProject;
+import enums.EnquiryStatus;
 
 public class Enquiry {
     public int id;
@@ -8,7 +9,7 @@ public class Enquiry {
     private BTOProject project;
     private String message;
     private String response;
-    private String status; // "open", "closed"
+    private EnquiryStatus status;
 
     public void editMessage(String msg) {
         this.message = msg;
@@ -22,12 +23,12 @@ public class Enquiry {
         // System.out.println("BTO Project Details");
         System.out.println("Message: "+this.message);
         System.out.println("Status: "+this.status);
-        if (status=="closed") System.out.println("Response:"+this.response);
+        if (status==EnquiryStatus.CLOSED) System.out.println("Response:"+this.response);
     }
 
     public void reply(String resp) {
         this.response = resp;
-        this.status = "closed";
+        this.status = EnquiryStatus.CLOSED;
         System.out.println("Successfully responded to the enquiry.");
     }
 }
