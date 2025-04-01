@@ -3,6 +3,7 @@ package boundary;
 import controller.BTOProjectController;
 import entity.project.BTOProject;
 import entity.user.Manager;
+import java.util.Map;
 import java.util.Scanner;
 
 public class BTOProjectMain {
@@ -50,7 +51,7 @@ public class BTOProjectMain {
                         System.out.println("Invalid option");
                     }
                 }
-            } while (choice != 3);
+            } while (choice != 6);
         }
     }
 
@@ -58,10 +59,24 @@ public class BTOProjectMain {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.print("Project name: ");
             String projectName = sc.nextLine();
+            if (projectController.projectExist(projectName)) {
+                System.out.println("Project already exists.");
+                return;
+            }
 
-            BTOProject createdProject = projectController.createProject(manager, projectName);
+            System.out.print("Project neighbourhood: ");
+            String neighbourhood = sc.nextLine();
+            System.out.print("""
+                    Flat Type:
+                    2 for Two-Room
+                    3 for Three-Room
+                    Enter number: 
+                    """);
+            int flatType = sc.nextInt();
+
+            BTOProject createdProject = projectController.createProject(manager, projectName, neighbourhood);
             if (createdProject == null) {
-                System.out.println("Could not create project");
+                System.out.println("Could not create project.");
             } else {
                 System.out.printf("Project %s successfully created!", projectName);
             }
@@ -72,17 +87,29 @@ public class BTOProjectMain {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.print("Enter name of project to edit: ");
             String projectName = sc.nextLine();
-            System.out.println("""
-                    What would you like to edit?
-                    1. Project name
-                    2. Project neighbourhood
-                    3. Project flat type
-                    """);
+            Map<Integer, String[]> options = Map.of(
+                1, new String[]{"Project Name", "NAME"},
+                2, new String[]{"Project neighbourhood", "NEIGHBOURHOOD"},
+                3, new String[]{"Project flat type", "FLAT_TYPE"},
+                4, new String[]{"Number of units", "NUM_UNITS"},
+                5, new String[]{"Application opening date", "OPENING_DATE"},
+                6, new String[]{"Application opening date", "CLOSING_DATE"}
+            );
+            System.out.println("What would you like to edit?");
+            options.forEach((key, value) -> System.out.println(key + ". " + value[0]));
+
+            System.out.print("(Enter number) Attribute to edit: ");
             int choice = sc.nextInt();
+            sc.nextLine();
+
+            String attribute = options.get(choice)[1];
+            if (attribute == null) {
+                System.out.println("Invalid choice");
+            }
             System.out.print("Enter new value: ");
             String value = sc.nextLine();
 
-            boolean edited = projectController.editProject(manager, projectName, choice, value);
+            boolean edited = projectController.editProject(manager, projectName, attribute, value);
             if (edited) {
                 System.out.println("Project updated!");
                 // print update project details ?

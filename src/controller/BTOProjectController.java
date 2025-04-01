@@ -12,29 +12,42 @@ public class BTOProjectController {
     public BTOProjectController() {
     }
 
-    public BTOProject createProject(Manager manager, String projectName) {
-        BTOProject project = new BTOProject(projectName, manager);
+    public BTOProject createProject(Manager manager, String projectName, String neighbourhood) {
+        // Check if project exists
+        if (allProjects.containsKey(projectName)) {
+            return null;
+        }
+
+        BTOProject project = new BTOProject(projectName, manager, neighbourhood);
         allProjects.put(projectName, project);
         manager.addProject(project);
         return project;
     }
 
-    public boolean editProject(Manager manager, String projectName, int choice, String value) {
+    public boolean editProject(Manager manager, String projectName, String attribute, String value) {
         BTOProject projectEdit = manager.getManagedProjects().get(projectName);
         if (projectEdit == null) {  // Project not found
             return false;
         }
 
-        switch (choice) {
-            case 1 -> { // Edit project name
+        switch (attribute) {
+            case "NAME" -> {    // Edit project name
                 allProjects.remove(projectName);    // Remove project in hashmap
+                manager.deleteProject(projectEdit); // Remove project for manager
                 projectEdit.setProjectName(value);
                 allProjects.put(value, projectEdit);
+                manager.addProject(projectEdit);
             }
-            case 2 -> { // Edit neighbourhood
+            case "NEIGHBOURHOOD" -> { // Edit neighbourhood
                 projectEdit.setNeighbourhood(value);
             }
-            case 3 -> { // Edit flat type
+            case "FLAT_TYPE" -> { // Edit flat type
+
+            }
+            case "NUM_UNITS" -> {
+
+            }
+            case "OPENING_DATE" -> {
 
             }
             default -> throw new AssertionError();
@@ -52,5 +65,9 @@ public class BTOProjectController {
         manager.deleteProject(projectDelete);
 
         return true;
+    }
+
+    public boolean projectExist(String projectName) {
+        return allProjects.containsKey(projectName);
     }
 }

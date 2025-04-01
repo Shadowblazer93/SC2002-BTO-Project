@@ -13,10 +13,13 @@ public class BTOProject {
     private LocalDate closingDate;
     private Manager managerInCharge;
     private int availableOfficerSlots;
+    private boolean visible;
 
-    public BTOProject(String projectName, Manager manager) {
+    public BTOProject(String projectName, Manager manager, String neighbourhood) {
         this.projectName = projectName;
+        this.neighbourhood = neighbourhood;
         this.numUnits = 0;
+        this.managerInCharge = manager;
         this.availableOfficerSlots = 10;    // Max 10
     }
 
