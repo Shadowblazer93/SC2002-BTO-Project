@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class Manager extends User {
 	// List of projects owned by manager
-	private static Map<String, BTOProject> managedProjects= new HashMap<>();
+	private Map<String, BTOProject> managedProjects= new HashMap<>();
 
 	// Project visibility ON and still ongoing
 	boolean projectActive;

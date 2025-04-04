@@ -11,6 +11,27 @@ public class Applicant extends User {
     private Enquiry Enquiries[];
     private int maxEnqId = 0;
 
+    public Applicant(BTOProject appliedProject, String applicationStatus, String flatType,
+    Enquiry Enquiries[], int maxEnqID){
+        this.appliedProject = appliedProject;
+        this.applicationStatus = applicationStatus;
+        this.flatType = flatType;
+        this.Enquiries = Enquiries[];
+        this.maxEnqId = maxEnqID;
+    }
+
+    public String getflatType(){
+        return flatType;
+    }
+
+    public void updateStatus(String newStatus){
+        this.applicationStatus = newStatus;
+    }
+
+    public void updateflatType(String newflatType){
+        this.flatType = newflatType;
+    }
+
     public void projectView(BTOProject p) {}
     public void projectApply(BTOProject p) {}
     public void projectWithdraw(BTOProject p) {}
