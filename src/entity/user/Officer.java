@@ -102,8 +102,8 @@ public class Officer extends Applicant{
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different Project!");
         } else {
-            String flatType = application.getflatType();
-            Map<String,Integer> unitCounts = assignedProject.getunitCounts();
+            FlatType flatType = application.getflatType();
+            Map<FlatType,Integer> unitCounts = assignedProject.getunitCounts();
             unitCounts.put(flatType, unitCounts.get(flatType) - 1);
         }
     }
@@ -162,7 +162,7 @@ public class Officer extends Applicant{
         BTOProject project = application.getProject();
         String projectName = project.getProjectName();
         String neighbourhood = project.getNeighbourhood();
-        Map<String,Integer> unitCounts = project.getunitCounts();
+        Map<FlatType,Integer> unitCounts = project.getunitCounts();
         
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer does not have access to this application!");
@@ -175,10 +175,11 @@ public class Officer extends Applicant{
             System.out.println("Flat type booked: " + flatType);
             System.out.println("Project name: " + projectName);
             System.out.println("Neighbourhood: " + neighbourhood);
-            for (Map.Entry<String, Integer> entry : unitCounts.entrySet()) {
-                String ProjectflatType = entry.getKey();
+            for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
+                FlatType ProjectflatType = entry.getKey();
+                int numRooms = ProjectflatType.getNumRooms();
                 Integer units = entry.getValue();
-                System.out.println(ProjectflatType + " has " + units + " units.");
+                System.out.printf("%d-Room has %d units\n", numRooms, units);
             System.out.println("===========================");
             }
         }   

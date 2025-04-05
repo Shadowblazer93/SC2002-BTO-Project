@@ -2,6 +2,9 @@
 .classpath
 .project
 
+.idea/
+*.iml
+
 # Compiled files
 bin/
 

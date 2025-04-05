@@ -1,17 +1,17 @@
 package entity.application;
 
 import entity.project.BTOProject;
-import entity.user.Applicant;
 import enums.ApplicationStatus;
+import enums.FlatType;
 
 public class Application {
     private String applicantNRIC;
     private BTOProject project;
-    private String flatType;
+    private FlatType flatType;
     private ApplicationStatus status;
     
     // Constructor, getters, setters
-    public Application(String applicantNRIC, BTOProject project, String flatType, ApplicationStatus status){
+    public Application(String applicantNRIC, BTOProject project, FlatType flatType, ApplicationStatus status){
         this.applicantNRIC = applicantNRIC;
         this.project = project;
         this.flatType = flatType;
@@ -23,7 +23,7 @@ public class Application {
     public BTOProject getProject(){
         return project;
     }
-    public String getflatType(){
+    public FlatType getflatType(){
         return flatType;
     }
     public ApplicationStatus getStatus(){

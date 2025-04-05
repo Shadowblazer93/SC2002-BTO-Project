@@ -2,6 +2,8 @@ package controller;
 
 import entity.project.BTOProject;
 import entity.user.Manager;
+import enums.FlatType;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,47 +14,19 @@ public class BTOProjectController {
     public BTOProjectController() {
     }
 
-    public BTOProject createProject(Manager manager, String projectName, String neighbourhood) {
+    public BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
+                                    Map<FlatType, Integer> unitCounts, LocalDate openingDate, 
+                                    LocalDate closingDate, int availableOfficerSlots) {
         // Check if project exists
         if (allProjects.containsKey(projectName)) {
             return null;
         }
 
-        BTOProject project = new BTOProject(projectName, manager, neighbourhood);
+        BTOProject project = new BTOProject(projectName, manager, neighbourhood, unitCounts, openingDate, 
+                                            closingDate, availableOfficerSlots);
         allProjects.put(projectName, project);
         manager.addProject(project);
         return project;
-    }
-
-    public boolean editProject(Manager manager, String projectName, String attribute, String value) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
-            return false;
-        }
-
-        switch (attribute) {
-            case "NAME" -> {    // Edit project name
-                allProjects.remove(projectName);    // Remove project in hashmap
-                manager.deleteProject(projectEdit); // Remove project for manager
-                projectEdit.setProjectName(value);
-                allProjects.put(value, projectEdit);
-                manager.addProject(projectEdit);
-            }
-            case "NEIGHBOURHOOD" -> { // Edit neighbourhood
-                projectEdit.setNeighbourhood(value);
-            }
-            case "FLAT_TYPE" -> { // Edit flat type
-
-            }
-            case "NUM_UNITS" -> {
-
-            }
-            case "OPENING_DATE" -> {
-
-            }
-            default -> throw new AssertionError();
-        }
-        return true;
     }
 
     public boolean deleteProject(Manager manager, String projectName) {
@@ -69,5 +43,63 @@ public class BTOProjectController {
 
     public boolean projectExist(String projectName) {
         return allProjects.containsKey(projectName);
+    }
+
+    public boolean editProjectName(Manager manager, String projectName, String newProjectName) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        allProjects.remove(projectName);    // Remove project in hashmap
+        manager.deleteProject(projectEdit); // Remove project for manager
+        projectEdit.setProjectName(newProjectName);
+        allProjects.put(newProjectName, projectEdit);
+        manager.addProject(projectEdit);
+        return true;
+    }
+
+    public boolean editNeighbourhood(Manager manager, String projectName, String neighbourhood) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        projectEdit.setNeighbourhood(neighbourhood);
+        return true;
+    }
+
+    public boolean editNumUnits(Manager manager, String projectName, FlatType flatType, int numUnits) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        projectEdit.setNumUnits(flatType, numUnits); // Assuming BTOProject has a method to set number of units
+        return true;
+    }
+
+    public boolean editOpeningDate(Manager manager, String projectName, LocalDate openingDate) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        projectEdit.setOpeningDate(openingDate);
+        return true;
+    }
+
+    public boolean editClosingDate(Manager manager, String projectName, LocalDate closingDate) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        projectEdit.setClosingDate(closingDate);
+        return true;
+    }
+
+    public boolean editVisibility(Manager manager, String projectName, boolean visible) {
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {  // Project not found
+            return false;
+        }
+        projectEdit.setVisible(visible);
+        return true;
     }
 }
