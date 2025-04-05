@@ -16,7 +16,7 @@ public class Applicant extends User {
         this.appliedProject = appliedProject;
         this.applicationStatus = applicationStatus;
         this.flatType = flatType;
-        this.Enquiries = Enquiries[];
+        this.Enquiries = Enquiries;
         this.maxEnqId = maxEnqID;
     }
 

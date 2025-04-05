@@ -11,6 +11,8 @@ public class Enquiry {
     private String response;
     private EnquiryStatus status;
 
+
+    
     public void editMessage(String msg) {
         this.message = msg;
         System.out.println("Successfully edited the enquiry message!");

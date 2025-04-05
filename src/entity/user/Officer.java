@@ -14,8 +14,14 @@ public class Officer extends Applicant{
     private String officerNRIC;
     private BTOProject assignedProject;
 
-    public Officer (String username, String password, String officerName, String officerNRIC){
-        super(username, password);
+    //hdb officer is a subset of applicant
+    public Officer(String username, String password, String officerName, String officerNRIC, 
+                   BTOProject appliedProject, String applicationStatus, String flatType, 
+                   Enquiry[] Enquiries, int maxEnqID) {
+        // Initialize the parent class (Applicant) with all necessary arguments
+        super(appliedProject, applicationStatus, flatType, Enquiries, maxEnqID);
+        
+        // Initialize Officer-specific fields
         this.officerName = officerName;
         this.officerNRIC = officerNRIC;
     }
@@ -68,7 +74,7 @@ public class Officer extends Applicant{
     }
     
     public void viewProjectEnquiries() {
-        // Check if the officer is assigned to a project
+    // Check if the officer is assigned to a project
         if (assignedProject == null) {
             System.out.println("No project assigned to the officer.");
             return;
@@ -81,17 +87,13 @@ public class Officer extends Applicant{
         } else {
             System.out.println("Enquiries for project: " + assignedProject.getProjectName());
             for (Enquiry enq : enquiries) {
-                System.out.println("Enquiry ID: " + enq.id);
-                System.out.println("Applicant NRIC: " + enq.applicantNRIC);
-                System.out.println("Message: " + enq.message);
-                System.out.println("Status: " + enq.status);
-                if (enq.status == EnquiryStatus.CLOSED) {
-                    System.out.println("Response: " + enq.response);
-                }
+                // Directly use the 'view' method from Enquiry class to display the enquiry details
+                enq.view();
                 System.out.println("----------------------------");
             }
         }
     }
+
 
     public void updateRemainingFlats(Applicant applicant){
         String NRIC = applicant.getUserID();
