@@ -178,6 +178,7 @@ public class Officer extends Applicant{
                 Integer units = entry.getValue();
                 System.out.println(ProjectflatType + " has " + units + " units.");
             System.out.println("===========================");
+            }
+        }   
     }
-}
 }
