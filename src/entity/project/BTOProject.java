@@ -1,7 +1,7 @@
 package entity.project;
 
+import entity.enquiry.Enquiry;
 import entity.user.Manager;
-import enums.FlatType;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +16,7 @@ public class BTOProject {
     private Manager managerInCharge;
     private int availableOfficerSlots;
     private boolean visible;
+    private Enquiry[] enquiries; 
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, int twoRooms, int threeRooms) {
         this.projectName = projectName;
@@ -31,6 +32,10 @@ public class BTOProject {
 
     public String getProjectName() {
         return projectName;
+    }
+
+    public Enquiry[] getEnquiries() {
+        return this.enquiries; // Returns the array of enquiries
     }
     public String getNeighbourhood(){
         return neighbourhood;

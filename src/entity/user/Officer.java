@@ -1,6 +1,7 @@
 package entity.user;
 
 import entity.project.BTOProject;
+import entity.enquiry.Enquiry;
 import enums.FlatType;
 import controller.ApplicationController;
 import entity.application.Application;
@@ -25,8 +26,13 @@ public class Officer extends Applicant{
 
     //register officer to a project
     public void assignToProject(BTOProject project){
-        this.assignedProject = project;
-        project.assignOfficer(this);
+        if (this.assignedProject != null) {
+            System.out.println("Officer " + officerName + " is already assigned to project " + this.assignedProject.getProjectName());
+        } else {
+            this.assignedProject = project;
+            project.assignOfficer(this);  // Assuming BTOProject has this method
+            System.out.println("Officer " + officerName + " has been assigned to project " + project.getProjectName());
+        }
     }
 
     private boolean hasAccessToApplication(Application application) {
@@ -37,6 +43,54 @@ public class Officer extends Applicant{
         return assignedProject != null && 
                application.getProject() != null && 
                application.getProject().getProjectName().equals(assignedProject.getProjectName());
+    }
+    public void replyEnquiries(int enquiryID, String responseMessage) {
+        // Find the enquiry based on ID
+        Enquiry enquiry = null;
+        boolean found = false;
+
+        // Look through all the enquiries in the project
+        for (Enquiry enq : assignedProject.getEnquiries()) {
+            if (enq.id == enquiryID) {
+                enquiry = enq;
+                found = true;
+                break;
+            }
+        }
+
+        // If the enquiry is found, reply to it
+        if (found) {
+            enquiry.reply(responseMessage);  // Set the response and update the status to CLOSED
+            System.out.println("Response sent successfully.");
+        } else {
+            System.out.println("Enquiry with ID " + enquiryID + " not found.");
+        }
+    }
+    
+    public void viewProjectEnquiries() {
+        // Check if the officer is assigned to a project
+        if (assignedProject == null) {
+            System.out.println("No project assigned to the officer.");
+            return;
+        }
+
+        // Get the list of all enquiries for the assigned project
+        Enquiry[] enquiries = assignedProject.getEnquiries();
+        if (enquiries == null || enquiries.length == 0) {
+            System.out.println("No enquiries for this project.");
+        } else {
+            System.out.println("Enquiries for project: " + assignedProject.getProjectName());
+            for (Enquiry enq : enquiries) {
+                System.out.println("Enquiry ID: " + enq.id);
+                System.out.println("Applicant NRIC: " + enq.applicantNRIC);
+                System.out.println("Message: " + enq.message);
+                System.out.println("Status: " + enq.status);
+                if (enq.status == EnquiryStatus.CLOSED) {
+                    System.out.println("Response: " + enq.response);
+                }
+                System.out.println("----------------------------");
+            }
+        }
     }
 
     public void updateRemainingFlats(Applicant applicant){
