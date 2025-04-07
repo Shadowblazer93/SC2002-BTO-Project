@@ -1,10 +1,12 @@
 package controller;
 
+import boundary.ManagerMain;
 import entity.user.User;
 import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
 import entity.project.BTOProject;
+import enums.UserRole;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -32,16 +34,20 @@ public class LoginController {
         try {
             if(validateLogin(applicantFile, nric, password)){
                 System.out.println("Login successful as Applicant.");      
-                currentUser = new Applicant()
-
+                currentUser = new Applicant();
+                //navigate to applicant page
             }
             else if (validateLogin(managerFile, nric, password)){
                 System.out.println("Login successful as Manager");
-                //currentUser = new Manager(nric, password);
+                currentUser = new Manager(nric, password, UserRole.MANAGER);
+
+                //redirect to ManagerMain
+                ManagerMain managerMain = new ManagerMain((Manager) currentUser);
             }
             else if (validateLogin(officerFile, nric, password)) {
                 System.out.println("Login successful as Officer.");
-                //currentUser = new Officer(nric, password);
+                currentUser = new Officer(nric, password);
+                //navigate to officer page
             }
             else{
                 System.out.println("Invalid credentials, please try again!");
@@ -58,7 +64,7 @@ public class LoginController {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {           //read file line by line
-                String[] parts = line.split(","); //split into NRIC, password....
+                String[] parts = line.split(","); //split into NRIC, password
 
                 if (parts.length >= 2) {  //ensure it has nric and password if not is in incorrect
                     String fileNric = parts[0].trim().toUpperCase();   //get nric
