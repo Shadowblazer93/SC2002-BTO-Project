@@ -48,13 +48,19 @@ public class OfficerMain {
         //print proj
         System.out.print(project);
     }
-    private void manageEnquiries(Officer officer){
+    private void manageEnquiries(Officer officer) {
         System.out.println("Viewing and replying to enquiries...");
         BTOProject project = officer.viewHandledProject();
         if (project != null) {
-            // Assuming the project has a method to get enquiries, this part may need adjustment
             System.out.println("Project Enquiries for " + project.getProjectName());
-            // Display and reply to enquiries
+            // Assuming project has a method to view enquiries
+            for (int i = 0; i < project.getEnquiries().length; i++) {
+                System.out.println("Enquiry ID: " + project.getEnquiries()[i].id + " Message: " + project.getEnquiries()[i].getMessage());
+            }
+            // Simulate replying to an enquiry
+            System.out.print("Enter Enquiry ID to reply: ");
+            int enquiryId = new Scanner(System.in).nextInt();
+            officer.replyEnquiries(enquiryId, "Response message to enquiry.");
         } else {
             System.out.println("No project assigned yet.");
         }

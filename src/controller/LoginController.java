@@ -1,10 +1,12 @@
 package controller;
 
 import boundary.ManagerMain;
+import boundary.OfficerMain;
 import entity.user.User;
 import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
+import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import enums.UserRole;
 import java.io.BufferedReader;
@@ -46,8 +48,16 @@ public class LoginController {
             }
             else if (validateLogin(officerFile, nric, password)) {
                 System.out.println("Login successful as Officer.");
-                currentUser = new Officer(nric, password);
-                OfficerMainMenu officerMain = new ManagerMain((Manager) currentUser);
+                BTOProject assignedProject = null; // Assign the relevant project here
+                Enquiry[] enquiries = new Enquiry[0]; // Assuming no enquiries for now
+                String applicationStatus = "Pending"; // Set the application status
+                String flatType = "Not specified"; // Example flat type
+                int maxEnqID = 0; // Assuming max enquiry ID is 0
+
+                // Now create the Officer object with all required parameters
+                currentUser = new Officer(nric, password, "Officer Name", nric, assignedProject, applicationStatus, flatType, enquiries, maxEnqID);
+
+                OfficerMain officerMain = new OfficerMain((Officer) currentUser);
             }
             else{
                 System.out.println("Invalid credentials, please try again!");
