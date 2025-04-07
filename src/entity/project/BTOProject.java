@@ -72,4 +72,8 @@ public class BTOProject {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+    @Override
+    public String toString() {
+        return "BTO Project Name: " + projectName + ", Neighbourhood: " + neighbourhood + ", Units Available: " + numUnits;
+    }
 }

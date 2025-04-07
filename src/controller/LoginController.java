@@ -47,7 +47,7 @@ public class LoginController {
             else if (validateLogin(officerFile, nric, password)) {
                 System.out.println("Login successful as Officer.");
                 currentUser = new Officer(nric, password);
-                //navigate to officer page
+                OfficerMainMenu officerMain = new ManagerMain((Manager) currentUser);
             }
             else{
                 System.out.println("Invalid credentials, please try again!");
