@@ -4,6 +4,7 @@ import entity.user.User;
 import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
+import entity.project.BTOProject;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -31,15 +32,16 @@ public class LoginController {
         try {
             if(validateLogin(applicantFile, nric, password)){
                 System.out.println("Login successful as Applicant.");      
-                currentUser = new Applicant(nric, password);    
+                currentUser = new Applicant()
+
             }
             else if (validateLogin(managerFile, nric, password)){
                 System.out.println("Login successful as Manager");
-                currentUser = new Manager(nric, password);
+                //currentUser = new Manager(nric, password);
             }
             else if (validateLogin(officerFile, nric, password)) {
                 System.out.println("Login successful as Officer.");
-                currentUser = new Officer(nric, password);
+                //currentUser = new Officer(nric, password);
             }
             else{
                 System.out.println("Invalid credentials, please try again!");

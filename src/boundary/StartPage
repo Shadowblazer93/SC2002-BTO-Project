@@ -1,0 +1,40 @@
+import controller.LoginController;
+import entity.user.*;
+import entity.project.BTOProject;
+import enums.UserRole;
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        //User interface
+        System.out.println("=========================================");
+        System.out.println("   Welcome to the BTO Management System");
+        System.out.println("=========================================");
+        
+        boolean running = true;
+        while (running){
+            System.out.println("Please choose an option:");
+            System.out.println("1. Login");
+            System.out.println("2. Exit");
+            System.out.println("=========================================");
+            int input = sc.nextInt();
+            sc.nextLine();
+            switch (input) {
+                case 1:
+                    LoginController loginController = new LoginController();
+                    loginController.login();
+                    break;
+                case 2:
+                    running = false;
+                    System.out.println("Thank you for using the system, goodbye!");
+                    break;
+                default:
+                    System.out.println("Invalid input! Please re-enter.");
+                    break;
+            }
+        }
+    }
+}
