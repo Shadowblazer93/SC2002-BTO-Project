@@ -46,7 +46,7 @@ public class Enquiry {
         str+= "Enquiry details: \n";
         str+= "ID: "+this.id+"\n";
         str+= "Applicant NRIC:" +this.applicantNRIC+"\n";
-        str+= "BTO Project Details:"+this.project.getProjectName();
+        str+= "BTO Project Details:"+this.project.getProjectName()+"\n";
         str+= "Message: "+this.message+"\n";
         str+= "Status: "+this.status+"\n";
         return str;
