@@ -22,7 +22,8 @@ public class ManagerMain {
                     1. Manage projects
                     2. Manage enquiries
                     3. Manage applications
-                    4. Logout
+                    4. Manage registrations
+                    5. Logout
                     """, manager.getName());
             System.out.print("Option: ");
             int choice = sc.nextInt();
