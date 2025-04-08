@@ -11,10 +11,12 @@ public class User {
     private String maritalStatus;
     private UserRole userRole;
 
-    public User(String UserID, String name, String password) {
+    public User(String UserID, String name, String password, int age, String maritalStatus) {
         this.UserID = UserID;
         this.name = name;
         this.password = password;
+        this.age = age;
+        this.maritalStatus = maritalStatus;
     }
 
     public boolean login(String NRIC,String loginPass) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import enums.FlatType;
 import enums.UserRole;
 
 import java.util.Scanner;
@@ -13,21 +14,23 @@ import java.util.Scanner;
 public class Applicant extends User { 
     private BTOProject appliedProject;
     private String applicationStatus;
-    private String flatType;
+    private FlatType flatType;
     private List<Enquiry> enquiries;
     private UserRole role = UserRole.APPLICANT;
-    private int maxEnqId = 0;
+    private int maxEnqId;
 
-    public Applicant(String UserID, String name, String password, BTOProject appliedProject, String applicationStatus, String flatType, int maxEnqID){
-        super(UserID, name, password);
+    public Applicant(String UserID, String name, int age, String maritalStatus, String password, BTOProject appliedProject, String applicationStatus){
+        super(UserID, name, password, age, maritalStatus);
         this.appliedProject = appliedProject;
         this.applicationStatus = applicationStatus;
-        this.flatType = flatType;
         this.enquiries = new ArrayList<>();
-        this.maxEnqId = maxEnqID;
+        this.maxEnqId = 0;
+
+        if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
+        if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
     }
 
-    public String getflatType(){
+    public FlatType getflatType(){
         return flatType;
     }
 
@@ -35,9 +38,9 @@ public class Applicant extends User {
         this.applicationStatus = newStatus;
     }
 
-    public void updateflatType(String newflatType){
-        this.flatType = newflatType;
-    }
+    // public void updateflatType(String newflatType){
+    //     this.flatType = newflatType;
+    // }
 
     public void projectView(BTOProject p) {}
     public void projectApply(BTOProject p) {}
@@ -109,9 +112,8 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        // Enquiry enq = null;
-        int foundId=-1;
 
+        // Enquiry enq = null;
         // find enquiry
         // for (int i=0;i<Enquiries.length;i++) {
         //     if (Enquiries[i].id==enqId) {
