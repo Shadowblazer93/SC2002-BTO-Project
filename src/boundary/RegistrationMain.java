@@ -1,9 +1,15 @@
 package boundary;
 
+import controller.RegistrationController;
+import entity.registration.Registration;
 import entity.user.Manager;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class RegistrationMain {
+    PrintRegistrations printRegistrations = new PrintRegistrations();
+    RegistrationController registrationController = new RegistrationController();
+
     public void displayMenu(Manager manager) {
         try (Scanner sc = new Scanner(System.in)) {
             int choice = 0;
@@ -23,13 +29,16 @@ public class RegistrationMain {
                 switch(choice) {
                     case 1 -> {
                         // Print registrations for each project managed
-                        displayAllRegistrations();
+                        printRegistrations.printMapList(registrationController.getAllRegistrations());
                     }
                     case 2 -> {
                         // Print projects managed
                         System.out.println("Select project: ");
+                        
+                        List<Registration> registrationList = null;
 
                         // Print registrations in the project
+                        printRegistrations.printList(registrationList);
 
                         System.out.println("Select registrations to approve: ");
                     }
@@ -47,9 +56,5 @@ public class RegistrationMain {
                 }
             }
         }
-    }
-
-    public void displayAllRegistrations() {
-
     }
 }

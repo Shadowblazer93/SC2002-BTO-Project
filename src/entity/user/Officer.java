@@ -4,8 +4,10 @@ import entity.project.BTOProject;
 import entity.enquiry.Enquiry;
 import enums.FlatType;
 import controller.ApplicationController;
+import controller.RegistrationController;
 import entity.application.Application;
-import java.util.HashMap;
+import entity.registration.Registration;
+import java.time.LocalDate;
 import java.util.Map;
 
 public class Officer extends Applicant{
@@ -20,15 +22,18 @@ public class Officer extends Applicant{
     }
 
     public void applyForProject(BTOProject project) {
-    // Check if this officer is already assigned to a project
-    if (this.assignedProject != null) {
-        System.out.println("You are already assigned to a project: " + assignedProject.getProjectName());
-        return;
-    }
+        // Check if this officer is already assigned to a project
+        if (this.assignedProject != null) {
+            System.out.println("You are already assigned to a project: " + assignedProject.getProjectName());
+            return;
+        }
 
-    // Apply to the given BTO project
-    project.addPendingApplicant(this); // This method should exist in BTOProject
-    System.out.println("Application submitted to project: " + project.getProjectName());
+        // Create registration
+        Registration registration = new Registration(this, project, LocalDate.now());
+        // Apply to the given BTO project
+        project.addRegistration(registration);  // Add registration to project
+        RegistrationController.addRegistration(project.getProjectName(), registration);
+        System.out.println("Application submitted to project: " + project.getProjectName());
     }
 
     

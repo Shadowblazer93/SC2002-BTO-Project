@@ -2,7 +2,7 @@ package database;
 
 public class ReadCSV {
     public void loadManager() {
-
+        
     }
 
     public void loadOfficer() {
@@ -10,7 +10,7 @@ public class ReadCSV {
     }
 
     public void loadApplicant() {
-        
+
     }
 
     public void loadProject() {

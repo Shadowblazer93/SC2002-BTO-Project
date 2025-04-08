@@ -22,6 +22,10 @@ public class Registration {
         return this.status;
     }
 
+    public Officer getOfficer() {
+        return this.officer;
+    }
+
     public void approveRegistration() {
         this.status = RegistrationStatus.APPROVED;
     }

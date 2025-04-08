@@ -16,7 +16,7 @@ public class BTOProjectMain {
     BTOProjectController projectController = new BTOProjectController();
     
     public static void main(String[] args) {
-        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER);
+        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
         BTOProjectMain btoProjectMain = new BTOProjectMain();
         btoProjectMain.displayMenu(manager);
     }
@@ -62,11 +62,11 @@ public class BTOProjectMain {
                         break;
                     }
                     case 4 -> {
-                        printer.print(projectController.getAllProjects());
+                        printer.printMap(projectController.getAllProjects());
                         break;
                     }
                     case 5 -> {
-                        printer.print(manager.getManagedProjects());
+                        printer.printMap(manager.getManagedProjects());
                         break;
                     }
                     case 6 -> {
@@ -201,7 +201,7 @@ public class BTOProjectMain {
                 case 2 -> {
                     System.out.print("New neighbourhood: ");
                     String newNeighbourhood = sc.nextLine();
-                    edited = projectController.editNeighbourhood(manager, projectName, newNeighbourhood, projectEdit);
+                    edited = projectController.editNeighbourhood(manager, newNeighbourhood, projectEdit);
                 }
                 case 3 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -212,24 +212,24 @@ public class BTOProjectMain {
                     }
                     System.out.print("New number of units: ");
                     int newNumUnits = sc.nextInt();
-                    edited = projectController.editNumUnits(manager, projectName, flatType, newNumUnits, projectEdit);
+                    edited = projectController.editNumUnits(manager, flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
                     System.out.print("New application opening date (YYYY-MM-DD): ");
                     String oDateInput = sc.nextLine();
                     LocalDate oDate = LocalDate.parse(oDateInput);
-                    edited = projectController.editOpeningDate(manager, projectName, oDate, projectEdit);
+                    edited = projectController.editOpeningDate(manager, oDate, projectEdit);
                 }
                 case 5 -> {
                     System.out.print("New application closing date (YYYY-MM-DD): ");
                     String cDateInput = sc.nextLine();
                     LocalDate cDate = LocalDate.parse(cDateInput);
-                    edited = projectController.editClosingDate(manager, projectName, cDate, projectEdit);
+                    edited = projectController.editClosingDate(manager, cDate, projectEdit);
                 }
                 case 6 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
-                    edited = projectController.editVisibility(manager, projectName, visible, projectEdit);
+                    edited = projectController.editVisibility(manager, visible, projectEdit);
                 }
                 case 7 -> {
                     System.out.println("Exiting edit project menu.");

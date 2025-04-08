@@ -6,32 +6,20 @@ import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.util.*;
-=======
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
->>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
 
 public class BTOProject {
     private String projectName;
     private String neighbourhood;
-    // Keeps track of flatTypes and numUnits
-    private Map<FlatType, Integer> unitCounts;
+    private Map<FlatType, Integer> unitCounts;          // Track of flatTypes and numUnits
     private LocalDate openingDate;
     private LocalDate closingDate;
-    private Manager managerInCharge;
+    private final Manager managerInCharge;              // Manager in charge does not change
     private int availableOfficerSlots;
     private boolean visible;
     private Enquiry[] enquiries; 
-<<<<<<< HEAD
-    private Officer assignedOfficer;
-    private List<Officer> pendingApplicants = new ArrayList<>();
-
-=======
-    private List<Registration> officerRegistrations;
->>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
+    private List<Officer> assignedOfficers;             // List of officers assigned to project
+    private List<Registration> pendingRegistrations;    // List of registrations for project
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -45,7 +33,8 @@ public class BTOProject {
         this.closingDate = closingDate;
         this.availableOfficerSlots = availableOfficerSlots;
         this.visible = false;
-        this.officerRegistrations = new ArrayList<>();
+        this.assignedOfficers = new ArrayList<>();
+        this.pendingRegistrations = new ArrayList<>();
     }
 
     // Getters and setters
@@ -71,13 +60,9 @@ public class BTOProject {
     public LocalDate getClosingDate() {
         return closingDate;
     }
-    
-    public List<Officer> getPendingApplicants() {
-        return pendingApplicants;
-    }
 
-    public List<Registration> getOfficerRegistrations() {
-        return officerRegistrations;
+    public List<Registration> getPendingRegistrations() {
+        return pendingRegistrations;
     }
 
     public void setProjectName(String projectName) {
@@ -104,21 +89,24 @@ public class BTOProject {
         this.visible = visible;
     }
 
-    // Method to assign an officer to the project
-    public void assignOfficer(Officer officer) {
-        this.assignedOfficer = officer;
+    // Assign officer to project
+    public void addOfficer(Registration registration) {
+        Officer officer = registration.getOfficer();
+        this.assignedOfficers.add(officer);             // Add to assigned officer list
+        this.availableOfficerSlots--;
+        this.pendingRegistrations.remove(registration); // Remove registration from pending registrations
         System.out.println("Officer " + officer.getName() + " assigned to project " + this.getProjectName());
     }
 
-    public void addPendingApplicant(Officer officer) {
-        if (!pendingApplicants.contains(officer)) {
-            pendingApplicants.add(officer);
-            System.out.println("Officer " + officer.getName() + " has applied to " + this.projectName);
-        } else {
-            System.out.println("You have already applied for this project.");
+    // Add officer to list of registrations
+    public void addRegistration(Registration registration) {
+        pendingRegistrations.add(registration);
     }
-    
-}
+
+    // Remove officer from list of registrations (Rejection)
+    public void removeRegistration(Registration registration) {
+        pendingRegistrations.remove(registration);
+    }
 
 
     @Override

@@ -3,8 +3,8 @@ package entity.user;
 import entity.project.BTOProject;
 import enums.UserRole;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 public class Manager extends User {
 	// List of projects owned by manager
@@ -29,7 +29,6 @@ public class Manager extends User {
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
 	}
-<<<<<<< HEAD
 	public void viewPendingApplications(BTOProject project) {
 		System.out.println("Pending officer applications for project: " + project.getProjectName());
 		List<Officer> pending = project.getPendingApplicants();
@@ -53,10 +52,8 @@ public class Manager extends User {
 }
 
 
-=======
 
 	public void approveRegistration() {
 		
 	}
->>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
 }

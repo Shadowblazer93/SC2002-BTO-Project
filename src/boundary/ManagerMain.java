@@ -6,9 +6,10 @@ import java.util.Scanner;
 
 public class ManagerMain {
     BTOProjectMain btoProjectMain = new BTOProjectMain();
+    RegistrationMain registrationMain = new RegistrationMain();
     
     public static void main(String[] args) {
-        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER);
+        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
         ManagerMain managerMain = new ManagerMain(manager);
     }
 
@@ -36,6 +37,9 @@ public class ManagerMain {
                 }
                 case 3 -> {
 
+                }
+                case 4 -> {
+                    registrationMain.displayMenu(manager);
                 }
                 default -> {
                 }

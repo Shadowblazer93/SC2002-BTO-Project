@@ -1,11 +1,12 @@
 package boundary;
 
 import entity.project.BTOProject;
+import java.util.List;
 import java.util.Map;
 
-public class PrintProjects implements PrintList<BTOProject> {
+public class PrintProjects implements Print<BTOProject> {
     @Override
-    public void print(Map<String, BTOProject> projectList) {
+    public void printMap(Map<String, BTOProject> projectList) {
         if (projectList == null || projectList.isEmpty()) {
             System.out.println("No projects created");
             return;
@@ -15,5 +16,15 @@ public class PrintProjects implements PrintList<BTOProject> {
         for (BTOProject project : projectList.values()) {
             System.out.printf(" - %s\n",project.getProjectName());
         }
+    }
+
+    @Override
+    public void printMapList(Map<String, List<BTOProject>> projectList) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void printList(List<BTOProject> projectList) {
+        throw new UnsupportedOperationException("Not supported.");
     }
 }
