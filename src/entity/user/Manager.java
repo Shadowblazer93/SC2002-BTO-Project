@@ -12,8 +12,8 @@ public class Manager extends User {
 	// Project visibility ON and still ongoing
 	boolean projectActive;
 
-	public Manager(String nric, String name, String password, UserRole role) {
-		super(nric, name, password);
+	public Manager(String nric, String name, String password, UserRole role, int age, String maritalStatus) {
+		super(nric, name, password, age, maritalStatus);
 		this.projectActive = false;
 	}
 
@@ -27,5 +27,9 @@ public class Manager extends User {
 
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
+	}
+
+	public void approveRegistration() {
+		
 	}
 }
