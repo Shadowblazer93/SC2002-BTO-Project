@@ -1,11 +1,18 @@
 package entity.project;
 
 import entity.enquiry.Enquiry;
+import entity.registration.Registration;
 import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
 import java.time.LocalDate;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+>>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
 
 public class BTOProject {
     private String projectName;
@@ -18,9 +25,13 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Enquiry[] enquiries; 
+<<<<<<< HEAD
     private Officer assignedOfficer;
     private List<Officer> pendingApplicants = new ArrayList<>();
 
+=======
+    private List<Registration> officerRegistrations;
+>>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -34,8 +45,7 @@ public class BTOProject {
         this.closingDate = closingDate;
         this.availableOfficerSlots = availableOfficerSlots;
         this.visible = false;
-        //unitCounts.put("2-room", twoRooms);
-        //unitCounts.put("3-room", threeRooms);
+        this.officerRegistrations = new ArrayList<>();
     }
 
     // Getters and setters
@@ -64,6 +74,10 @@ public class BTOProject {
     
     public List<Officer> getPendingApplicants() {
         return pendingApplicants;
+    }
+
+    public List<Registration> getOfficerRegistrations() {
+        return officerRegistrations;
     }
 
     public void setProjectName(String projectName) {

@@ -13,8 +13,8 @@ public class Manager extends User {
 	// Project visibility ON and still ongoing
 	boolean projectActive;
 
-	public Manager(String nric, String name, String password, UserRole role) {
-		super(nric, name, password);
+	public Manager(String nric, String name, String password, UserRole role, int age, String maritalStatus) {
+		super(nric, name, password, age, maritalStatus);
 		this.projectActive = false;
 	}
 
@@ -29,6 +29,7 @@ public class Manager extends User {
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
 	}
+<<<<<<< HEAD
 	public void viewPendingApplications(BTOProject project) {
 		System.out.println("Pending officer applications for project: " + project.getProjectName());
 		List<Officer> pending = project.getPendingApplicants();
@@ -52,4 +53,10 @@ public class Manager extends User {
 }
 
 
+=======
+
+	public void approveRegistration() {
+		
+	}
+>>>>>>> 7218b3f46a25565672498628fda790c9ef29c1d8
 }
