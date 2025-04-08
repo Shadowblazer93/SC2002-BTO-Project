@@ -72,4 +72,23 @@ public class BTOProject {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+   @Override
+    public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("BTO Project Details:\n")
+      .append("Project Name: ").append(projectName).append("\n")
+      .append("Neighbourhood: ").append(neighbourhood).append("\n")
+      .append("Manager In Charge: ").append(managerInCharge.getName()).append("\n")
+      .append("Opening Date: ").append(openingDate).append("\n")
+      .append("Closing Date: ").append(closingDate).append("\n")
+      .append("Available Officer Slots: ").append(availableOfficerSlots).append("\n")
+      .append("Visibility: ").append(visible ? "Visible" : "Not Visible").append("\n")
+      .append("Unit Counts: \n");
+
+    for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
+        sb.append(entry.getKey()).append(": ").append(entry.getValue()).append(" units\n");
+    }
+
+    return sb.toString();
+    }
 }
