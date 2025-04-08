@@ -41,7 +41,7 @@ public class LoginController {
             }
             else if (validateLogin(managerFile, nric, password)){
                 System.out.println("Login successful as Manager");
-                currentUser = new Manager(nric, password, UserRole.MANAGER);
+                currentUser = new Manager(nric, password, "DefaultName", UserRole.MANAGER);
 
                 //redirect to ManagerMain
                 ManagerMain managerMain = new ManagerMain((Manager) currentUser);
@@ -55,7 +55,7 @@ public class LoginController {
                 int maxEnqID = 0; // Assuming max enquiry ID is 0
 
                 // Now create the Officer object with all required parameters
-                currentUser = new Officer(nric, password, "Officer Name", nric, assignedProject, applicationStatus, flatType, enquiries, maxEnqID);
+                currentUser = new Officer(nric, password, assignedProject, applicationStatus, flatType, enquiries, maxEnqID);
 
                 OfficerMain officerMain = new OfficerMain((Officer) currentUser);
             }

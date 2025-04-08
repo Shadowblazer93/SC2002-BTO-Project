@@ -2,9 +2,10 @@ package entity.project;
 
 import entity.enquiry.Enquiry;
 import entity.user.Manager;
+import entity.user.Officer;
 import enums.FlatType;
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.*;
 
 public class BTOProject {
     private String projectName;
@@ -17,6 +18,9 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Enquiry[] enquiries; 
+    private Officer assignedOfficer;
+    private List<Officer> pendingApplicants = new ArrayList<>();
+
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -57,6 +61,10 @@ public class BTOProject {
     public LocalDate getClosingDate() {
         return closingDate;
     }
+    
+    public List<Officer> getPendingApplicants() {
+        return pendingApplicants;
+    }
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
@@ -81,6 +89,23 @@ public class BTOProject {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+    // Method to assign an officer to the project
+    public void assignOfficer(Officer officer) {
+        this.assignedOfficer = officer;
+        System.out.println("Officer " + officer.getName() + " assigned to project " + this.getProjectName());
+    }
+
+    public void addPendingApplicant(Officer officer) {
+        if (!pendingApplicants.contains(officer)) {
+            pendingApplicants.add(officer);
+            System.out.println("Officer " + officer.getName() + " has applied to " + this.projectName);
+        } else {
+            System.out.println("You have already applied for this project.");
+    }
+    
+}
+
 
     @Override
     public String toString() {

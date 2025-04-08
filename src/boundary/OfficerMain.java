@@ -55,7 +55,7 @@ public class OfficerMain {
             System.out.println("Project Enquiries for " + project.getProjectName());
             // Assuming project has a method to view enquiries
             for (int i = 0; i < project.getEnquiries().length; i++) {
-                System.out.println("Enquiry ID: " + project.getEnquiries()[i].id + " Message: " + project.getEnquiries()[i].getMessage());
+                System.out.println(project.getEnquiries()[i]);
             }
             // Simulate replying to an enquiry
             System.out.print("Enter Enquiry ID to reply: ");

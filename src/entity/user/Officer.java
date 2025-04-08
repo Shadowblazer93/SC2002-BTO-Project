@@ -9,36 +9,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Officer extends Applicant{
-    // No need for these since UserID is NRIC and user's name is officer's name
-    private String officerName;
-    private String officerNRIC;
     private BTOProject assignedProject;
+    private String username; // Add username field
 
     //hdb officer is a subset of applicant
-    public Officer(String username, String password, String officerName, String officerNRIC, 
-                   BTOProject appliedProject, String applicationStatus, String flatType, 
+    public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-        // Initialize the parent class (Applicant) with all necessary arguments
-        super(appliedProject, applicationStatus, flatType, Enquiries, maxEnqID);
-        
-        // Initialize Officer-specific fields
-        this.officerName = officerName;
-        this.officerNRIC = officerNRIC;
+        super(username, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
+        this.username = username; // Initialize username field
     }
+
+    public void applyForProject(BTOProject project) {
+    // Check if this officer is already assigned to a project
+    if (this.assignedProject != null) {
+        System.out.println("You are already assigned to a project: " + assignedProject.getProjectName());
+        return;
+    }
+
+    // Apply to the given BTO project
+    project.addPendingApplicant(this); // This method should exist in BTOProject
+    System.out.println("Application submitted to project: " + project.getProjectName());
+    }
+
     
     public BTOProject viewHandledProject(){
         return this.assignedProject;
     }
 
-    //register officer to a project
-    public void assignToProject(BTOProject project){
-        if (this.assignedProject != null) {
-            System.out.println("Officer " + officerName + " is already assigned to project " + this.assignedProject.getProjectName());
-        } else {
-            this.assignedProject = project;
-            project.assignOfficer(this);  // Assuming BTOProject has this method
-            System.out.println("Officer " + officerName + " has been assigned to project " + project.getProjectName());
-        }
+    public void assignProject(BTOProject project) {
+        this.assignedProject = project;
     }
 
     private boolean hasAccessToApplication(Application application) {
