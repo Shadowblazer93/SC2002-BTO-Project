@@ -48,6 +48,12 @@ public class Applicant extends User {
 
     public void enquirySubmit() {
         // add id assignment to Enquiries
+        this.maxEnqId+=1;
+        System.out.println("Enter enquiry message: ");
+        Scanner sc = new Scanner(System.in);
+        String msg = sc.nextLine();
+        Enquiry enq = new Enquiry(maxEnqId,super.getUserID(),this.appliedProject,msg);
+        this.enquiries.add(enq);
     }
 
     public void enquiryView() {
@@ -56,15 +62,7 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        // Enquiry enq = null;
-        // boolean found = false;
-
-        // find enquiry
-        // for (int i=0;i<enquiries.size();i++) {
-        //     if (Enquiries[i].id==enqId) enq = Enquiries[i];
-        //     found = true;
-        // }
-
+    
         Enquiry enq = enquiries.stream()
             .filter(e -> e.id==enqId)
             .findFirst()
@@ -76,7 +74,7 @@ public class Applicant extends User {
             return;
         }
 
-        enq.view();
+        System.out.println(enq);
     }
 
     public void enquiryEdit(int enqID, String newMessage) {
@@ -85,14 +83,7 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        // Enquiry enq = null;
-        // boolean found = false;
 
-        // find enquiry
-        // for (int i=0;i<Enquiries.length;i++) {
-        //     if (Enquiries[i].id==enqId) enq = Enquiries[i];
-        //     found = true;
-        // }
         Enquiry enq = enquiries.stream()
             .filter(e -> e.id==enqId)
             .findFirst()
@@ -113,15 +104,6 @@ public class Applicant extends User {
         int enqId = sc.nextInt();
         sc.close();
 
-        // Enquiry enq = null;
-        // find enquiry
-        // for (int i=0;i<Enquiries.length;i++) {
-        //     if (Enquiries[i].id==enqId) {
-        //         foundId = i;
-        //         break;
-        //     }
-        // }
-
         Enquiry enq = enquiries.stream()
             .filter(e -> e.id==enqId)
             .findFirst()
@@ -133,7 +115,6 @@ public class Applicant extends User {
             return;
         }
 
-        // Enquiries[foundId] = null;
         enquiries.remove(enq);
     }
 }
