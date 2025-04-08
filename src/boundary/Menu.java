@@ -16,7 +16,8 @@ public class Menu {
             do { 
                 System.out.print("""
                     1. Login
-                    2. Change password
+                    2. Register
+                    3. Change password
                     3. Exit
                     """);
                 choice = sc.nextInt();

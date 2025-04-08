@@ -1,7 +1,6 @@
 package entity.user;
-import java.util.Scanner;
-
 import enums.UserRole;
+import java.util.Scanner;
 
 // Change to interface ?
 public class User {
@@ -12,7 +11,11 @@ public class User {
     private String maritalStatus;
     private UserRole userRole;
 
-    public User(){}
+    public User(String UserID, String name, String password) {
+        this.UserID = UserID;
+        this.name = name;
+        this.password = password;
+    }
 
     public boolean login(String NRIC,String loginPass) {
         if (NRIC.equals(UserID)&&loginPass.equals(password)) {return true;}

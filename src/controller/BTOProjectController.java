@@ -14,6 +14,10 @@ public class BTOProjectController {
     public BTOProjectController() {
     }
 
+    public Map<String, BTOProject> getAllProjects() {
+        return allProjects;
+    }
+
     public BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
                                     Map<FlatType, Integer> unitCounts, LocalDate openingDate, 
                                     LocalDate closingDate, int availableOfficerSlots) {
@@ -45,11 +49,7 @@ public class BTOProjectController {
         return allProjects.containsKey(projectName);
     }
 
-    public boolean editProjectName(Manager manager, String projectName, String newProjectName) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
-            return false;
-        }
+    public boolean editProjectName(Manager manager, String projectName, String newProjectName, BTOProject projectEdit) {
         allProjects.remove(projectName);    // Remove project in hashmap
         manager.deleteProject(projectEdit); // Remove project for manager
         projectEdit.setProjectName(newProjectName);
@@ -58,47 +58,35 @@ public class BTOProjectController {
         return true;
     }
 
-    public boolean editNeighbourhood(Manager manager, String projectName, String neighbourhood) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
-            return false;
-        }
+    public boolean editNeighbourhood(Manager manager, String projectName, String neighbourhood, BTOProject projectEdit) {
         projectEdit.setNeighbourhood(neighbourhood);
         return true;
     }
 
-    public boolean editNumUnits(Manager manager, String projectName, FlatType flatType, int numUnits) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
-            return false;
-        }
+    public boolean editNumUnits(Manager manager, String projectName, FlatType flatType, int numUnits, BTOProject projectEdit) {
         projectEdit.setNumUnits(flatType, numUnits); // Assuming BTOProject has a method to set number of units
         return true;
     }
 
-    public boolean editOpeningDate(Manager manager, String projectName, LocalDate openingDate) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
+    public boolean editOpeningDate(Manager manager, String projectName, LocalDate openingDate, BTOProject projectEdit) {
+        LocalDate closingDate = projectEdit.getClosingDate();
+        if (openingDate.isAfter(closingDate)) {
             return false;
         }
         projectEdit.setOpeningDate(openingDate);
         return true;
     }
 
-    public boolean editClosingDate(Manager manager, String projectName, LocalDate closingDate) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
+    public boolean editClosingDate(Manager manager, String projectName, LocalDate closingDate, BTOProject projectEdit) {
+        LocalDate openingDate = projectEdit.getOpeningDate();
+        if (closingDate.isBefore(openingDate)) {
             return false;
         }
         projectEdit.setClosingDate(closingDate);
         return true;
     }
 
-    public boolean editVisibility(Manager manager, String projectName, boolean visible) {
-        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
-        if (projectEdit == null) {  // Project not found
-            return false;
-        }
+    public boolean editVisibility(Manager manager, String projectName, boolean visible, BTOProject projectEdit) {
         projectEdit.setVisible(visible);
         return true;
     }

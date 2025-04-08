@@ -49,6 +49,15 @@ public class BTOProject {
     public Map<FlatType,Integer> getunitCounts(){
         return unitCounts;
     }
+
+    public LocalDate getOpeningDate() {
+        return openingDate;
+    }
+
+    public LocalDate getClosingDate() {
+        return closingDate;
+    }
+
     public void setProjectName(String projectName) {
         this.projectName = projectName;
     }
@@ -72,23 +81,24 @@ public class BTOProject {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
-   @Override
+
+    @Override
     public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("BTO Project Details:\n")
-      .append("Project Name: ").append(projectName).append("\n")
-      .append("Neighbourhood: ").append(neighbourhood).append("\n")
-      .append("Manager In Charge: ").append(managerInCharge.getName()).append("\n")
-      .append("Opening Date: ").append(openingDate).append("\n")
-      .append("Closing Date: ").append(closingDate).append("\n")
-      .append("Available Officer Slots: ").append(availableOfficerSlots).append("\n")
-      .append("Visibility: ").append(visible ? "Visible" : "Not Visible").append("\n")
-      .append("Unit Counts: \n");
+        sb.append("BTO Project Details:\n")
+        .append("Project Name: ").append(projectName).append("\n")
+        .append("Neighbourhood: ").append(neighbourhood).append("\n")
+        .append("Manager In Charge: ").append(managerInCharge.getName()).append("\n")
+        .append("Opening Date: ").append(openingDate).append("\n")
+        .append("Closing Date: ").append(closingDate).append("\n")
+        .append("Available Officer Slots: ").append(availableOfficerSlots).append("\n")
+        .append("Visibility: ").append(visible ? "Visible" : "Not Visible").append("\n")
+        .append("Unit Counts: \n");
 
-    for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
-        sb.append(entry.getKey()).append(": ").append(entry.getValue()).append(" units\n");
-    }
+        for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
+            sb.append(entry.getKey().getNumRooms()).append("-Room: ").append(entry.getValue()).append(" units\n");
+        }
 
-    return sb.toString();
+        return sb.toString();
     }
 }

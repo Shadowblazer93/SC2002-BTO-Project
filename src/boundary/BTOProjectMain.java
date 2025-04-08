@@ -16,7 +16,7 @@ public class BTOProjectMain {
     BTOProjectController projectController = new BTOProjectController();
     
     public static void main(String[] args) {
-        Manager manager = new Manager("123", "password", UserRole.MANAGER);
+        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER);
         BTOProjectMain btoProjectMain = new BTOProjectMain();
         btoProjectMain.displayMenu(manager);
     }
@@ -62,11 +62,11 @@ public class BTOProjectMain {
                         break;
                     }
                     case 4 -> {
-                        printer.print(manager.getManagedProjects());
+                        printer.print(projectController.getAllProjects());
                         break;
                     }
                     case 5 -> {
-                        System.out.print("Exit");
+                        printer.print(manager.getManagedProjects());
                         break;
                     }
                     case 6 -> {
@@ -129,6 +129,10 @@ public class BTOProjectMain {
             String cDateInput = sc.nextLine();
             try {
                 cDate = LocalDate.parse(cDateInput);
+                if (cDate.isBefore(oDate)) {
+                    System.out.println("Closing date must be after opening date.");
+                    cDate = null;
+                }
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date.");
             }
@@ -153,6 +157,7 @@ public class BTOProjectMain {
             System.out.println("Could not create project.");
         } else {
             System.out.printf("Project %s successfully created!\n", projectName);
+            System.out.println(createdProject.toString());
         }
     }
 
@@ -163,6 +168,13 @@ public class BTOProjectMain {
         }
         System.out.print("Enter name of project to edit: ");
         String projectName = sc.nextLine();
+
+        // Check if project exists
+        BTOProject projectEdit = manager.getManagedProjects().get(projectName);
+        if (projectEdit == null) {
+            System.out.println("Project not found.");
+            return;
+        }
 
         int choice = 0;
         while (choice != 7) {
@@ -178,17 +190,18 @@ public class BTOProjectMain {
                 """);
             System.out.print("(Enter number) Attribute to edit: ");
             choice = sc.nextInt();
+            sc.nextLine();
             boolean edited = false;
             switch (choice) {
                 case 1 -> {
                     System.out.print("New project name: ");
                     String newProjectName = sc.nextLine();
-                    edited = projectController.editProjectName(manager, projectName, newProjectName);
+                    edited = projectController.editProjectName(manager, projectName, newProjectName, projectEdit);
                 }
                 case 2 -> {
                     System.out.print("New neighbourhood: ");
                     String newNeighbourhood = sc.nextLine();
-                    edited = projectController.editNeighbourhood(manager, projectName, newNeighbourhood);
+                    edited = projectController.editNeighbourhood(manager, projectName, newNeighbourhood, projectEdit);
                 }
                 case 3 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -199,24 +212,24 @@ public class BTOProjectMain {
                     }
                     System.out.print("New number of units: ");
                     int newNumUnits = sc.nextInt();
-                    edited = projectController.editNumUnits(manager, projectName, flatType, newNumUnits);
+                    edited = projectController.editNumUnits(manager, projectName, flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
                     System.out.print("New application opening date (YYYY-MM-DD): ");
                     String oDateInput = sc.nextLine();
                     LocalDate oDate = LocalDate.parse(oDateInput);
-                    edited = projectController.editOpeningDate(manager, projectName, oDate);
+                    edited = projectController.editOpeningDate(manager, projectName, oDate, projectEdit);
                 }
                 case 5 -> {
                     System.out.print("New application closing date (YYYY-MM-DD): ");
                     String cDateInput = sc.nextLine();
                     LocalDate cDate = LocalDate.parse(cDateInput);
-                    edited = projectController.editClosingDate(manager, projectName, cDate);
+                    edited = projectController.editClosingDate(manager, projectName, cDate, projectEdit);
                 }
                 case 6 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
-                    edited = projectController.editVisibility(manager, projectName, visible);
+                    edited = projectController.editVisibility(manager, projectName, visible, projectEdit);
                 }
                 case 7 -> {
                     System.out.println("Exiting edit project menu.");
@@ -227,7 +240,7 @@ public class BTOProjectMain {
             }
             if (edited) {
                 System.out.println("Project updated!");
-                // print update project details ?
+                System.out.println(projectEdit.toString());
             } else {
                 System.out.println("Failed to update project");
             }

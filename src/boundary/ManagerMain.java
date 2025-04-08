@@ -8,7 +8,7 @@ public class ManagerMain {
     BTOProjectMain btoProjectMain = new BTOProjectMain();
     
     public static void main(String[] args) {
-        Manager manager = new Manager("123", "password", UserRole.MANAGER);
+        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER);
         ManagerMain managerMain = new ManagerMain(manager);
     }
 
@@ -23,7 +23,7 @@ public class ManagerMain {
                     2. Manage enquiries
                     3. Manage applications
                     4. Logout
-                    """, manager.getUserID());
+                    """, manager.getName());
             System.out.print("Option: ");
             int choice = sc.nextInt();
             switch (choice) {
