@@ -1,5 +1,6 @@
 package entity.user;
 
+import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import java.util.ArrayList;
@@ -34,6 +35,16 @@ public class Applicant extends User {
         return flatType;
     }
 
+    public String getFlatTypeString() {
+        if (flatType == FlatType.TWO_ROOM) { return "2-room";}
+        else if (flatType == FlatType.THREE_ROOM) {return "3-room";}
+        else {return "Unknown flat type";}
+    }
+
+    public BTOProject getAppliedProject(){
+        return appliedProject;
+    }
+
     public void updateStatus(String newStatus){
         this.applicationStatus = newStatus;
     }
@@ -42,9 +53,20 @@ public class Applicant extends User {
     //     this.flatType = newflatType;
     // }
 
-    public void projectView(BTOProject p) {}
-    public void projectApply(BTOProject p) {}
-    public void projectWithdraw(BTOProject p) {}
+    public void projectView(BTOProject p) {System.out.println(p);}
+
+    public void projectApply(BTOProject p) {
+        if (this.appliedProject!=null) {
+            System.out.println("You have already applied for a project. Withdraw your current application before applying for a new one.");
+            return;
+        }
+
+        // BTOApplication application = new BTOApplication(this.getUserID(),this.getAppliedProject(),this.getFlatTypeString());
+    }
+
+    public void projectWithdraw(BTOProject p) {
+
+    }
 
     public void enquirySubmit() {
         // add id assignment to Enquiries
