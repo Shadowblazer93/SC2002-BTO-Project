@@ -1,9 +1,12 @@
 package entity.project;
 
 import entity.enquiry.Enquiry;
+import entity.registration.Registration;
 import entity.user.Manager;
 import enums.FlatType;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class BTOProject {
@@ -17,6 +20,7 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Enquiry[] enquiries; 
+    private List<Registration> officerRegistrations;
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -30,8 +34,7 @@ public class BTOProject {
         this.closingDate = closingDate;
         this.availableOfficerSlots = availableOfficerSlots;
         this.visible = false;
-        //unitCounts.put("2-room", twoRooms);
-        //unitCounts.put("3-room", threeRooms);
+        this.officerRegistrations = new ArrayList<>();
     }
 
     // Getters and setters
@@ -56,6 +59,10 @@ public class BTOProject {
 
     public LocalDate getClosingDate() {
         return closingDate;
+    }
+
+    public List<Registration> getOfficerRegistrations() {
+        return officerRegistrations;
     }
 
     public void setProjectName(String projectName) {
