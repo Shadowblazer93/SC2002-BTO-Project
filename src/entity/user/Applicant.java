@@ -2,25 +2,35 @@ package entity.user;
 
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import enums.FlatType;
+import enums.UserRole;
+
 import java.util.Scanner;
 
 public class Applicant extends User { 
     private BTOProject appliedProject;
     private String applicationStatus;
-    private String flatType;
-    private Enquiry Enquiries[];
-    private int maxEnqId = 0;
+    private FlatType flatType;
+    private List<Enquiry> enquiries;
+    private UserRole role = UserRole.APPLICANT;
+    private int maxEnqId;
 
-    public Applicant(BTOProject appliedProject, String applicationStatus, String flatType,
-    Enquiry Enquiries[], int maxEnqID){
+    public Applicant(String UserID, String name, int age, String maritalStatus, String password, BTOProject appliedProject, String applicationStatus){
+        super(UserID, name, password, age, maritalStatus);
         this.appliedProject = appliedProject;
         this.applicationStatus = applicationStatus;
-        this.flatType = flatType;
-        this.Enquiries = Enquiries;
-        this.maxEnqId = maxEnqID;
+        this.enquiries = new ArrayList<>();
+        this.maxEnqId = 0;
+
+        if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
+        if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
     }
 
-    public String getflatType(){
+    public FlatType getflatType(){
         return flatType;
     }
 
@@ -28,9 +38,9 @@ public class Applicant extends User {
         this.applicationStatus = newStatus;
     }
 
-    public void updateflatType(String newflatType){
-        this.flatType = newflatType;
-    }
+    // public void updateflatType(String newflatType){
+    //     this.flatType = newflatType;
+    // }
 
     public void projectView(BTOProject p) {}
     public void projectApply(BTOProject p) {}
@@ -38,6 +48,12 @@ public class Applicant extends User {
 
     public void enquirySubmit() {
         // add id assignment to Enquiries
+        this.maxEnqId+=1;
+        System.out.println("Enter enquiry message: ");
+        Scanner sc = new Scanner(System.in);
+        String msg = sc.nextLine();
+        Enquiry enq = new Enquiry(maxEnqId,super.getUserID(),this.appliedProject,msg);
+        this.enquiries.add(enq);
     }
 
     public void enquiryView() {
@@ -46,22 +62,19 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        Enquiry enq = null;
-        boolean found = false;
-
-        // find enquiry
-        for (int i=0;i<Enquiries.length;i++) {
-            if (Enquiries[i].id==enqId) enq = Enquiries[i];
-            found = true;
-        }
+    
+        Enquiry enq = enquiries.stream()
+            .filter(e -> e.id==enqId)
+            .findFirst()
+            .orElse(null);
 
         // check if enquiry exists
-        if (!found) {
+        if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         }
 
-        enq.view();
+        System.out.println(enq);
     }
 
     public void enquiryEdit(int enqID, String newMessage) {
@@ -70,17 +83,14 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        Enquiry enq = null;
-        boolean found = false;
 
-        // find enquiry
-        for (int i=0;i<Enquiries.length;i++) {
-            if (Enquiries[i].id==enqId) enq = Enquiries[i];
-            found = true;
-        }
+        Enquiry enq = enquiries.stream()
+            .filter(e -> e.id==enqId)
+            .findFirst()
+            .orElse(null);
 
         // check if enquiry exists
-        if (!found) {
+        if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         }
@@ -93,23 +103,18 @@ public class Applicant extends User {
         System.out.print("Enter ID of enquiry you want to view: ");
         int enqId = sc.nextInt();
         sc.close();
-        Enquiry enq = null;
-        int foundId=-1;
 
-        // find enquiry
-        for (int i=0;i<Enquiries.length;i++) {
-            if (Enquiries[i].id==enqId) {
-                foundId = i;
-                break;
-            }
-        }
+        Enquiry enq = enquiries.stream()
+            .filter(e -> e.id==enqId)
+            .findFirst()
+            .orElse(null);
 
         // check if enquiry exists
-        if (foundId==-1) {
+        if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         }
 
-        Enquiries[foundId] = null;
+        enquiries.remove(enq);
     }
 }
