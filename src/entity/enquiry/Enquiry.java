@@ -11,7 +11,14 @@ public class Enquiry {
     private String response;
     private EnquiryStatus status;
 
-
+    public Enquiry(int id, String applicantNRIC, BTOProject project, String message) {
+        this.id = id;
+        this.applicantNRIC = applicantNRIC;
+        this.project = project;
+        this.message = message;
+        this.response = "";
+        this.status = EnquiryStatus.OPEN;
+    }
     
     public void editMessage(String msg) {
         this.message = msg;
@@ -32,5 +39,17 @@ public class Enquiry {
         this.response = resp;
         this.status = EnquiryStatus.CLOSED;
         System.out.println("Successfully responded to the enquiry.");
+    }
+
+    public String toString() {
+        String str = "";
+        str+= "Enquiry details: \n";
+        str+= "ID: "+this.id+"\n";
+        str+= "Applicant NRIC:" +this.applicantNRIC+"\n";
+        str+= "BTO Project Details:"+this.project.getProjectName();
+        str+= "Message: "+this.message+"\n";
+        str+= "Status: "+this.status+"\n";
+        return str;
+        // System.out.println("BTO Project Details");
     }
 }
