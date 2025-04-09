@@ -23,7 +23,7 @@ public class OfficerMain {
                     4. Generate receipt for bookings
                     5. Logout
                     ------------------------------
-                    """, officer.getUserID());
+                    """, officer.getName());
             
             System.out.print("Choose an option: ");
             int choice = sc.nextInt();

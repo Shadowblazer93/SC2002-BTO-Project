@@ -17,7 +17,7 @@ public class RegistrationMain {
         while (choice != 4) {
             System.out.println("""
                 --------------------------
-                    Registration Main Page
+                  Registration Main Page
                 --------------------------
                 1. View all registrations
                 2. Approve registrations
@@ -50,59 +50,32 @@ public class RegistrationMain {
     }
 
     private void approveRegistrations(Manager manager, Scanner sc) {
-        // Print projects managed
-        printProjects.printMap(manager.getManagedProjects());
-        System.out.println("Select project: ");
-        String projectName = sc.nextLine();
-        BTOProject project = manager.getManagedProjects().get(projectName);
-        if (project == null) {
-            System.out.println("Project not found.");
-            return;
-        }
-        
-        // Get pending registrations for project
-        Map<String, Registration> registrationList = project.getPendingRegistrations();
-        if (registrationList.isEmpty()) {
-            System.out.println("No pending registrations for this project.");
-            return;
-        }
-
-        // Print registrations in the project
-        printRegistrations.printMap(registrationList);
-
-        System.out.println("Select registrations to approve (NRIC). Type 0 to stop: ");
-        String nric = "";
-        while (!nric.equals("0")) {
-            nric = sc.nextLine();
-            // Retrieve registration by NRIC
-            Registration registration;
-            if (registrationList.containsKey(nric)) {
-                registration = registrationList.get(nric);
-            } else {
-                System.out.println("Registration not found.");
-                continue;
-            }
-            // Approve registration
-            boolean success = registrationController.approveRegistration(project, registration);
-            if (success) {
-                System.out.println("Registration approved.");
-            } else {
-                System.out.println("Failed to approve registration.");
-            }
+        BTOProject project = selectProject(manager, sc);
+        if (project != null) {
+            processRegistrations(project, sc, true);
         }
     }
 
     private void rejectRegistrations(Manager manager, Scanner sc) {
-        // Print projects managed
+        BTOProject project = selectProject(manager, sc);
+        if (project != null) {
+            processRegistrations(project, sc, false);
+        }
+    }
+
+    public BTOProject selectProject(Manager manager, Scanner sc) {
+        // Print list of projects
         printProjects.printMap(manager.getManagedProjects());
         System.out.println("Select project: ");
         String projectName = sc.nextLine();
         BTOProject project = manager.getManagedProjects().get(projectName);
         if (project == null) {
             System.out.println("Project not found.");
-            return;
         }
-        
+        return project;
+    }
+
+    public void processRegistrations(BTOProject project, Scanner sc, boolean isApproval) {
         // Get pending registrations for project
         Map<String, Registration> registrationList = project.getPendingRegistrations();
         if (registrationList.isEmpty()) {
@@ -126,11 +99,13 @@ public class RegistrationMain {
                 continue;
             }
             // Reject registration
-            boolean success = registrationController.rejectRegistration(project, registration);
+            boolean success = isApproval
+                ? registrationController.approveRegistration(project, registration)
+                : registrationController.rejectRegistration(project, registration);
             if (success) {
-                System.out.println("Registration rejected.");
+                System.out.println("Registration " + (isApproval ? "approved" : "rejected"));
             } else {
-                System.out.println("Failed to reject registration.");
+                System.out.println("Failed to " + (isApproval ? "approve" : "reject") +  " registration.");
             }
         }
     }
