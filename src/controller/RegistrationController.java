@@ -2,6 +2,7 @@ package controller;
 
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import entity.user.Officer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +30,11 @@ public class RegistrationController {
     }
 
     public boolean approveRegistration(BTOProject project, Registration registration) {
+        Officer officer = registration.getOfficer();
         if (project.getPendingRegistrations().isEmpty()) {
             System.out.println("No registrations found for this project.");
             return false;
-        } else if (!project.getPendingRegistrations().contains(registration)) {
+        } else if (!project.getPendingRegistrations().containsKey(officer.getNRIC())) {
             System.out.println("This registration does not exist for this project.");
             return false;
         }
@@ -43,10 +45,11 @@ public class RegistrationController {
     }
 
     public boolean rejectRegistration(BTOProject project, Registration registration) {
+        Officer officer = registration.getOfficer();
         if (project.getPendingRegistrations().isEmpty()) {
             System.out.println("No registrations found for this project.");
             return false;
-        } else if (!project.getPendingRegistrations().contains(registration)) {
+        } else if (!project.getPendingRegistrations().containsKey(officer.getNRIC())) {
             System.out.println("This registration does not exist for this project.");
             return false;
         }

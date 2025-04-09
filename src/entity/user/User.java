@@ -4,15 +4,15 @@ import java.util.Scanner;
 
 // Change to interface ?
 public class User {
-    private String UserID;
+    private String nric;
     private String name;
     private String password;
     private int age;
     private String maritalStatus;
     private UserRole userRole;
 
-    public User(String UserID, String name, String password, int age, String maritalStatus) {
-        this.UserID = UserID;
+    public User(String nric, String name, String password, int age, String maritalStatus) {
+        this.nric = nric;
         this.name = name;
         this.password = password;
         this.age = age;
@@ -20,7 +20,7 @@ public class User {
     }
 
     public boolean login(String NRIC,String loginPass) {
-        if (NRIC.equals(UserID)&&loginPass.equals(password)) {return true;}
+        if (NRIC.equals(NRIC)&&loginPass.equals(password)) {return true;}
         else {return false;}
     }
 
@@ -36,8 +36,8 @@ public class User {
         // logout afterwards
     }
 
-    public String getUserID() {
-        return UserID;
+    public String getNRIC() {
+        return nric;
     }
     public String getName(){
         return name;

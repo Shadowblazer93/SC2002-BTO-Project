@@ -12,7 +12,7 @@ public class PrintProjects implements Print<BTOProject> {
             return;
         }
 
-        System.out.println("BTO Project List");
+        System.out.println("BTO Project List:");
         for (BTOProject project : projectList.values()) {
             System.out.printf(" - %s\n",project.getProjectName());
         }

@@ -1,6 +1,7 @@
 package boundary;
 
 import entity.registration.Registration;
+import entity.user.Officer;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -8,7 +9,7 @@ import java.util.Map.Entry;
 public class PrintRegistrations implements Print<Registration> {
     @Override
     public void printMapList(Map<String, List<Registration>> allRegistrations) {
-        if (allRegistrations == null) {
+        if (allRegistrations == null || allRegistrations.isEmpty()) {
             System.out.println("No registrations found");
             return;
         }
@@ -24,19 +25,20 @@ public class PrintRegistrations implements Print<Registration> {
 
     @Override
     public void printList(List<Registration> registrationList) {
+        throw new UnsupportedOperationException("Not supported.");
+    }
+
+    @Override
+    public void printMap(Map<String, Registration> registrationList) {
         if (registrationList == null || registrationList.isEmpty()) {
             System.out.println("No registrations found");
             return;
         }
 
-        System.out.println("Registration List");
-        for (Registration registration : registrationList) {
-            System.out.printf(" - %s: %s\n", registration.getOfficer().getName(), registration.getRegistrationStatus());
+        System.out.println("List of registrations:");
+        for (Registration registration : registrationList.values()) {
+            Officer officer = registration.getOfficer();
+            System.out.printf(" - %s (%s)\n", officer.getName(), officer.getNRIC());
         }
-    }
-
-    @Override
-    public void printMap(Map<String, Registration> registrationList) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 }

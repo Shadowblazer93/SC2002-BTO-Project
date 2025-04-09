@@ -10,27 +10,31 @@ public class ManagerMain {
     
     public static void main(String[] args) {
         Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
-        ManagerMain managerMain = new ManagerMain(manager);
+        try (Scanner sc = new Scanner(System.in)) {
+            ManagerMain managerMain = new ManagerMain(manager, sc);
+        }
     }
 
-    public ManagerMain(Manager manager) {
-        try (Scanner sc = new Scanner(System.in)) {
+    public ManagerMain(Manager manager, Scanner sc) {
+        boolean running = true;
+        while (running) {
             System.out.printf("""
-                    Hi %s
-                    -------------------------
-                      HDB Manager Main Page
-                    -------------------------
-                    1. Manage projects
-                    2. Manage enquiries
-                    3. Manage applications
-                    4. Manage registrations
-                    5. Logout
-                    """, manager.getName());
+                Hi %s
+                -------------------------
+                    HDB Manager Main Page
+                -------------------------
+                1. Manage projects
+                2. Manage enquiries
+                3. Manage applications
+                4. Manage registrations
+                5. Logout
+                """, manager.getName());
             System.out.print("Option: ");
             int choice = sc.nextInt();
+            sc.nextLine();
             switch (choice) {
                 case 1 -> {
-                    btoProjectMain.displayMenu(manager);
+                    btoProjectMain.displayMenu(manager, sc);
                 }
                 case 2 -> {
 
@@ -39,9 +43,14 @@ public class ManagerMain {
 
                 }
                 case 4 -> {
-                    registrationMain.displayMenu(manager);
+                    registrationMain.displayMenu(manager, sc);
+                }
+                case 5 -> {
+                    System.out.println("Logging out...");
+                    running = false;
                 }
                 default -> {
+                    System.out.println("Invalid option.");
                 }
             }
         }

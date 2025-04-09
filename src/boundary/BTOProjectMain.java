@@ -18,67 +18,67 @@ public class BTOProjectMain {
     public static void main(String[] args) {
         Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
         BTOProjectMain btoProjectMain = new BTOProjectMain();
-        btoProjectMain.displayMenu(manager);
+        try(Scanner sc = new Scanner(System.in)) {
+            btoProjectMain.displayMenu(manager, sc);
+        }
     }
 
-    public void displayMenu(Manager manager) {
-        try (Scanner sc = new Scanner(System.in)) {
-            int choice = 0;
-            do { 
-                System.out.print("""
-                    ---------------------------
-                      Project Management Menu
-                    ---------------------------
-                    1. Create project
-                    2. Edit project
-                    3. Delete project
-                    4. View all projects
-                    5. View my projects
-                    6. Exit
-                    """);
-                boolean validInput = false;
-                while (!validInput) {
-                    try {
-                        System.out.print("Option: ");
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        validInput = true;
-                    } catch (Exception e) {
-                        System.out.println("Invalid input. Please enter a number.");
-                        sc.nextLine(); 
-                    }
+    public void displayMenu(Manager manager, Scanner sc) {
+        int choice = 0;
+        do { 
+            System.out.print("""
+                ---------------------------
+                    Project Management Menu
+                ---------------------------
+                1. Create project
+                2. Edit project
+                3. Delete project
+                4. View all projects
+                5. View my projects
+                6. Exit
+                """);
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
                 }
+            }
 
-                switch (choice) {
-                    case 1 -> {
-                        createProject(manager, sc);
-                    }
-                    case 2 -> {
-                        editProject(manager, sc);
-                        break;
-                    }
-                    case 3 -> {
-                        deleteProject(manager, sc);
-                        break;
-                    }
-                    case 4 -> {
-                        printer.printMap(projectController.getAllProjects());
-                        break;
-                    }
-                    case 5 -> {
-                        printer.printMap(manager.getManagedProjects());
-                        break;
-                    }
-                    case 6 -> {
-                        System.out.print("Exit");
-                        break;
-                    }
-                    default -> {
-                        System.out.println("Invalid option");
-                    }
+            switch (choice) {
+                case 1 -> {
+                    createProject(manager, sc);
                 }
-            } while (choice != 6);
-        }
+                case 2 -> {
+                    editProject(manager, sc);
+                    break;
+                }
+                case 3 -> {
+                    deleteProject(manager, sc);
+                    break;
+                }
+                case 4 -> {
+                    printer.printMap(projectController.getAllProjects());
+                    break;
+                }
+                case 5 -> {
+                    printer.printMap(manager.getManagedProjects());
+                    break;
+                }
+                case 6 -> {
+                    System.out.print("Exit");
+                    break;
+                }
+                default -> {
+                    System.out.println("Invalid option");
+                }
+            }
+        } while (choice != 6);
     }
 
     private void createProject(Manager manager, Scanner sc) {

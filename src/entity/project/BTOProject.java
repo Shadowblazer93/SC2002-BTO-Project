@@ -18,8 +18,8 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Enquiry[] enquiries; 
-    private List<Officer> assignedOfficers;             // List of officers assigned to project
-    private List<Registration> pendingRegistrations;    // List of registrations for project
+    private List<Officer> assignedOfficers;                 // List of officers assigned to project
+    private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -34,7 +34,7 @@ public class BTOProject {
         this.availableOfficerSlots = availableOfficerSlots;
         this.visible = false;
         this.assignedOfficers = new ArrayList<>();
-        this.pendingRegistrations = new ArrayList<>();
+        this.pendingRegistrations = new HashMap<>();
     }
 
     // Getters and setters
@@ -61,7 +61,7 @@ public class BTOProject {
         return closingDate;
     }
 
-    public List<Registration> getPendingRegistrations() {
+    public Map<String, Registration> getPendingRegistrations() {
         return pendingRegistrations;
     }
 
@@ -94,18 +94,21 @@ public class BTOProject {
         Officer officer = registration.getOfficer();
         this.assignedOfficers.add(officer);             // Add to assigned officer list
         this.availableOfficerSlots--;
-        this.pendingRegistrations.remove(registration); // Remove registration from pending registrations
+        String nric = officer.getNRIC();
+        this.pendingRegistrations.remove(nric); // Remove registration from pending registrations
         System.out.println("Officer " + officer.getName() + " assigned to project " + this.getProjectName());
     }
 
     // Add officer to list of registrations
     public void addRegistration(Registration registration) {
-        pendingRegistrations.add(registration);
+        Officer officer = registration.getOfficer();
+        pendingRegistrations.put(officer.getNRIC(), registration);  
     }
 
     // Remove officer from list of registrations (Rejection)
     public void removeRegistration(Registration registration) {
-        pendingRegistrations.remove(registration);
+        Officer officer = registration.getOfficer();
+        pendingRegistrations.remove(officer.getNRIC());
     }
 
 
