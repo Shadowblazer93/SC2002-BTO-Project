@@ -63,7 +63,7 @@ public class RegistrationMain {
         }
     }
 
-    public BTOProject selectProject(Manager manager, Scanner sc) {
+    private BTOProject selectProject(Manager manager, Scanner sc) {
         // Print list of projects
         printProjects.printMap(manager.getManagedProjects());
         System.out.println("Select project: ");

@@ -52,4 +52,8 @@ public class Enquiry {
         return str;
         // System.out.println("BTO Project Details");
     }
+
+    public int getID() {
+        return id;
+    }
 }

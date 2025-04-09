@@ -1,6 +1,7 @@
 package boundary;
 
 import controller.BTOProjectController;
+import database.SaveCSV;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
@@ -28,7 +29,7 @@ public class BTOProjectMain {
         do { 
             System.out.print("""
                 ---------------------------
-                    Project Management Menu
+                  Project Management Menu
                 ---------------------------
                 1. Create project
                 2. Edit project
@@ -72,6 +73,7 @@ public class BTOProjectMain {
                 }
                 case 6 -> {
                     System.out.print("Exit");
+                    SaveCSV.saveProject();
                     break;
                 }
                 default -> {

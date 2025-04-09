@@ -61,6 +61,22 @@ public class BTOProject {
         return closingDate;
     }
 
+    public Manager getManager() {
+        return managerInCharge;
+    }
+
+    public int getAvailableOfficerSlots() {
+        return availableOfficerSlots;
+    }
+
+    public boolean getVisibility() {
+        return visible;
+    }
+
+    public List<Officer> getAssignedOfficers() {
+        return assignedOfficers;
+    }
+
     public Map<String, Registration> getPendingRegistrations() {
         return pendingRegistrations;
     }
