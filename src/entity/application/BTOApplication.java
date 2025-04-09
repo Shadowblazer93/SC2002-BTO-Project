@@ -14,14 +14,14 @@ public class BTOApplication {
     private String applicantNRIC;
     private String projectID;
     private String flatType;
-    private String status; // Pending, Successful, Unsuccessful, Booked
+    private ApplicationStatus status; // PENDING, SUCCESSFUL, UNSUCCESSFUL, BOOKED,
     private boolean hasRequestedWithdrawal;
 
     public BTOApplication(String nric, String projectID, String flatType) {
         this.applicantNRIC = nric;
         this.projectID = projectID;
         this.flatType = flatType;
-        this.status = "Pending";
+        this.status = ApplicationStatus.PENDING;
         this.hasRequestedWithdrawal = false;
     }
 
@@ -122,12 +122,12 @@ class ApplicationManager {
 
     public void approveApplication(String nric) {
         BTOApplication app = applications.get(nric);
-        if (app != null && app.getStatus().equals("Pending")) {
+        if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             if (projectManager.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
-                app.setStatus("Successful");
+                app.setStatus(ApplicationStatus.SUCCESSFUL);
                 System.out.println("Application approved.");
             } else {
-                app.setStatus("Unsuccessful");
+                app.setStatus(ApplicationStatus.UNSUCCESSFUL);
                 System.out.println("Application rejected due to unavailability.");
             }
         }
@@ -135,15 +135,15 @@ class ApplicationManager {
 
     public void rejectApplication(String nric) {
         BTOApplication app = applications.get(nric);
-        if (app != null && app.getStatus().equals("Pending")) {
-            app.setStatus("Unsuccessful");
+        if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
+            app.setStatus(ApplicationStatus.UNSUCCESSFUL);
             System.out.println("Application rejected.");
         }
     }
 
     public boolean bookFlat(String nric, String flatType) {
         BTOApplication app = applications.get(nric);
-        if (app == null || !app.getStatus().equals("Successful")) {
+        if (app == null || app.getStatus() != ApplicationStatus.SUCCESSFUL) {
             System.out.println("Booking not allowed. You must have a successful application.");
             return false;
         }
@@ -151,7 +151,7 @@ class ApplicationManager {
             System.out.println("Selected flat type is no longer available.");
             return false;
         }
-        app.setStatus("Booked");
+        app.setStatus(ApplicationStatus.BOOKED);
         app.setFlatType(flatType);
         projectManager.decrementFlatCount(app.getProjectID(), flatType);
         ReceiptManager.generateReceipt(nric, app.getProjectID(), flatType, userManager);
@@ -162,7 +162,7 @@ class ApplicationManager {
     public void approveWithdrawal(String nric) {
         BTOApplication app = applications.get(nric);
         if (app != null && app.hasRequestedWithdrawal()) {
-            if (app.getStatus().equals("Booked")) {
+            if (app.getStatus() == ApplicationStatus.BOOKED) {
                 projectManager.incrementFlatCount(app.getProjectID(), app.getFlatType());
             }
             applications.remove(nric);
