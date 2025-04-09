@@ -111,6 +111,19 @@ public class BTOProject {
         pendingRegistrations.remove(officer.getNRIC());
     }
 
+    public void viewProjectEnquiries() {
+    // Check if the officer is assigned to a project
+        if (enquiries == null || enquiries.length == 0) {
+            System.out.println("No enquiries for this project.");
+        } else {
+            System.out.println("Enquiries for project: " + this.getProjectName());
+            for (Enquiry enq : enquiries) {
+                // Directly use the 'view' method from Enquiry class to display the enquiry details
+                System.out.println(enq);
+                System.out.println("----------------------------");
+            }
+        }
+    }
 
     @Override
     public String toString() {
