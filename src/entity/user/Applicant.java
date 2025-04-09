@@ -1,11 +1,9 @@
 package entity.user;
 
-import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import enums.FlatType;
 import enums.UserRole;
@@ -68,14 +66,15 @@ public class Applicant extends User {
 
     }
 
-    public void enquirySubmit() {
+    public void enquirySubmit(String msg) {
         // add id assignment to Enquiries
         this.maxEnqId+=1;
         System.out.println("Enter enquiry message: ");
-        Scanner sc = new Scanner(System.in);
-        String msg = sc.nextLine();
-        Enquiry enq = new Enquiry(maxEnqId,super.getUserID(),this.appliedProject,msg);
+        // Scanner sc = new Scanner(System.in);
+        // String msg = sc.nextLine();
+        Enquiry enq = new Enquiry(maxEnqId,super.getNRIC(),this.appliedProject,msg);
         this.enquiries.add(enq);
+        System.out.println("Enquiry submitted successfully!");
     }
 
     public void enquiryView() {
@@ -94,9 +93,7 @@ public class Applicant extends User {
         if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
-        }
-
-        System.out.println(enq);
+        } else {System.out.println(enq);}
     }
 
     public void enquiryEdit(int enqID, String newMessage) {
@@ -115,8 +112,10 @@ public class Applicant extends User {
         if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
+        } else {
+            enq.editMessage(newMessage);
+            System.out.println("Enquiry message updated successfully!");
         }
-        enq.editMessage(newMessage);
     }
 
     public void enquiryDelete(int enqID) {
@@ -135,8 +134,9 @@ public class Applicant extends User {
         if (enq==null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
+        } else {
+            enquiries.remove(enq);
+            System.out.println("Enquiry deleted successfully!");
         }
-
-        enquiries.remove(enq);
     }
 }
