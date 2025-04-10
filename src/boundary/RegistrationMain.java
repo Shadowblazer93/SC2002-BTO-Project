@@ -86,7 +86,7 @@ public class RegistrationMain {
         // Print registrations in the project
         printRegistrations.printMap(registrationList);
 
-        System.out.println("Select registrations to approve (NRIC). Type 0 to stop: ");
+        System.out.println("Select registrations to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
         while (!nric.equals("0")) {
             nric = sc.nextLine();
@@ -99,14 +99,10 @@ public class RegistrationMain {
                 continue;
             }
             // Reject registration
-            boolean success = isApproval
+            String result = isApproval
                 ? registrationController.approveRegistration(project, registration)
                 : registrationController.rejectRegistration(project, registration);
-            if (success) {
-                System.out.println("Registration " + (isApproval ? "approved" : "rejected"));
-            } else {
-                System.out.println("Failed to " + (isApproval ? "approve" : "reject") +  " registration.");
-            }
+            System.out.println(result);
         }
     }
 }

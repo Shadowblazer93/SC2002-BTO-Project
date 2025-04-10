@@ -6,7 +6,7 @@ import enums.RegistrationStatus;
 import java.time.LocalDate;
 
 public class Registration {
-    int id;
+    private final int id;
     private final Officer officer;
     private final BTOProject project;
     private final LocalDate registrationDate;

@@ -143,10 +143,12 @@ public class BTOProjectMain {
         int slots = 0;
         while (slots <= 0) {
             try {
-                System.out.printf("Available HDB Office Slots: ");
+                System.out.printf("Available HDB Office Slots (Max 10): ");
                 slots = sc.nextInt();
                 if (slots <= 0) {
                     System.out.println("Number of slots must be greater than 0.");
+                } else if (slots > 10) {
+                    System.out.println("Number of slots must not exceed 10.");
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter a number.");

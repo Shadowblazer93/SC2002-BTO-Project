@@ -11,9 +11,6 @@ public class BTOProjectController {
     // Hashmap to store projects
     private static Map<String, BTOProject> allProjects = new HashMap<>();
 
-    public BTOProjectController() {
-    }
-
     public Map<String, BTOProject> getAllProjects() {
         return allProjects;
     }

@@ -18,7 +18,7 @@ public class ReadCSV {
 
     }
 
-    public void loadProject() {
+    public static void loadProject() {
         BTOProjectController projectController = new BTOProjectController();
         File projectsFile = new File("src/database/ProjectList.csv");
         try (Scanner projectsReader = new Scanner(projectsFile)) {

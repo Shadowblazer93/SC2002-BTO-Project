@@ -29,10 +29,11 @@ public class Officer extends Applicant{
         }
 
         // Create registration
-        Registration registration = new Registration(this, project, LocalDate.now());
+        RegistrationController registrationController = new RegistrationController();
+        Registration registration = registrationController.createRegistration(this, project, LocalDate.now());
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project
-        RegistrationController.addRegistration(project.getProjectName(), registration);
+        registrationController.addRegistration(project.getProjectName(), registration);
         System.out.println("Application submitted to project: " + project.getProjectName());
     }
 

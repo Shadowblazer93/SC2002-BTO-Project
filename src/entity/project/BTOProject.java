@@ -27,7 +27,6 @@ public class BTOProject {
         this.projectName = projectName;
         this.neighbourhood = neighbourhood;
         this.managerInCharge = manager;
-        this.availableOfficerSlots = 10;    // Max 10
         this.unitCounts = unitCounts; 
         this.openingDate = openingDate;
         this.closingDate = closingDate;
