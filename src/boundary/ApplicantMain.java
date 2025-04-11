@@ -1,16 +1,14 @@
 package boundary;
 
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
 import controller.BTOProjectController;
 import entity.project.BTOProject;
 import entity.user.Applicant;
+import java.util.Scanner;
+import java.util.Set;
 
 public class ApplicantMain {
-    public ApplicantMain(Applicant applicant, BTOProjectController projectController) {
-        Scanner sc = new Scanner(System.in);
+    public ApplicantMain(Applicant applicant, Scanner sc) {
+        BTOProjectController projectController = new BTOProjectController();
         int choice = 0;
 
         while (choice!=8) {

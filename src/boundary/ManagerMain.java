@@ -1,27 +1,20 @@
 package boundary;
 
 import entity.user.Manager;
-import enums.UserRole;
 import java.util.Scanner;
 
 public class ManagerMain {
     BTOProjectMain btoProjectMain = new BTOProjectMain();
     RegistrationMain registrationMain = new RegistrationMain();
-    
-    public static void main(String[] args) {
-        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
-        try (Scanner sc = new Scanner(System.in)) {
-            ManagerMain managerMain = new ManagerMain(manager, sc);
-        }
-    }
 
     public ManagerMain(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {
             System.out.printf("""
+                
                 Hi %s
                 -------------------------
-                    HDB Manager Main Page
+                  HDB Manager Main Page
                 -------------------------
                 1. Manage projects
                 2. Manage enquiries

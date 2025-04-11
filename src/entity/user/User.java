@@ -11,12 +11,13 @@ public class User {
     private String maritalStatus;
     private UserRole userRole;
 
-    public User(String nric, String name, String password, int age, String maritalStatus) {
+    public User(String nric, String name, String password, int age, String maritalStatus, UserRole userRole) {
         this.nric = nric;
         this.name = name;
         this.password = password;
         this.age = age;
         this.maritalStatus = maritalStatus;
+        this.userRole = userRole;
     }
 
     public boolean login(String NRIC,String loginPass) {
@@ -42,10 +43,16 @@ public class User {
     public String getName(){
         return name;
     }
+    public String getPassword() {
+        return password;
+    }
     public int getAge(){
         return age;
     }
     public String getMaritalStatus(){
         return maritalStatus;
+    }
+    public UserRole getUserRole() {
+        return userRole;
     }
 }

@@ -12,7 +12,8 @@ public class Registration {
     private final LocalDate registrationDate;
     private RegistrationStatus status;
 
-    public Registration(Officer officer, BTOProject project, LocalDate registrationDate) {
+    public Registration(int id, Officer officer, BTOProject project, LocalDate registrationDate) {
+        this.id = id;
         this.officer = officer;
         this.project = project;
         this.registrationDate = registrationDate;

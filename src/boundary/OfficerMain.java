@@ -8,8 +8,7 @@ public class OfficerMain {
     public static void main(String[] args) {
 
     }
-    public OfficerMain(Officer officer){
-        Scanner sc = new Scanner(System.in);
+    public OfficerMain(Officer officer, Scanner sc){
         boolean running = true;
         while (running) {
             System.out.printf("""

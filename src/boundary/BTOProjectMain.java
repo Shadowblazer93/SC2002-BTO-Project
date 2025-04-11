@@ -5,7 +5,6 @@ import database.SaveCSV;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
-import enums.UserRole;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -15,14 +14,6 @@ import java.util.Scanner;
 public class BTOProjectMain {
     PrintProjects printer = new PrintProjects();
     BTOProjectController projectController = new BTOProjectController();
-    
-    public static void main(String[] args) {
-        Manager manager = new Manager("123", "John", "password", UserRole.MANAGER, 1, "");
-        BTOProjectMain btoProjectMain = new BTOProjectMain();
-        try(Scanner sc = new Scanner(System.in)) {
-            btoProjectMain.displayMenu(manager, sc);
-        }
-    }
 
     public void displayMenu(Manager manager, Scanner sc) {
         int choice = 0;

@@ -13,8 +13,8 @@ public class Manager extends User {
 	// Project visibility ON and still ongoing
 	boolean projectActive;
 
-	public Manager(String nric, String name, String password, UserRole role, int age, String maritalStatus) {
-		super(nric, name, password, age, maritalStatus);
+	public Manager(String nric, String name, String password, int age, String maritalStatus) {
+		super(nric, name, password, age, maritalStatus, UserRole.MANAGER);
 		this.projectActive = false;
 	}
 
