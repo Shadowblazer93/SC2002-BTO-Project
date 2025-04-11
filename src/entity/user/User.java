@@ -1,6 +1,5 @@
 package entity.user;
 import enums.UserRole;
-import java.util.Scanner;
 
 // Change to interface ?
 public class User {
@@ -20,21 +19,8 @@ public class User {
         this.userRole = userRole;
     }
 
-    public boolean login(String NRIC,String loginPass) {
-        if (NRIC.equals(NRIC)&&loginPass.equals(password)) {return true;}
-        else {return false;}
-    }
-
-    public void logout() {}
-
-    public void changePassword() {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter new password: ");
-        String newPassword = sc.next();
-        
-        this.password = newPassword;
-        System.out.println("Password successfully changed.");
-        // logout afterwards
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNRIC() {

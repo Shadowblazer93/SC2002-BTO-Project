@@ -12,7 +12,6 @@ import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
-    private String username; // Add username field
 
     //hdb officer is a subset of applicant
     public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
@@ -21,7 +20,11 @@ public class Officer extends Applicant{
         this.username = username; // Initialize username field
     }
 
-    public void applyForProject(BTOProject project) {
+    public BTOProject getAssignedProject() {
+        return assignedProject;
+    }
+
+    /*public void applyForProject(BTOProject project) {
         // Check if this officer is already assigned to a project
         if (this.assignedProject != null) {
             System.out.println("You are already assigned to a project: " + assignedProject.getProjectName());
@@ -35,7 +38,7 @@ public class Officer extends Applicant{
         project.addRegistration(registration);  // Add registration to project
         registrationController.addRegistration(project.getProjectName(), registration);
         System.out.println("Application submitted to project: " + project.getProjectName());
-    }
+    }*/
 
     
     public BTOProject viewHandledProject(){
@@ -55,30 +58,19 @@ public class Officer extends Applicant{
                application.getProject() != null && 
                application.getProject().getProjectName().equals(assignedProject.getProjectName());
     }
-    public void replyEnquiries(int enquiryID, String responseMessage) {
+    /*public void replyEnquiries(String enquiryID, String responseMessage) {
         // Find the enquiry based on ID
-        Enquiry enquiry = null;
-        boolean found = false;
-
-        // Look through all the enquiries in the project
-        for (Enquiry enq : assignedProject.getEnquiries()) {
-            if (enq.id == enquiryID) {
-                enquiry = enq;
-                found = true;
-                break;
-            }
-        }
-
+        Enquiry enquiry = assignedProject.getEnquiries().get(enquiryID);
         // If the enquiry is found, reply to it
-        if (found) {
+        if (enquiry != null) {
             enquiry.reply(responseMessage);  // Set the response and update the status to CLOSED
             System.out.println("Response sent successfully.");
         } else {
             System.out.println("Enquiry with ID " + enquiryID + " not found.");
         }
-    }
+    }*/
     
-    public void viewProjectEnquiries() {
+    public void viewProjectEnquiries() {    // Can use PrintEnquiries instead
     // Check if the officer is assigned to a project
         if (assignedProject == null) {
             System.out.println("No project assigned to the officer.");
@@ -101,7 +93,7 @@ public class Officer extends Applicant{
 
 
     public void updateRemainingFlats(Applicant applicant){
-        String NRIC = applicant.getUserID();
+        String NRIC = applicant.getNRIC();
         Application application = ApplicationController.getApplicationByNRIC(NRIC);
         
         if (!hasAccessToApplication(application)) {
@@ -109,12 +101,12 @@ public class Officer extends Applicant{
         } else {
             FlatType flatType = application.getflatType();
             Map<FlatType,Integer> unitCounts = assignedProject.getunitCounts();
-            unitCounts.put(flatType, unitCounts.get(flatType) - 1);
+            unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
         }
     }
 
     public Application retrieveApplicantApplication(Applicant applicant) {
-        String NRIC = applicant.getUserID();
+        String NRIC = applicant.getNRIC();
         Application application = ApplicationController.getApplicationByNRIC(NRIC);
         
         if (application == null) {
@@ -131,7 +123,7 @@ public class Officer extends Applicant{
     }
 
     public void updateApplicantStatus(Applicant applicant) {
-        String NRIC = applicant.getUserID();
+        String NRIC = applicant.getNRIC();
         Application application = ApplicationController.getApplicationByNRIC(NRIC);
         
         if (!hasAccessToApplication(application)) {
@@ -143,9 +135,9 @@ public class Officer extends Applicant{
     }
 
     public void updateApplicantProfile(Applicant applicant){
-        String NRIC = applicant.getUserID();
+        String NRIC = applicant.getNRIC();
         Application application = ApplicationController.getApplicationByNRIC(NRIC);
-        String flatType = application.getflatType();
+        FlatType flatType = application.getflatType();
         
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different project!");
@@ -156,11 +148,11 @@ public class Officer extends Applicant{
     }
 
     public void generateReceipt(Applicant applicant){
-        String NRIC = applicant.getUserID();
+        String NRIC = applicant.getNRIC();
         String name = applicant.getName();
         int age = applicant.getAge();
         String maritalStatus = applicant.getMaritalStatus();
-        String flatType = applicant.getflatType();
+        FlatType flatType = applicant.getflatType();
 
         Application application = ApplicationController.getApplicationByNRIC(NRIC);
 

@@ -27,5 +27,6 @@ public class Main {
 
         // Save CSV files
         SaveCSV.saveProject();
+        SaveCSV.saveManageras();
     }
 }

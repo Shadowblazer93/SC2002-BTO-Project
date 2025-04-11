@@ -24,9 +24,8 @@ public class Menu {
                          Login Menu
                     --------------------
                     1. Login
-                    2. Register
-                    3. Change password
-                    4. Exit
+                    2. Change password
+                    3. Exit
                     """);
                 System.out.print("Option: ");
                 choice = sc.nextInt();
@@ -36,12 +35,9 @@ public class Menu {
                         login(sc);
                     }
                     case 2 -> {
-                        System.out.println("change password");
+                        changePassword(sc);
                     }
                     case 3 -> {
-
-                    }
-                    case 4 -> {
                         System.out.print("Bye!");
                         // End program
                         running = false;
@@ -50,18 +46,22 @@ public class Menu {
                         System.out.println("Invalid option");
                     }
                 }
-                
             }
         }
     }
 
-    private void login(Scanner sc) {
+    private User loginInput(Scanner sc) {
         System.out.print("Enter NRIC: ");
         String nric = sc.nextLine().trim().toUpperCase();
         System.out.print("Enter password: ");
         String password = sc.nextLine();
 
         User user = LoginController.validateLogin(nric, password);
+        return user;
+    }
+
+    private void login(Scanner sc) {
+        User user = loginInput(sc);
         if (user != null) {
             System.out.println("Login successful as " + user.getUserRole());
             switch (user.getUserRole()) {
@@ -78,5 +78,17 @@ public class Menu {
         } else {
             System.out.println("Invalid credentials, please try again!");
         }
+    }
+
+    private void changePassword(Scanner sc) {
+        User user = loginInput(sc);
+        if (user == null) {
+            System.out.println("Invalid credentials, please try again!");
+            return;
+        }
+        System.out.print("Enter new password: ");
+        String newPassword = sc.next();
+        user.setPassword(newPassword);
+        System.out.println("Password successfully changed.");
     }
 }

@@ -1,9 +1,11 @@
 package database;
 
 import controller.BTOProjectController;
+import controller.user.ManagerController;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
 import java.io.File;
@@ -33,10 +35,11 @@ public class SaveCSV {
                 LocalDate closingDate = project.getClosingDate();
                 int availableOfficerSlots = project.getAvailableOfficerSlots();
                 boolean visibile = project.getVisibility();
-                Enquiry[] enquiryList = project.getEnquiries();
+                Map<String, Enquiry> enquiryList = project.getEnquiries();
                 StringBuilder enquiries = new StringBuilder();
                 if (enquiryList != null) {
-                    for (Enquiry enquiry : enquiryList) {
+                    for (Map.Entry<String, Enquiry> entry : enquiryList.entrySet()) {
+                        Enquiry enquiry = entry.getValue();
                         enquiries.append(enquiry.getID()).append("|");
                     }
                     if (enquiries.length() > 0) {
@@ -81,6 +84,29 @@ public class SaveCSV {
             }
         } catch (IOException e) {
             System.out.println("Error saving projects");
+        }
+    }
+
+    public static void saveManageras() {
+        ManagerController managerController = new ManagerController();
+        Map<String, Manager> allManagers = managerController.getAllManagers();
+        File filePath = new File("src/database/ManagerList.csv");
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // File header
+            writer.write("Name,NRIC,Age,Marital Status,Password\n");
+
+            for (Manager manager : allManagers.values()) {
+                String name = manager.getName();
+                String nric = manager.getNRIC();
+                int age = manager.getAge();
+                String maritalStatus = manager.getMaritalStatus();
+                String password = manager.getPassword();
+
+                writer.write(String.format("\"%s\",\"%s\",%d,\"%s\",\"%s\"\n",
+                    name, nric, age, maritalStatus, password));
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving managers");
         }
     }
 }

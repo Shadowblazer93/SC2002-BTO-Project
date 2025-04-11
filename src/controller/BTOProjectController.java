@@ -60,15 +60,15 @@ public class BTOProjectController {
         manager.addProject(projectEdit);
         return true;
     }
-    public boolean editNeighbourhood(Manager manager, String neighbourhood, BTOProject projectEdit) {
+    public boolean editNeighbourhood(String neighbourhood, BTOProject projectEdit) {
         projectEdit.setNeighbourhood(neighbourhood);
         return true;
     }
-    public boolean editNumUnits(Manager manager, FlatType flatType, int numUnits, BTOProject projectEdit) {
-        projectEdit.setNumUnits(flatType, numUnits); // Assuming BTOProject has a method to set number of units
+    public boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
+        projectEdit.setNumUnits(flatType, numUnits);
         return true;
     }
-    public boolean editOpeningDate(Manager manager, LocalDate openingDate, BTOProject projectEdit) {
+    public boolean editOpeningDate(LocalDate openingDate, BTOProject projectEdit) {
         LocalDate closingDate = projectEdit.getClosingDate();
         if (openingDate.isAfter(closingDate)) {
             return false;
@@ -76,7 +76,7 @@ public class BTOProjectController {
         projectEdit.setOpeningDate(openingDate);
         return true;
     }
-    public boolean editClosingDate(Manager manager, LocalDate closingDate, BTOProject projectEdit) {
+    public boolean editClosingDate(LocalDate closingDate, BTOProject projectEdit) {
         LocalDate openingDate = projectEdit.getOpeningDate();
         if (closingDate.isBefore(openingDate)) {
             return false;
@@ -84,7 +84,7 @@ public class BTOProjectController {
         projectEdit.setClosingDate(closingDate);
         return true;
     }
-    public boolean editVisibility(Manager manager, boolean visible, BTOProject projectEdit) {
+    public boolean editVisibility(boolean visible, BTOProject projectEdit) {
         projectEdit.setVisible(visible);
         return true;
     }

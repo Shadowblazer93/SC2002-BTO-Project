@@ -18,4 +18,12 @@ public class ApplicantController {
     public Map<String, Applicant> getAllApplicants() {
         return allApplicants;
     }
+
+    public void updateApplicantStatus() {   // (In Officer)
+        
+    }
+
+    public void updateApplicantProfile() {  // (In Officer)
+
+    }
 }

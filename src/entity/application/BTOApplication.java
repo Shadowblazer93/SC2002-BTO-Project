@@ -45,7 +45,7 @@ public class BTOApplication {
         this.hasRequestedWithdrawal = false;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ApplicationStatus status) {
         this.status = status;
     }
 
@@ -53,7 +53,7 @@ public class BTOApplication {
         this.flatType = flatType;
     }
 
-    public String getStatus() {
+    public ApplicationStatus getStatus() {
         return status;
     }
 

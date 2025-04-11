@@ -17,7 +17,7 @@ public class BTOProject {
     private final Manager managerInCharge;              // Manager in charge does not change
     private int availableOfficerSlots;
     private boolean visible;
-    private Enquiry[] enquiries; 
+    private Map<String, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
     private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
 
@@ -36,14 +36,35 @@ public class BTOProject {
         this.pendingRegistrations = new HashMap<>();
     }
 
+    // Assign officer to project
+    public void addOfficer(Registration registration) {
+        Officer officer = registration.getOfficer();
+        this.assignedOfficers.add(officer);             // Add to assigned officer list
+        this.availableOfficerSlots--;
+        String nric = officer.getNRIC();
+        this.pendingRegistrations.remove(nric); // Remove registration from pending registrations
+    }
+
+    // Add officer to list of registrations
+    public void addRegistration(Registration registration) {
+        Officer officer = registration.getOfficer();
+        pendingRegistrations.put(officer.getNRIC(), registration);  
+    }
+
+    // Remove officer from list of registrations (Rejection)
+    public void removeRegistration(Registration registration) {
+        Officer officer = registration.getOfficer();
+        pendingRegistrations.remove(officer.getNRIC());
+    }
+
     // Getters and setters
 
     public String getProjectName() {
         return projectName;
     }
 
-    public Enquiry[] getEnquiries() {
-        return this.enquiries; // Returns the array of enquiries
+    public Map<String, Enquiry> getEnquiries() {
+        return this.enquiries;
     }
     public String getNeighbourhood(){
         return neighbourhood;
@@ -102,42 +123,6 @@ public class BTOProject {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    // Assign officer to project
-    public void addOfficer(Registration registration) {
-        Officer officer = registration.getOfficer();
-        this.assignedOfficers.add(officer);             // Add to assigned officer list
-        this.availableOfficerSlots--;
-        String nric = officer.getNRIC();
-        this.pendingRegistrations.remove(nric); // Remove registration from pending registrations
-        System.out.println("Officer " + officer.getName() + " assigned to project " + this.getProjectName());
-    }
-
-    // Add officer to list of registrations
-    public void addRegistration(Registration registration) {
-        Officer officer = registration.getOfficer();
-        pendingRegistrations.put(officer.getNRIC(), registration);  
-    }
-
-    // Remove officer from list of registrations (Rejection)
-    public void removeRegistration(Registration registration) {
-        Officer officer = registration.getOfficer();
-        pendingRegistrations.remove(officer.getNRIC());
-    }
-
-    public void viewProjectEnquiries() {
-    // Check if the officer is assigned to a project
-        if (enquiries == null || enquiries.length == 0) {
-            System.out.println("No enquiries for this project.");
-        } else {
-            System.out.println("Enquiries for project: " + this.getProjectName());
-            for (Enquiry enq : enquiries) {
-                // Directly use the 'view' method from Enquiry class to display the enquiry details
-                System.out.println(enq);
-                System.out.println("----------------------------");
-            }
-        }
     }
 
     @Override

@@ -15,6 +15,7 @@ public class RegistrationController {
     public Registration createRegistration(Officer officer, BTOProject project, LocalDate registrationDate) {
         registrationCount++;    // Increment ID
         Registration registration = new Registration(registrationCount, officer, project, registrationDate);
+        addRegistration(project.getProjectName(), registration);
         return registration;
     }
 

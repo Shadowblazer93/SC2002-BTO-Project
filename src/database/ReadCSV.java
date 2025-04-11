@@ -2,6 +2,7 @@ package database;
 
 import controller.BTOProjectController;
 import controller.user.ManagerController;
+import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
@@ -15,16 +16,16 @@ import java.util.Scanner;
 public class ReadCSV {
     public static void loadManager() {
         ManagerController managerController = new ManagerController();
-        File managerFile = new File("src/database/ManagerList.csv");
-        try (Scanner managerReader = new Scanner(managerFile)) {
-            if (managerReader.hasNextLine()) {
-                managerReader.nextLine();   // Skip header
+        File file = new File("src/database/ManagerList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
             }
 
-            while (managerReader.hasNextLine()) {
-                String data = managerReader.nextLine();
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
                 
-                String[] managerData = data.split(",");
+                String[] managerData = line.split(",");
                 String name = managerData[0].replace("\"", "").trim();
                 String nric = managerData[1].replace("\"", "").trim();
                 int age = Integer.parseInt(managerData[2].trim());
@@ -40,7 +41,29 @@ public class ReadCSV {
     }
 
     public void loadOfficer() {
+        OfficerController officerController = new OfficerController();
+        File file = new File("src/database/OfficerList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
 
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+                
+                String[] data = line.split(",");
+                String name = data[0].replace("\"", "").trim();
+                String nric = data[1].replace("\"", "").trim();
+                int age = Integer.parseInt(data[2].trim());
+                String maritalStatus = data[3].replace("\"", "").trim();
+                String password = data[4].replace("\"", "").trim();
+
+                // Create Officer
+                officerController.createOfficer(nric, name, password, age, maritalStatus);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
     }
 
     public void loadApplicant() {
@@ -50,28 +73,28 @@ public class ReadCSV {
     public static void loadProject() {
         BTOProjectController projectController = new BTOProjectController();
         ManagerController managerController = new ManagerController();
-        File projectsFile = new File("src/database/ProjectList.csv");
-        try (Scanner projectsReader = new Scanner(projectsFile)) {
-            if (projectsReader.hasNextLine()) {
-                projectsReader.nextLine();  // Skip header
+        File file = new File("src/database/ProjectList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();  // Skip header
             }
 
-            while (projectsReader.hasNextLine()) {
-                String data = projectsReader.nextLine();
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
                 
-                String[] projectData = data.split(",");
-                String projectName = projectData[0].replace("\"", "").trim();
-                String managerNRIC = projectData[1].replace("\"", "").trim();
-                String neighbourhood = projectData[2].replace("\"", "").trim();
-                int twoRoomCount = Integer.parseInt(projectData[3].trim());
-                int threeRoomCount = Integer.parseInt(projectData[4].trim());
+                String[] data = line.split(",");
+                String projectName = data[0].replace("\"", "").trim();
+                String managerNRIC = data[1].replace("\"", "").trim();
+                String neighbourhood = data[2].replace("\"", "").trim();
+                int twoRoomCount = Integer.parseInt(data[3].trim());
+                int threeRoomCount = Integer.parseInt(data[4].trim());
                 Map<FlatType, Integer> unitCounts = new HashMap<>();
                 unitCounts.put(FlatType.TWO_ROOM, twoRoomCount);
                 unitCounts.put(FlatType.THREE_ROOM, threeRoomCount);
-                LocalDate openingDate = LocalDate.parse(projectData[5].replace("\"", "").trim());
-                LocalDate closingDate = LocalDate.parse(projectData[6].replace("\"", "").trim());
-                int officerSlots = Integer.parseInt(projectData[7].trim());
-                boolean visible = Boolean.parseBoolean(projectData[8].trim());
+                LocalDate openingDate = LocalDate.parse(data[5].replace("\"", "").trim());
+                LocalDate closingDate = LocalDate.parse(data[6].replace("\"", "").trim());
+                int officerSlots = Integer.parseInt(data[7].trim());
+                boolean visible = Boolean.parseBoolean(data[8].trim());
 
                 // Get manager
                 Manager manager = managerController.getManager(managerNRIC);
@@ -80,6 +103,9 @@ public class ReadCSV {
                     continue; // or throw an exception
                 }
                 BTOProject project = projectController.createProject(manager, projectName, neighbourhood, unitCounts, openingDate, closingDate, officerSlots);
+                if (visible) {  // Default visibility is false
+                    project.setVisible(visible);
+                }
                 manager.getManagedProjects().put(projectName, project);
             }
         } catch (FileNotFoundException e) {

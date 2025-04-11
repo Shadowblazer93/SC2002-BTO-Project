@@ -1,7 +1,6 @@
 package controller;
 
 import entity.application.Application;
-import enums.ApplicationStatus;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,5 +16,9 @@ public class ApplicationController {
     // Retrieve application by NRIC
     public static Application getApplicationByNRIC(String nric) {
         return applicationDatabase.get(nric);
+    }
+
+    public void hasAccessToApplication() {  // Check officer access to application (In Officer)
+
     }
 }

@@ -35,7 +35,7 @@ public class Enquiry {
     //     if (status==EnquiryStatus.CLOSED) System.out.println("Response:"+this.response);
     // }
 
-    public void reply(String resp) {
+    public void setReply(String resp) {
         this.response = resp;
         this.status = EnquiryStatus.CLOSED;
         System.out.println("Successfully responded to the enquiry.");
@@ -55,5 +55,8 @@ public class Enquiry {
 
     public int getID() {
         return id;
+    }
+    public String getMessage() {
+        return message;
     }
 }
