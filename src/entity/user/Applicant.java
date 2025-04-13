@@ -32,6 +32,10 @@ public class Applicant extends User {
         return flatType;
     }
 
+    public void updateFlatType(FlatType flatType){
+        this.flatType = flatType;
+    }
+
     public String getFlatTypeString() {
         if (flatType == FlatType.TWO_ROOM) { return "2-room";}
         else if (flatType == FlatType.THREE_ROOM) {return "3-room";}

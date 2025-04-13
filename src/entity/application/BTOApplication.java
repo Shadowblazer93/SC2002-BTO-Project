@@ -1,16 +1,17 @@
 package entity.application;
 
 import enums.ApplicationStatus;
+import enums.FlatType;
 import entity.project.BTOProject;
 
 public class BTOApplication {
     private String applicantNRIC;
     private BTOProject project;
-    private String flatType;
+    private FlatType flatType;
     private ApplicationStatus status;
     private boolean hasRequestedWithdrawal;
 
-    public BTOApplication(String nric, BTOProject project, String flatType) {
+    public BTOApplication(String nric, BTOProject project, FlatType flatType) {
         this.applicantNRIC = nric;
         this.project = project;
         this.flatType = flatType;
@@ -26,11 +27,11 @@ public class BTOApplication {
         return project;
     }
 
-    public String getFlatType() {
+    public FlatType getFlatType() {
         return flatType;
     }
 
-    public void setFlatType(String flatType) {
+    public void setFlatType(FlatType flatType) {
         this.flatType = flatType;
     }
 
