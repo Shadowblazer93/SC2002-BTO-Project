@@ -15,6 +15,7 @@ public class ApplicantMain {
 
         while (choice!=9) {
             System.out.printf("""
+                    
                     Hi %s
                     ------------------------------
                           Applicant Main Page

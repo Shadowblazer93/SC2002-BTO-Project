@@ -63,6 +63,15 @@ public class Applicant extends User {
     }
 
     public void enquirySubmit(String msg) {
+        if (application==null) {
+            System.out.println("You have not applied for any project. Please apply for a project before submitting an enquiry.");
+            return;
+        }
+        if (msg==null || msg.isEmpty()) {
+            System.out.println("Enquiry message cannot be empty.");
+            return;
+        }
+
         // add id assignment to Enquiries
         EnquiryController.incrementEnquiryCount();
         System.out.println("Enter enquiry message: ");

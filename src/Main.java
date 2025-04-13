@@ -39,7 +39,7 @@ public class Main {
 
         ReadCSV.loadEnquiry();
         EnquiryController enquiryController = new EnquiryController();
-        List<Enquiry> allEnquiries = enquiryController.getAllEnquiries();
+        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
 
         // Start menu
         Menu menu = new Menu();
@@ -49,5 +49,6 @@ public class Main {
         SaveCSV.saveProject();
         SaveCSV.saveManageras();
         SaveCSV.saveApplicantas();
+        SaveCSV.saveEnquiries();
     }
 }
