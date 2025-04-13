@@ -13,8 +13,8 @@ public class RegistrationMain {
     RegistrationController registrationController = new RegistrationController();
 
     public void displayMenu(Manager manager, Scanner sc) {
-        int choice = 0;
-        while (choice != 4) {
+        boolean running = true;
+        while (running) {
             System.out.println("""
                 --------------------------
                   Registration Main Page
@@ -22,10 +22,12 @@ public class RegistrationMain {
                 1. View all registrations
                 2. Approve registrations
                 3. Reject registrations
-                4. Exit
+                4. View pending registrations
+                5. View approved registrations
+                6. Exit
                 """);
             System.out.print("Option: ");
-            choice = sc.nextInt();
+            int choice = sc.nextInt();
             sc.nextLine();
 
             switch(choice) {
@@ -40,7 +42,14 @@ public class RegistrationMain {
                     rejectRegistrations(manager, sc);
                 }
                 case 4 -> {
+
+                }
+                case 5 -> {
+                    
+                }
+                case 6 -> {
                     System.out.println("Exiting registration menu.");
+                    running = false;
                 }
                 default -> {
                     System.out.println("Invalid option.");

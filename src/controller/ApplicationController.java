@@ -9,13 +9,13 @@ import entity.user.*;
 
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
-    private Manager projectManager;
-    private User userManager;
+    //private Manager projectManager;
+    //private User userManager;
 
-    public ApplicationController(Manager projectManager, User userManager) {
+    /*public ApplicationController(Manager projectManager, User userManager) {
         this.projectManager = projectManager;
         this.userManager = userManager;
-    }
+    }*/
 
     public static void addApplication(BTOApplication application) {
         applicationDatabase.put(application.getApplicantNRIC(), application);
