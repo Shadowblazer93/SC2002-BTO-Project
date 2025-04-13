@@ -1,6 +1,9 @@
-package entity.application;
+package controller;
 
+import entity.application.BTOApplication;
 import entity.project.BTOProject;
+import entity.user.Applicant;
+import enums.FlatType;
 
 // to use the function: List<BTOApplication> allApps = getAllApplicationsSomehow();
 // to use the function: List<BTOApplication> filtered = ApplicationFilter.filterByStatus(allApps, "Successful");
@@ -13,7 +16,24 @@ public interface ApplicationFilter {
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ApplicationFilter {
+public class Filter {
+
+    // Filter applications by marital status, flat type
+    public static List<BTOApplication> filterApplications(Map<String, BTOApplication> applications, String maritalStatus, FlatType flatType) {
+        return applications.values().stream()
+            .filter(a -> {
+                boolean match = true;
+                if (maritalStatus != null) {
+                    match &= a.getApplicant().getMaritalStatus().equalsIgnoreCase(maritalStatus);
+                }
+                if (flatType != null) {
+                    match &= a.getFlatType().equals(flatType);
+                }
+                return match;
+            })
+            .collect(Collectors.toList());
+    }
+
 
     // Filter by Project ID
     public static List<BTOApplication> filterByProjectID(List<BTOApplication> applications, String projectID) {

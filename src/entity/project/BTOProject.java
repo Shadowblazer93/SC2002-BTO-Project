@@ -1,6 +1,6 @@
 package entity.project;
 
-import entity.application.Application;
+import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.registration.Registration;
 import entity.user.Manager;
@@ -19,7 +19,7 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Map<String, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
-    private Map<String, Application> applications;           // Applications for project (NRIC, Application)
+    private Map<String, BTOApplication> applications;           // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
     private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
 
@@ -62,7 +62,7 @@ public class BTOProject {
     }
 
     // Add application to project
-    public void addApplication(Application application) {
+    public void addApplication(BTOApplication application) {
         String nric = application.getApplicantNRIC();
         applications.put(nric, application);
     }
@@ -111,7 +111,7 @@ public class BTOProject {
         return pendingRegistrations;
     }
 
-    public Map<String, Application> getApplications() {
+    public Map<String, BTOApplication> getApplications() {
         return applications;
     }
 

@@ -70,7 +70,7 @@ public class ApplicationController {
         System.out.println("Withdrawal requested.");
     }
 
-    public boolean approveApplication(Application application) {
+    public boolean approveApplication(BTOApplication application) {
         /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             if (projectController.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
@@ -84,7 +84,7 @@ public class ApplicationController {
         return true;
     }
 
-    public boolean rejectApplication(Application application) {
+    public boolean rejectApplication(BTOApplication application) {
         /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             app.setStatus(ApplicationStatus.UNSUCCESSFUL);
