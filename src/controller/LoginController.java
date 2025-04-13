@@ -5,11 +5,16 @@ import controller.user.ManagerController;
 import controller.user.OfficerController;
 import entity.user.Applicant;
 import entity.user.Manager;
+import entity.user.Officer;
 import entity.user.User;
 
 public class LoginController {
     public static User validateLogin(String nric, String password) {
         OfficerController officerController = new OfficerController();
+        Officer officer = officerController.getOfficer(nric);
+        if (officer != null && officer.getPassword().equals(password)) {
+            return officer;
+        }
 
         ManagerController managerController = new ManagerController();
         Manager manager = managerController.getManager(nric);
