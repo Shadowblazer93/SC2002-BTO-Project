@@ -2,10 +2,12 @@ package boundary;
 
 import controller.ApplicationController;
 import controller.BTOProjectController;
+import controller.Filter;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.FlatType;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -15,9 +17,8 @@ public class ApplicantMain {
     ApplicationController applicationController = new ApplicationController();
 
     public ApplicantMain(Applicant applicant, Scanner sc) {
-        int choice = 0;
-
-        while (choice!=9) {
+        boolean running = true;
+        while (true) {
             System.out.printf("""
                     
                     Hi %s
@@ -35,13 +36,13 @@ public class ApplicantMain {
                     9. Logout
                     ------------------------------
                     """, applicant.getName());
-            
-            choice = sc.nextInt();
+            System.out.print("Option: ");
+            int choice = sc.nextInt();
             sc.nextLine();
 
             switch (choice) {
                 case 1 -> {
-                    projectPrinter.printMap(projectController.getAllProjects());
+                    viewProjectList();
                 }
 
                 case 2 -> {
@@ -69,9 +70,7 @@ public class ApplicantMain {
                 }
 
                 case 6 -> {
-                    System.out.println("Enter enquiry message: ");
-                    String msg = sc.nextLine();
-                    applicant.enquirySubmit(msg);
+                    submitEnquiry(sc, applicant);
                 }
 
                 case 7 -> {
@@ -92,13 +91,24 @@ public class ApplicantMain {
                 
                 case 9 -> {
                     System.out.println("Logging out...");
-                    sc.close();
+                    running = false;
                     return;
                 }
 
                 default -> System.out.println("Unknown choice!");
             }
         }
+    }
+
+    private void viewProjectList() {
+        List<BTOProject> visibleProjects = Filter.filterVisibleProjects(projectController.getAllProjects());
+        projectPrinter.printList(visibleProjects);
+    }
+
+    private void submitEnquiry(Scanner sc, Applicant applicant) {
+        System.out.println("Enter enquiry message: ");
+        String msg = sc.nextLine();
+        applicant.enquirySubmit(msg);
     }
 
     private void applyProject(Scanner sc, Applicant applicant, BTOProjectController controller) {
@@ -108,7 +118,7 @@ public class ApplicantMain {
         }
 
         // Print list of projects
-        projectPrinter.printVisibleProjects(controller.getAllProjects());
+        viewProjectList();
         
         System.out.println("Enter name of project:");
         String projectName = sc.next();

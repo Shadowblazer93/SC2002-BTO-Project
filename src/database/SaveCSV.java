@@ -27,7 +27,7 @@ public class SaveCSV {
         File filePath = new File("src/database/ProjectList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
-            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,AssignedOfficers,PendingRegistrations\n");
+            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,PendingRegistrations\n");
 
             for (BTOProject project: allProjects.values()) {
                 String projectName = project.getProjectName();
@@ -40,9 +40,10 @@ public class SaveCSV {
                 LocalDate closingDate = project.getClosingDate();
                 int availableOfficerSlots = project.getAvailableOfficerSlots();
                 boolean visibile = project.getVisibility();
+
                 Map<Integer, Enquiry> enquiryList = project.getEnquiries();
                 StringBuilder enquiries = new StringBuilder();
-                if (enquiryList != null) {
+                if (!enquiryList.isEmpty()) {
                     for (Map.Entry<Integer, Enquiry> entry : enquiryList.entrySet()) {
                         Enquiry enquiry = entry.getValue();
                         enquiries.append(enquiry.getID()).append("|");
@@ -53,11 +54,28 @@ public class SaveCSV {
                 } else {
                     enquiries.append("");
                 }
+
+                Map<String, BTOApplication> applicationList = project.getApplications();
+                StringBuilder applications = new StringBuilder();
+                if (!applicationList.isEmpty()) {
+                    for (Map.Entry<String, BTOApplication> entry : applicationList.entrySet()) {
+                        BTOApplication application = entry.getValue();
+                        applications.append(application.getApplicant().getNRIC()).append("|");
+                    }
+                    if (applications.length() > 0) {
+                        applications.setLength(applications.length() - 1);
+                    }
+                } else {
+                    applications.append("");
+                }
                 
                 List<Officer> officerList = project.getAssignedOfficers();
                 StringBuilder assignedOfficers = new StringBuilder();
-                if (officerList != null) {
+                if (!officerList.isEmpty()) {
                     for (Officer officer : officerList) {
+                        if (officer == null) {
+                            continue;
+                        }
                         assignedOfficers.append(officer.getNRIC()).append("|");
                     }
                     if (assignedOfficers.length() > 0) {
@@ -69,7 +87,7 @@ public class SaveCSV {
                 
                 StringBuilder pendingRegistrations = new StringBuilder();
                 Map<String, Registration> pendingRegistrationList = project.getPendingRegistrations();
-                if (pendingRegistrationList != null) {
+                if (!pendingRegistrationList.isEmpty()) {
                     for (Map.Entry<String, Registration> entry : pendingRegistrationList.entrySet()) {
                         Registration registration = entry.getValue();
                         pendingRegistrations.append(registration.getID()).append("|");
@@ -82,10 +100,10 @@ public class SaveCSV {
                 }
                 
 
-                writer.write(String.format("\"%s\",\"%s\",\"%s\",%d,%d,\"%s\",\"%s\",%d,%b,\"%s\",\"%s\",\"%s\"\n",
+                writer.write(String.format("\"%s\",\"%s\",\"%s\",%d,%d,\"%s\",\"%s\",%d,%b,\"%s\",\"%s\",\"%s\",\"%s\"\n",
                     projectName, managerNRIC, neighbourhood, twoRoom, threeRoom,
                     openingDate, closingDate, availableOfficerSlots, visibile,
-                    enquiries, assignedOfficers, pendingRegistrations));
+                    enquiries, applications, assignedOfficers, pendingRegistrations));
             }
         } catch (IOException e) {
             System.out.println("Error saving projects");
@@ -139,13 +157,13 @@ public class SaveCSV {
 
     public static void saveEnquiries() {
         // EnquiryController enquiryController = new EnquiryController();
-        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+        Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
         File filePath = new File("src/database/EnquiryList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
             writer.write("ID,Applicant NRIC,ProjectName,Message,Response,Status\n");
 
-            for (Enquiry enquiry : allEnquiries) {
+            for (Enquiry enquiry : allEnquiries.values()) {
                 int id = enquiry.getID();
                 String applicantNRIC = enquiry.getApplicantNRIC();
                 String projectName = enquiry.getProjectName();

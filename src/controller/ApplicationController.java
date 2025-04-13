@@ -38,6 +38,7 @@ public class ApplicationController {
     public void applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
         // Create application
         BTOApplication application = new BTOApplication(applicant, project, flatType);
+        applicant.setApplication(application);
         addApplication(application);
     }
 

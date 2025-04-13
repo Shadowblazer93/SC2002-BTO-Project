@@ -25,7 +25,10 @@ public class PrintRegistrations implements Print<String, Registration> {
 
     @Override
     public void printList(List<Registration> registrationList) {
-        throw new UnsupportedOperationException("Not supported.");
+        for (Registration registration : registrationList) {
+            Officer officer = registration.getOfficer();
+            System.out.printf(" - %s: %s\n", officer.getNRIC(), registration.getStatus());
+        }
     }
 
     @Override
@@ -38,7 +41,7 @@ public class PrintRegistrations implements Print<String, Registration> {
         System.out.println("List of registrations:");
         for (Registration registration : registrationList.values()) {
             Officer officer = registration.getOfficer();
-            System.out.printf(" - %s (%s)\n", officer.getName(), officer.getNRIC());
+            System.out.printf(" - %s: %s\n", officer.getNRIC(), registration.getStatus());
         }
     }
 }

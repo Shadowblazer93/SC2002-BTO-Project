@@ -1,16 +1,13 @@
 
 import boundary.Menu;
-import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
 import database.ReadCSV;
 import database.SaveCSV;
-import entity.enquiry.Enquiry;
 import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
-import java.util.List;
 import java.util.Map;
 
 
@@ -26,7 +23,7 @@ public class Main {
             Manager manager = entry.getValue();
             System.out.printf("NRIC: %s Name: %s Role: %s\n", nric, manager.getName(), manager.getUserRole());
         }
-        ReadCSV.loadProject();
+        
 
         System.out.println();
         ReadCSV.loadApplicant();
@@ -48,9 +45,9 @@ public class Main {
         }
 
         ReadCSV.loadEnquiry();
-        EnquiryController enquiryController = new EnquiryController();
-        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
 
+        ReadCSV.loadProject();
+        
         // Start menu
         Menu menu = new Menu();
         menu.displayMenu();

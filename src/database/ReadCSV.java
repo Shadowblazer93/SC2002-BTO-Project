@@ -5,6 +5,7 @@ import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
+import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.*;
 import enums.FlatType;
@@ -136,13 +137,23 @@ public class ReadCSV {
                     project.setVisible(visible);
                 }
                 manager.getManagedProjects().put(projectName, project);
+                if (LocalDate.now().isAfter(openingDate) && LocalDate.now().isBefore(closingDate)) {
+                    manager.setCurrentProject(project);
+                }
 
                 // Parse enquiries
-
+                String[] enquiryArray = enquiries.split("\\|");
+                Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+                for (String enquiryID : enquiryArray) {
+                    if (enquiryID.isEmpty()) continue; 
+                    int id = Integer.parseInt(enquiryID.trim());
+                    Enquiry enquiry = allEnquiries.get(id);
+                    project.addEnquiry(enquiry);
+                }
                 // Parse applications
 
                 // Parse assigned officers
-                String[] assignedOfficerArray = assignedOfficers.split("|");
+                String[] assignedOfficerArray = assignedOfficers.split("\\|");
                 Map<String, Officer> allOfficers = officerController.getAllOfficers();
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();

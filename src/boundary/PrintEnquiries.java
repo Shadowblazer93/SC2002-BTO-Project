@@ -1,6 +1,7 @@
 package boundary;
 
 import entity.enquiry.Enquiry;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,15 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
             return;
         }
 
-        for (Enquiry enquiry : enquiryList.values()) {
-            System.out.printf(" - %s: %s\n", enquiry.getID(), enquiry.getMessage());
+        List<Enquiry> sortedEnquiries = new ArrayList<>(enquiryList.values());
+        // Print sorted list of enquiries by project and ID
+        if (sortedEnquiries.size() > 1) {
+            sortedEnquiries.sort(Comparator
+                .comparing((Enquiry e) -> e.getProjectName())
+                .thenComparing(Enquiry::getID));
+        }
+        for (Enquiry enquiry : sortedEnquiries) {
+            System.out.printf(" - Project: %s | %d: %s\n", enquiry.getProjectName(), enquiry.getID(), enquiry.getMessage());
         }
     }
 }

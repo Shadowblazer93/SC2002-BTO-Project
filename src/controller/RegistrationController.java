@@ -47,6 +47,7 @@ public class RegistrationController {
             return "This registration does not exist for this project.";
         }
 
+        officer.assignProject(project);
         registration.approveRegistration(); // Set as approved
         project.assignOfficer(registration);   // Add to project
         return "Success";

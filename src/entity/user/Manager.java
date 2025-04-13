@@ -30,6 +30,10 @@ public class Manager extends User {
 		managedProjects.remove(project.getProjectName());
 	}
 
+	public void setCurrentProject(BTOProject project) {
+		this.currentProject = project;
+	}
+
 	public BTOProject getCurrentProject() {
 		return currentProject;
 	}

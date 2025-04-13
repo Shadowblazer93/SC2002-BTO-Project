@@ -15,11 +15,11 @@ public class BTOProject {
     private Map<FlatType, Integer> unitCounts;          // Track of flatTypes and numUnits
     private LocalDate openingDate;
     private LocalDate closingDate;
-    private final Manager managerInCharge;              // Manager in charge does not change
+    private final Manager managerInCharge;                  // Manager in charge does not change
     private int availableOfficerSlots;
     private boolean visible;
     private Map<Integer, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
-    private Map<String, BTOApplication> applications;           // Applications for project (NRIC, Application)
+    private Map<String, BTOApplication> applications;       // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
     private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
 
@@ -69,6 +69,10 @@ public class BTOProject {
     public void addApplication(BTOApplication application) {
         String nric = application.getApplicant().getNRIC();
         applications.put(nric, application);
+    }
+
+    public void addEnquiry(Enquiry enquiry) {
+        enquiries.put(enquiry.getID(), enquiry); // Add enquiry to the map
     }
 
     // Getters and setters

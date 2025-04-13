@@ -2,11 +2,11 @@ package controller;
 
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EnquiryController {
-    private static List<Enquiry> allEnquiries = new ArrayList<>();  // Store all enquiries
+    private static Map<Integer, Enquiry> allEnquiries = new HashMap<>();  // Store all enquiries
     private static int enquiryCount = 0;                            // Track enquiry ID
 
     public static int getEnquiryCount() {
@@ -19,19 +19,19 @@ public class EnquiryController {
     public Enquiry createEnquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
         enquiryCount = Math.max(enquiryCount,id)+1;
         Enquiry enquiry = new Enquiry(id,applicantNRIC,projectName,message,response,status);
-        allEnquiries.add(enquiry);  // Add the enquiry to the list
+        allEnquiries.put(enquiry.getID(), enquiry);  // Add the enquiry to the list
         return enquiry;
     }
 
     public static void addEnquiry(Enquiry enquiry) {
-        allEnquiries.add(enquiry);  // Add the enquiry to the list
+        allEnquiries.put(enquiry.getID(), enquiry);  // Add the enquiry to the list
     }
 
     public static void removeEnquiry(Enquiry enquiry) {
-        allEnquiries.remove(enquiry);  // Remove the enquiry from the list
+        allEnquiries.remove(enquiry.getID());  // Remove the enquiry from the list
     }
     
-    public static List<Enquiry> getAllEnquiries() {
+    public static Map<Integer, Enquiry> getAllEnquiries() {
         return allEnquiries;
     }
 

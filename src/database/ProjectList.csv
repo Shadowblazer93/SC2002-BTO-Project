@@ -1,4 +1,4 @@
-ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,AssignedOfficers,PendingRegistrations
-"project2","T8765432F","neighbourhood2",30,70,"2025-04-04","2025-07-07",3,false,"","",""
-"project 3","S5678901G","neighbourhood3",30,50,"2025-05-06","2025-06-06",5,false,"","",""
-"edited name","T8765432F","neighbourhood1",4,6,"2024-05-05","2024-06-06",6,false,"","",""
+ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,PendingRegistrations
+"project2","T8765432F","neighbourhood2",30,70,"2025-04-04","2025-07-07",1,true,"3","","",""
+"project 3","S5678901G","neighbourhood3",30,50,"2025-05-06","2025-06-06",5,false,"","","",""
+"edited name","T8765432F","neighbourhood1",4,6,"2024-05-05","2024-06-06",6,false,"","","",""

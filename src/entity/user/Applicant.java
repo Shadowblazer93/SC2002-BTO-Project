@@ -37,6 +37,10 @@ public class Applicant extends User {
         else {return "Unknown flat type";}
     }
 
+    public void setApplication(BTOApplication application) {
+        this.application = application;
+    }
+
     public BTOApplication getApplication(){
         return application;
     }
@@ -73,6 +77,8 @@ public class Applicant extends User {
         // String msg = sc.nextLine();
         Enquiry enq = new Enquiry(EnquiryController.getEnquiryCount(),super.getNRIC(),this.getApplication().getProject().getProjectName(),msg);
         EnquiryController.addEnquiry(enq);
+        BTOProject project = this.getApplication().getProject();
+        project.addEnquiry(enq);  // Add enquiry to project
         System.out.println("Enquiry submitted successfully!");
     }
 

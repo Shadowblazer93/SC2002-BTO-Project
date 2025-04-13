@@ -5,7 +5,7 @@ import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.*;
 import enums.UserRole;
-import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class EnquiryMain {
@@ -28,12 +28,12 @@ public class EnquiryMain {
         boolean running = true;
         while (running) {
             System.out.println("""
-                ------------------------------------
-                            Enquiry Menu
-                ------------------------------------
-                1. View enquiries (managed project)
-                2. Reply enquiries (managed project)
-                3. Exit
+            ------------------------------------
+                        Enquiry Menu
+            ------------------------------------
+            1. View enquiries (managed project)
+            2. Reply enquiries (managed project)
+            3. Exit
             """);
             System.out.print("Option: ");
             int choice = sc.nextInt();
@@ -58,13 +58,13 @@ public class EnquiryMain {
         boolean running = true;
         while (running) {
             System.out.println("""
-                ------------------------------------
-                            Enquiry Menu
-                ------------------------------------
-                1. View enquiries (all projects)
-                2. View enquiries (managed project)
-                3. Reply enquiries (managed project)
-                4. Exit
+            ------------------------------------
+                        Enquiry Menu
+            ------------------------------------
+            1. View enquiries (all projects)
+            2. View enquiries (managed project)
+            3. Reply enquiries (managed project)
+            4. Exit
             """);
             System.out.print("Option: ");
             int choice = sc.nextInt();
@@ -89,8 +89,8 @@ public class EnquiryMain {
     }
 
     private void viewAllEnquiries() {
-        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
-        enquiryPrinter.printList(allEnquiries);
+        Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+        enquiryPrinter.printMap(allEnquiries);
     }
 
     private BTOProject viewManagedEnquiries(User user) {

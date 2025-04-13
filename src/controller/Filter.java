@@ -2,17 +2,7 @@ package controller;
 
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
-import entity.user.Applicant;
 import enums.FlatType;
-
-// to use the function: List<BTOApplication> allApps = getAllApplicationsSomehow();
-// to use the function: List<BTOApplication> filtered = ApplicationFilter.filterByStatus(allApps, "Successful");
-
-/* 
-public interface ApplicationFilter {
-    
-}*/
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,9 +24,16 @@ public class Filter {
             .collect(Collectors.toList());
     }
 
+    public static List<BTOProject> filterVisibleProjects(Map<String, BTOProject> projects) {
+        return projects.values().stream()
+                .filter(BTOProject::isVisible)
+                .sorted(Comparator.comparing(BTOProject::getProjectName))
+                .collect(Collectors.toList());
+    }
+
 
     // Filter by Project ID
-    public static List<BTOApplication> filterByProjectID(List<BTOApplication> applications, String projectID) {
+    /*public static List<BTOApplication> filterByProjectID(List<BTOApplication> applications, String projectID) {
         return applications.stream()
                 .filter(app -> app.getProjectID().equalsIgnoreCase(projectID))
                 .collect(Collectors.toList());
@@ -73,5 +70,5 @@ public class Filter {
                 .filter(app -> app.getStatus().name().equalsIgnoreCase(status))
                 .filter(app -> app.getFlatType().equalsIgnoreCase(flatType))
                 .collect(Collectors.toList());
-    }
+    }*/
 }
