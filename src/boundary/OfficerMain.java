@@ -20,21 +20,25 @@ public class OfficerMain {
     OfficerController officerController = new OfficerController();
     ApplicantController applicantController = new ApplicantController();
     public static void main(String[] args) {
-
+        
     }
     public OfficerMain(Officer officer, Scanner sc){
         boolean running = true;
         while (running) {
+            System.out.println();
+            System.out.println();
             System.out.printf("""
                     Hi %s
                     ------------------------------
                         HDB Officer Main Page
                     ------------------------------
-                    1. View and manage flat bookings
-                    2. View and reply to enquiries
+                    1. Register for project
+                    2. Check Registration status
+                    3. View registered project
+                    2. View and reply to project enquiries
                     3. Update applicant status
                     4. Generate receipt for bookings
-                    5. Register for project
+                    5. 
                     6. Book flat for applicant
                     7. Logout
                     ------------------------------
