@@ -196,7 +196,7 @@ public class BTOProjectMain {
                 case 2 -> {
                     System.out.print("New neighbourhood: ");
                     String newNeighbourhood = sc.nextLine();
-                    edited = projectController.editNeighbourhood(manager, newNeighbourhood, projectEdit);
+                    edited = projectController.editNeighbourhood(newNeighbourhood, projectEdit);
                 }
                 case 3 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -207,24 +207,24 @@ public class BTOProjectMain {
                     }
                     System.out.print("New number of units: ");
                     int newNumUnits = sc.nextInt();
-                    edited = projectController.editNumUnits(manager, flatType, newNumUnits, projectEdit);
+                    edited = projectController.editNumUnits(flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
                     System.out.print("New application opening date (YYYY-MM-DD): ");
                     String oDateInput = sc.nextLine();
                     LocalDate oDate = LocalDate.parse(oDateInput);
-                    edited = projectController.editOpeningDate(manager, oDate, projectEdit);
+                    edited = projectController.editOpeningDate(oDate, projectEdit);
                 }
                 case 5 -> {
                     System.out.print("New application closing date (YYYY-MM-DD): ");
                     String cDateInput = sc.nextLine();
                     LocalDate cDate = LocalDate.parse(cDateInput);
-                    edited = projectController.editClosingDate(manager, cDate, projectEdit);
+                    edited = projectController.editClosingDate(cDate, projectEdit);
                 }
                 case 6 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
-                    edited = projectController.editVisibility(manager, visible, projectEdit);
+                    edited = projectController.editVisibility(visible, projectEdit);
                 }
                 case 7 -> {
                     System.out.println("Exiting edit project menu.");

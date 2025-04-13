@@ -6,6 +6,8 @@ import java.util.Scanner;
 public class ManagerMain {
     BTOProjectMain btoProjectMain = new BTOProjectMain();
     RegistrationMain registrationMain = new RegistrationMain();
+    EnquiryMain enquiryMain = new EnquiryMain();
+    ApplicationMain applicationMain = new ApplicationMain();
 
     public ManagerMain(Manager manager, Scanner sc) {
         boolean running = true;
@@ -30,10 +32,10 @@ public class ManagerMain {
                     btoProjectMain.displayMenu(manager, sc);
                 }
                 case 2 -> {
-
+                    enquiryMain.displayMenuManager(sc, manager);
                 }
                 case 3 -> {
-
+                    applicationMain.displayMenuManager(sc, manager);
                 }
                 case 4 -> {
                     registrationMain.displayMenu(manager, sc);

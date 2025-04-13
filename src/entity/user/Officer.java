@@ -3,6 +3,7 @@ package entity.user;
 import entity.project.BTOProject;
 import entity.enquiry.Enquiry;
 import enums.FlatType;
+import enums.UserRole;
 import controller.ApplicationController;
 import controller.RegistrationController;
 import entity.application.Application;
@@ -15,10 +16,12 @@ public class Officer extends Applicant{
     private String username; // Declare username field
 
     //hdb officer is a subset of applicant
-    public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
+    public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-        super(username, password, maxEnqID, applicationStatus, flatType);
-        this.username = username; // Initialize username field
+        super(nric, name, age, maritalStatus, password);    // Applicant constructor
+        this.setUserRole(UserRole.OFFICER);
+        this.assignedProject = appliedProject;
+        //super(nric, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
     }
 
     public BTOProject getAssignedProject() {
