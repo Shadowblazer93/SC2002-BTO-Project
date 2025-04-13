@@ -12,11 +12,12 @@ import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
+    private String username; // Declare username field
 
     //hdb officer is a subset of applicant
     public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-        super(username, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
+        super(username, password, maxEnqID, applicationStatus, flatType);
         this.username = username; // Initialize username field
     }
 
@@ -70,6 +71,39 @@ public class Officer extends Applicant{
         }
     }*/
     
+public void bookFlat(Applicant applicant, FlatType flatType) {
+    // Check if the officer is assigned to a project
+    if (assignedProject == null) {
+        System.out.println("No project assigned to the officer.");
+        return;
+    }
+
+    // Check if the applicant has already booked a flat
+    if (applicant.getApplication() == null) {
+        System.out.println("The applicant has not applied for any project.");
+        return;
+    }
+
+    // Retrieve the project associated with the applicant's application
+    BTOProject project = applicant.getApplication().getProject();
+    if (project == null || !project.getProjectName().equals(assignedProject.getProjectName())) {
+        System.out.println("The applicant's application is not linked to the officer's assigned project.");
+        return;
+    }
+
+    // Check if the selected flat type is available
+    Map<FlatType, Integer> unitCounts = project.getunitCounts();
+    if (!unitCounts.containsKey(flatType) || unitCounts.get(flatType) <= 0) {
+        System.out.println("The selected flat type is not available.");
+        return;
+    }
+
+    // Book the flat
+    unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Decrease the count of available flats
+    applicant.updateStatus("BOOKED"); // Update the applicant's status to "BOOKED"
+    System.out.println("Flat successfully booked for applicant " + applicant.getName() + " in project " + project.getProjectName());
+}
+
     public void viewProjectEnquiries() {    // Can use PrintEnquiries instead
     // Check if the officer is assigned to a project
         if (assignedProject == null) {
@@ -78,7 +112,7 @@ public class Officer extends Applicant{
         }
 
         // Get the list of all enquiries for the assigned project
-        Enquiry[] enquiries = assignedProject.getEnquiries();
+        Enquiry[] enquiries = assignedProject.getEnquiries().values().toArray(new Enquiry[0]);
         if (enquiries == null || enquiries.length == 0) {
             System.out.println("No enquiries for this project.");
         } else {
@@ -94,7 +128,7 @@ public class Officer extends Applicant{
 
     public void updateRemainingFlats(Applicant applicant){
         String NRIC = applicant.getNRIC();
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
+        Application application = (Application) ApplicationController.getApplicationByNRIC(NRIC);
         
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different Project!");

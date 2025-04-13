@@ -22,6 +22,9 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
+    }
 
     public String getNRIC() {
         return nric;

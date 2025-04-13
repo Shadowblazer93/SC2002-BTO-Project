@@ -9,6 +9,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
+import enums.FlatType; // Ensure FlatType is imported from the correct package
 import java.time.LocalDate;
 import java.util.*;
 public class OfficerMain {
@@ -34,7 +35,8 @@ public class OfficerMain {
                     3. Update applicant status
                     4. Generate receipt for bookings
                     5. Register for project
-                    6. Logout
+                    6. Book flat for applicant
+                    7. Logout
                     ------------------------------
                     """, officer.getName());
             
@@ -47,7 +49,8 @@ public class OfficerMain {
                 case 3 -> updateApplicantStatus(sc, officer);
                 case 4 -> generateReceipt(sc, officer);
                 case 5 -> registerProject(sc, officer);
-                case 6 -> {
+                case 6 -> bookFlat(sc, officer);
+                case 7 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -56,6 +59,20 @@ public class OfficerMain {
         }
     }
 
+    private void bookFlat(Scanner sc, Officer officer) {
+        System.out.println("Booking flat for applicant");
+        System.out.print("Enter the NRIC of the applicant: ");
+        String nric = sc.next();
+        Applicant applicant = applicantController.getAllApplicants().get(nric);
+        if (applicant == null) {
+            System.out.println("Applicant not found.");
+            return;
+        }
+        System.out.print("Enter the flat type: ");
+        String flatTypeInput = sc.next();
+        FlatType flatType = FlatType.valueOf(flatTypeInput.toUpperCase());
+        officer.bookFlat(applicant, flatType);
+    }
     private void manageFlatBookings(Officer officer){
         System.out.println("Managing flat bookings!");
         BTOProject project = officer.viewHandledProject();

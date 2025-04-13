@@ -13,10 +13,10 @@ public class ApplicationController {
     private User userManager;
     private BTOProjectController projectController;
 
-    public ApplicationController(Manager projectManager, User userManager) {
+    /*public ApplicationController(Manager projectManager, User userManager) {
         this.projectManager = projectManager;
         this.userManager = userManager;
-    }
+    }*/
 
     public static void addApplication(BTOApplication application) {
         applicationDatabase.put(application.getApplicantNRIC(), application);

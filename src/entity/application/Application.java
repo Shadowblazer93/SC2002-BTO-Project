@@ -29,6 +29,9 @@ public class Application {
     public ApplicationStatus getStatus(){
         return status;
     }
+    public void setStatus(ApplicationStatus status){
+        this.status = status;
+    }
     public String toString(){
         return String.format("""
                 Applicant NRIC: %s
