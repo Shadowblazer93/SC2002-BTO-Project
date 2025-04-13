@@ -1,6 +1,7 @@
 package controller;
 
 import entity.application.BTOApplication;
+import entity.project.BTOProject;
 import enums.ApplicationStatus;
 import entity.application.Application;
 import java.util.HashMap;
@@ -129,7 +130,14 @@ public class ApplicationController {
         }
     }
 
-    public void hasAccessToApplication() {
-        // Implement access control logic for officers if needed
+    public boolean hasAccessToApplication(Officer officer, BTOApplication application) {
+        if (application == null || officer == null) {
+            return false;
+        }
+        
+        BTOProject assignedProject = officer.getAssignedProject();
+        return assignedProject != null && 
+               application.getProject() != null && 
+               application.getProject().getProjectName().equals(assignedProject.getProjectName());
     }
 }
