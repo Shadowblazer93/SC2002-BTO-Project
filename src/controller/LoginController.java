@@ -25,8 +25,4 @@ public class LoginController {
 
         return null;    // None of the users
     }
-
-    public static void changePassword() {
-        
-    }
 }

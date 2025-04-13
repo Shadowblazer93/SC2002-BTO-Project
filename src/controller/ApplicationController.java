@@ -3,13 +3,12 @@ package controller;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import enums.ApplicationStatus;
-import entity.application.Application;
 import java.util.HashMap;
 import java.util.Map;
 import entity.user.*;
 
 public class ApplicationController {
-    private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
+    private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();   // NRIC + Application
     //private Manager projectManager;
     private User userManager;
     private BTOProjectController projectController;
