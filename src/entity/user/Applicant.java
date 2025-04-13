@@ -1,27 +1,30 @@
 package entity.user;
 
+import entity.application.Application;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import java.util.ArrayList;
 import java.util.List;
 
+import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
 
 import java.util.Scanner;
 
 public class Applicant extends User { 
-    private BTOProject appliedProject;
-    private String applicationStatus;
+    // private BTOProject appliedProject;
+    private Application application;
+    // private String applicationStatus;
     private FlatType flatType;
     private List<Enquiry> enquiries;
-    private UserRole role = UserRole.APPLICANT;
+    // private UserRole role = UserRole.APPLICANT;
     private int maxEnqId;
 
-    public Applicant(String UserID, String name, int age, String maritalStatus, String password, BTOProject appliedProject, String applicationStatus){
-        super(UserID, name, password, age, maritalStatus);
-        this.appliedProject = appliedProject;
-        this.applicationStatus = applicationStatus;
+    public Applicant(String UserID, String name, int age, String maritalStatus, String password){
+        super(UserID, name, password, age, maritalStatus, UserRole.APPLICANT);
+        this.application = null;
+        // this.applicationStatus = null;
         this.enquiries = new ArrayList<>();
         this.maxEnqId = 0;
 
@@ -39,31 +42,28 @@ public class Applicant extends User {
         else {return "Unknown flat type";}
     }
 
-    public BTOProject getAppliedProject(){
-        return appliedProject;
+    public Application getApplication(){
+        return application;
     }
-
-    public void updateStatus(String newStatus){
-        this.applicationStatus = newStatus;
-    }
-
-    // public void updateflatType(String newflatType){
-    //     this.flatType = newflatType;
-    // }
 
     public void projectView(BTOProject p) {System.out.println(p);}
 
     public void projectApply(BTOProject p) {
-        if (this.appliedProject!=null) {
+        if (this.application!=null) {
             System.out.println("You have already applied for a project. Withdraw your current application before applying for a new one.");
             return;
         }
 
-        // BTOApplication application = new BTOApplication(this.getUserID(),this.getAppliedProject(),this.getFlatTypeString());
+        this.application = new Application(this.getNRIC(), p, this.flatType, ApplicationStatus.PENDING);
+        p.setApplication(application);
+        System.out.println("Application submitted successfully!");
     }
 
-    public void projectWithdraw(BTOProject p) {
-
+    public void projectWithdraw() {
+        BTOProject p = this.application.getProject();
+        this.application = null;
+        p.setApplication(null);
+        System.out.println("You have successfully withdrawn from the project.");
     }
 
     public void enquirySubmit(String msg) {
@@ -72,7 +72,7 @@ public class Applicant extends User {
         System.out.println("Enter enquiry message: ");
         // Scanner sc = new Scanner(System.in);
         // String msg = sc.nextLine();
-        Enquiry enq = new Enquiry(maxEnqId,super.getNRIC(),this.appliedProject,msg);
+        Enquiry enq = new Enquiry(maxEnqId,super.getNRIC(),this.getApplication().getProject(),msg);
         this.enquiries.add(enq);
         System.out.println("Enquiry submitted successfully!");
     }

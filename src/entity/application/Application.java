@@ -29,4 +29,12 @@ public class Application {
     public ApplicationStatus getStatus(){
         return status;
     }
+    public String toString(){
+        return String.format("""
+                Applicant NRIC: %s
+                Project: %s
+                Flat Type: %s
+                Status: %s
+                """, applicantNRIC, project.getProjectName(), flatType, status);
+    }
 }
