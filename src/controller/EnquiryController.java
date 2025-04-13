@@ -35,7 +35,17 @@ public class EnquiryController {
         return allEnquiries;
     }
 
+<<<<<<< HEAD
     public void replyEnquiry(BTOProject project, int enquiryID, String reply) {
+=======
+    public void replyEnquiry(Officer officer, String enquiryID, String reply) {
+        BTOProject assignedProject = officer.getAssignedProject();
+        if (assignedProject == null) {
+            System.out.println("Officer has no assigned project.");
+            return;
+        }
+        
+>>>>>>> 3eb7033 (changed OfficerMain)
         // Find the enquiry based on ID
         Enquiry enquiry = project.getEnquiries().get(enquiryID);
         // If the enquiry is found, reply to it

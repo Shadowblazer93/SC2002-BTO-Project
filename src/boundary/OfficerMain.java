@@ -63,7 +63,7 @@ public class OfficerMain {
             }
         }
     }
-
+    // wrong
     private void manageFlatBookings(Officer officer){
         System.out.println("Managing flat bookings!");
         BTOProject project = officer.viewHandledProject();
@@ -73,10 +73,15 @@ public class OfficerMain {
     private void manageEnquiries(Scanner sc, Officer officer) {
         EnquiryMain enquiryMain = new EnquiryMain();
         
-        // Use the extracted method for viewing enquiries
+        BTOProject project = officer.getAssignedProject();
+        if (project == null) {
+            System.out.println("No project assigned to the officer.");
+            return; // Exit the method early
+        }
+        
+        // Only continue if project exists
         enquiryMain.viewProjectEnquiries(officer);
         
-        // Continue with reply functionality
         System.out.print("Enter Enquiry ID to reply: ");
         String enquiryId = sc.nextLine();
         System.out.print("Enter reply: ");
@@ -85,34 +90,91 @@ public class OfficerMain {
     }
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
+        sc.nextLine(); // Consume the leftover newline from previous input
+        
         System.out.print("Enter the NRIC of the applicant: ");
         String NRIC = sc.nextLine();
+        
         Applicant applicant = applicantController.getApplicant(NRIC);
+        if (applicant == null) {
+            System.out.println("Applicant not found with NRIC: " + NRIC);
+            return;
+        }
         
         OfficerController.updateApplicantStatus(officer, applicant, ApplicationStatus.BOOKED);
     }
 
-    private void registerProject(Scanner sc, Officer officer) {
-        // Check if eligible to register
-        String message = officerController.canRegisterProject(officer);
-        if (message.equals("success")) {
-            System.out.println(message);
+    private void generateReceipt(Scanner sc, Officer officer) {
+        System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
+        String nric = sc.next();
+        sc.nextLine();
+        
+        Applicant applicant = applicantController.getApplicant(nric);
+        if (applicant == null) {
+            System.out.println("Applicant not found.");
             return;
         }
+        officer.generateReceipt(applicant);
+    }
+
+    private void registerProject(Scanner sc, Officer officer) {
+        // Check if eligible to register
+        String message = officerController.registerProject(officer);
+        if (!message.equals("success")) {
+            System.out.println(message);
+            return; // Only return early if validation fails
+        }
+        
         // View list of projects
+        System.out.println("Available projects you can register for:");
         projectPrinter.printMap(projectController.getAllProjects());
-        System.out.print("Project to register: ");
+        
+        sc.nextLine(); // Clear buffer after previous nextInt()
+        System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
+        
         BTOProject project = projectController.getAllProjects().get(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
+        
         // Create registration
         Registration registration = registrationController.createRegistration(officer, project, LocalDate.now());
+        
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project
-        System.out.println("Application submitted to project: " + project.getProjectName());
+        System.out.println("Registration submitted to project: " + project.getProjectName());
+        System.out.println("Awaiting manager approval.");
+    }
+
+    private void bookFlat(Scanner sc, Officer officer) {
+        System.out.print("Enter the NRIC of the applicant: ");
+        String nric = sc.next();
+        sc.nextLine(); // Clear buffer
+        
+        Applicant applicant = applicantController.getApplicant(nric);
+        if (applicant == null) {
+            System.out.println("Applicant not found.");
+            return;
+        }
+        
+        System.out.println("Available flat types:");
+        for (FlatType type : FlatType.values()) {
+            System.out.println(type.getNumRooms() + "-Room");
+        }
+        
+        System.out.print("Enter flat type (2 or 3): ");
+        int roomNumber = sc.nextInt();
+        sc.nextLine(); // Clear buffer
+        
+        FlatType flatType = FlatType.getFlatType(roomNumber);
+        if (flatType == null) {
+            System.out.println("Invalid flat type.");
+            return;
+        }
+        
+        OfficerController.bookFlat(officer, applicant, flatType);
     }
 }
 

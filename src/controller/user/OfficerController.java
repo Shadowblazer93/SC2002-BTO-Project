@@ -8,17 +8,17 @@ import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import controller.ApplicationController;
+import entity.registration.Registration;
+import controller.BTOProjectController;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apple.eawt.Application;
-
 public class OfficerController {
     private static final Map<String, Officer> allOfficers = new HashMap<>(); // NRIC + Officer
-
+    private BTOProjectController projectController = new BTOProjectController();
     public Officer createOfficer(String nric, String name, String password, int age, String maritalStatus) {
-        Officer officer = new Officer(nric, name, password, age, maritalStatus);
+        Officer officer = new Officer(nric, name, password, age, maritalStatus, null, null, null);
         allOfficers.put(nric, officer);
         return officer;
     }
@@ -32,18 +32,34 @@ public class OfficerController {
     }
 
     // Check if officer is eligible for registration of project
-    public String canRegisterProject(Officer officer) {   
+    public String registerProject(Officer officer) {   
         String message = "success";
-        // Already assigned to project
+        
+        // Check if officer is already assigned to a project
         if (officer.getAssignedProject() != null) {
             message = "You are already assigned to a project: " + officer.getAssignedProject().getProjectName();
             return message;
-        } else if (false) {
-            // Check if have applied for any project as applicant
         }
+        
+        // Check if officer has applied for a project as an applicant
+        if (officer.getApplication() != null) {
+            message = "You cannot register as an officer for any project while you have an active application as an applicant.";
+            return message;
+        }
+        
+        // Check if the officer has any pending registrations
+        for (BTOProject project : projectController.getAllProjects().values()) {
+            Map<String, Registration> pendingRegs = project.getPendingRegistrations();
+            if (pendingRegs != null && pendingRegs.containsKey(officer.getNRIC())) {
+                message = "You already have a pending registration for project: " + project.getProjectName();
+                return message;
+            }
+        }
+        
         return message;
     }
-        public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
+
+    public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
         if (application == null || officer == null) {
             return false;
         }
@@ -55,10 +71,19 @@ public class OfficerController {
     }
 
     public static void updateApplicantStatus(Officer officer, Applicant applicant, ApplicationStatus status) {
+        if (applicant == null) {
+            System.out.println("Cannot update status for null applicant");
+            return;
+        }
+        
         String NRIC = applicant.getNRIC();
         BTOApplication application = ApplicationController.getApplicationByNRIC(NRIC);
         
-        if (!hasAccessToApplication(officer, application)) {
+        if (officer.getAssignedProject() == null) {
+            System.out.println("Officer has no assigned project!");
+        } else if (application == null || application.getProject() == null) {
+            System.out.println("No valid application found for this applicant!");
+        } else if (!officer.getAssignedProject().getProjectName().equals(application.getProject().getProjectName())) {
             System.out.println("Officer is assigned to a different project!");
         } else {
             applicant.updateStatus(status);
@@ -116,6 +141,12 @@ public class OfficerController {
         FlatType flatType = applicant.getflatType();
 
         BTOApplication application = ApplicationController.getApplicationByNRIC(NRIC);
+        
+        // Add this null check
+        if (application == null) {
+            System.out.println("No application found for applicant with NRIC: " + NRIC);
+            return;
+        }
 
         BTOProject project = application.getProject();
         String projectName = project.getProjectName();
@@ -141,5 +172,48 @@ public class OfficerController {
             System.out.println("===========================");
             }
         }   
+    }
+
+    public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
+        // 1. Check if officer has assigned project
+        BTOProject assignedProject = officer.getAssignedProject();
+        if (assignedProject == null) {
+            System.out.println("Officer has no assigned project!");
+            return;
+        }
+        
+        // 2. Check if applicant exists
+        String NRIC = applicant.getNRIC();
+        BTOApplication application = ApplicationController.getApplicationByNRIC(NRIC);
+        
+        // 3. If no application exists, create one
+        if (application == null) {
+            application = new BTOApplication(NRIC, applicant, assignedProject, flatType);
+            ApplicationController.addApplication(application);
+        }
+        
+        // 4. Verify officer has permission
+        if (!hasAccessToApplication(officer, application)) {
+            System.out.println("Officer is assigned to a different project!");
+            return;
+        }
+        
+        // 5. Check flat availability
+        Map<FlatType, Integer> unitCounts = assignedProject.getunitCounts();
+        int availableUnits = unitCounts.getOrDefault(flatType, 0);
+        
+        if (availableUnits <= 0) {
+            System.out.println("No more units available of type " + flatType.getNumRooms() + "-Room!");
+            return;
+        }
+        
+        // 6. Book the flat
+        unitCounts.put(flatType, availableUnits - 1);
+        application.setStatus(ApplicationStatus.BOOKED);
+        applicant.updateFlatType(flatType);
+        
+        System.out.println("Flat successfully booked for " + applicant.getName() + "!");
+        System.out.println("Flat type: " + flatType.getNumRooms() + "-Room");
+        System.out.println("Project: " + assignedProject.getProjectName());
     }
 }
