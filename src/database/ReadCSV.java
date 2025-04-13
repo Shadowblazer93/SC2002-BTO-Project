@@ -42,7 +42,7 @@ public class ReadCSV {
         }
     }
 
-    public void loadOfficer() {
+    public static void loadOfficer() {
         OfficerController officerController = new OfficerController();
         File file = new File("src/database/OfficerList.csv");
         try (Scanner Reader = new Scanner(file)) {

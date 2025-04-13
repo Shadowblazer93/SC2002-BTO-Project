@@ -3,12 +3,13 @@ import boundary.Menu;
 import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
+import controller.user.OfficerController;
 import database.ReadCSV;
 import database.SaveCSV;
 import entity.enquiry.Enquiry;
 import entity.user.Applicant;
 import entity.user.Manager;
-
+import entity.user.Officer;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,15 @@ public class Main {
             String nric = entry.getKey();
             Applicant applicant = entry.getValue();
             System.out.printf("NRIC: %s Name: %s Role: %s\n", nric, applicant.getName(), applicant.getUserRole());
+        }
+
+        ReadCSV.loadOfficer();
+        OfficerController officerController = new OfficerController();
+        Map<String, Officer> allOfficers = officerController.getAllOfficers();
+        for (Map.Entry<String, Officer> entry : allOfficers.entrySet()) {
+            String nric = entry.getKey();
+            Officer officer = entry.getValue();
+            System.out.printf("NRIC: %s Name: %s Role: %s\n", nric, officer.getName(), officer.getUserRole());
         }
 
         ReadCSV.loadEnquiry();
