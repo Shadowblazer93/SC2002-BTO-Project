@@ -8,6 +8,7 @@ import java.util.Map;
 public class Manager extends User {
 	// List of projects owned by manager
 	private Map<String, BTOProject> managedProjects= new HashMap<>();
+	private BTOProject currentProject;	// Current project handled by manager
 
 	// Project visibility ON and still ongoing
 	boolean projectActive;
@@ -28,6 +29,13 @@ public class Manager extends User {
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
 	}
+<<<<<<< HEAD
+
+	public BTOProject getCurrentProject() {
+		return currentProject;
+	}
+=======
 	
 	
+>>>>>>> 4583d49e0b693d620c54d17a58f08f8c9e97f0dc
 }

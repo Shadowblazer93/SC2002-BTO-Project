@@ -32,7 +32,7 @@ public class ApplicationFilter {
     // Filter by Application Status
     public static List<BTOApplication> filterByStatus(List<BTOApplication> applications, String status) {
         return applications.stream()
-                .filter(app -> app.getStatus().equalsIgnoreCase(status))
+                .filter(app -> app.getStatus().name().equalsIgnoreCase(status))
                 .collect(Collectors.toList());
     }
 
@@ -50,7 +50,7 @@ public class ApplicationFilter {
                                                                 String flatType) {
         return applications.stream()
                 .filter(app -> app.getProjectID().equalsIgnoreCase(projectID))
-                .filter(app -> app.getStatus().equalsIgnoreCase(status))
+                .filter(app -> app.getStatus().name().equalsIgnoreCase(status))
                 .filter(app -> app.getFlatType().equalsIgnoreCase(flatType))
                 .collect(Collectors.toList());
     }

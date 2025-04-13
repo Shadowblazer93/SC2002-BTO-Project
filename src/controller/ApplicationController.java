@@ -3,14 +3,14 @@ package controller;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import enums.ApplicationStatus;
-import utils.ReceiptManager;
+import entity.application.Application;
 import java.util.HashMap;
 import java.util.Map;
 import entity.user.*;
 
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
-    private Manager projectManager;
+    //private Manager projectManager;
     private User userManager;
     private BTOProjectController projectController;
 
@@ -33,7 +33,7 @@ public class ApplicationController {
             return false;
         }
 
-        if (!projectManager.isProjectVisibleAndOpen(projectID)) {
+        if (!projectController.isProjectVisibleAndOpen(projectID)) {
             System.out.println("Project is not open or visible.");
             return false;
         }
@@ -70,25 +70,27 @@ public class ApplicationController {
         System.out.println("Withdrawal requested.");
     }
 
-    public void approveApplication(String nric) {
-        BTOApplication app = getApplicationByNRIC(nric);
+    public boolean approveApplication(Application application) {
+        /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
-            if (projectManager.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
+            if (projectController.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
                 app.setStatus(ApplicationStatus.SUCCESSFUL);
                 System.out.println("Application approved.");
             } else {
                 app.setStatus(ApplicationStatus.UNSUCCESSFUL);
                 System.out.println("Application rejected due to unavailability.");
             }
-        }
+        }*/
+        return true;
     }
 
-    public void rejectApplication(String nric) {
-        BTOApplication app = getApplicationByNRIC(nric);
+    public boolean rejectApplication(Application application) {
+        /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             app.setStatus(ApplicationStatus.UNSUCCESSFUL);
             System.out.println("Application rejected.");
-        }
+        }*/
+        return true;
     }
 
     public boolean bookFlat(String nric, String flatType) {
@@ -97,7 +99,7 @@ public class ApplicationController {
             System.out.println("Booking not allowed. You must have a successful application.");
             return false;
         }
-        if (!projectManager.hasAvailableFlat(app.getProjectID(), flatType)) {
+        if (!projectController.hasAvailableFlat(app.getProjectID(), flatType)) {
             System.out.println("Selected flat type is no longer available.");
             return false;
         }
