@@ -102,8 +102,7 @@ public class ApplicationController {
         }
         app.setStatus(ApplicationStatus.BOOKED);
         app.setFlatType(flatType);
-        projectManager.decrementFlatCount(app.getProjectID(), flatType);
-        //ReceiptManager.generateReceipt(nric, app.getProjectID(), flatType, userManager);
+        projectController.decrementFlatCount(app.getProjectID(), flatType);
         System.out.println("Flat booked successfully.");
         return true;
     }
@@ -112,7 +111,7 @@ public class ApplicationController {
         BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.hasRequestedWithdrawal()) {
             if (app.getStatus() == ApplicationStatus.BOOKED) {
-                projectManager.incrementFlatCount(app.getProjectID(), app.getFlatType());
+                projectController.incrementFlatCount(app.getProjectID(), app.getFlatType());
                 // incrementFlatCount() --> update the available flat count for the given flat type within the specified project
             }
             applicationDatabase.remove(nric);
@@ -127,7 +126,6 @@ public class ApplicationController {
             System.out.println("Withdrawal rejected.");
         }
     }
-
 
     public void hasAccessToApplication() {
         // Implement access control logic for officers if needed

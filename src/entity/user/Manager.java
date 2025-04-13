@@ -28,6 +28,6 @@ public class Manager extends User {
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
 	}
-
+	
 	
 }
