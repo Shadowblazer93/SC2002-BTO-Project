@@ -3,6 +3,7 @@ package boundary;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.Applicant;
+import enums.ApplicationStatus;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,24 @@ public class PrintApplications implements Print<String, BTOApplication> {
         }
 
         for (BTOApplication application : applicationList.values()) {
-            System.out.printf(" - NRIC: %s | Flat Type: %s\n", application.getApplicantNRIC(), application.getFlatType());
+            if (application.getStatus() == ApplicationStatus.BOOKED || application.getStatus() == ApplicationStatus.SUCCESSFUL) {
+                continue;   // Skip applications that are booked or successful
+            }
+            System.out.printf(" - NRIC: %s | Flat Type: %s\n", application.getApplicant().getNRIC(), application.getFlatType());
+        }
+    }
+
+    public void printWithdrawals(Map<String, BTOApplication> applicationList) {
+        if (applicationList == null || applicationList.isEmpty()) {
+            System.out.println("No applications found");
+            return;
+        }
+
+        for (BTOApplication application : applicationList.values()) {
+            if (application.getStatus() == ApplicationStatus.BOOKED || application.getStatus() == ApplicationStatus.SUCCESSFUL || !application.getWithdrawal()) {
+                continue;   // Skip applications that have not requested withdrawal
+            }
+            System.out.printf(" - NRIC: %s | Flat Type: %s\n", application.getApplicant().getNRIC(), application.getFlatType());
         }
     }
 }

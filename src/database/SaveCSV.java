@@ -1,9 +1,11 @@
 package database;
 
+import controller.ApplicationController;
 import controller.BTOProjectController;
 import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
+import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.registration.Registration;
@@ -38,10 +40,10 @@ public class SaveCSV {
                 LocalDate closingDate = project.getClosingDate();
                 int availableOfficerSlots = project.getAvailableOfficerSlots();
                 boolean visibile = project.getVisibility();
-                Map<String, Enquiry> enquiryList = project.getEnquiries();
+                Map<Integer, Enquiry> enquiryList = project.getEnquiries();
                 StringBuilder enquiries = new StringBuilder();
                 if (enquiryList != null) {
-                    for (Map.Entry<String, Enquiry> entry : enquiryList.entrySet()) {
+                    for (Map.Entry<Integer, Enquiry> entry : enquiryList.entrySet()) {
                         Enquiry enquiry = entry.getValue();
                         enquiries.append(enquiry.getID()).append("|");
                     }
@@ -90,7 +92,7 @@ public class SaveCSV {
         }
     }
 
-    public static void saveManageras() {
+    public static void saveManagers() {
         ManagerController managerController = new ManagerController();
         Map<String, Manager> allManagers = managerController.getAllManagers();
         File filePath = new File("src/database/ManagerList.csv");
@@ -113,7 +115,7 @@ public class SaveCSV {
         }
     }
 
-    public static void saveApplicantas() {
+    public static void saveApplicants() {
         ApplicantController applicantController = new ApplicantController();
         Map<String, Applicant> allApplicants = applicantController.getAllApplicants();
         File filePath = new File("src/database/ApplicantList.csv");
@@ -156,6 +158,29 @@ public class SaveCSV {
             }
         } catch (IOException e) {
             System.out.println("Error saving enquiries");
+        }
+    }
+
+    public static void saveBTOApplications() {
+        ApplicationController applicationController = new ApplicationController();
+        Map<String, BTOApplication> allApplications = applicationController.getAllApplications();
+        File filePath = new File("src/database/ApplicationList.csv");
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // File header
+            writer.write("Applicant,Project,FlatType(Rooms),Status,Withdrawal\n");
+
+            for (BTOApplication application : allApplications.values()) {
+                String applicant = application.getApplicant().getNRIC();
+                String project = application.getProject().getProjectName();
+                int flatType = application.getFlatType().getNumRooms();
+                String status = application.getStatus().toString();
+                boolean withdrawal = application.getWithdrawal();
+
+                writer.write(String.format("\"%s\",\"%s\",%d,\"%s\",%b\n",
+                    applicant, project, flatType, status, withdrawal));
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving applications");
         }
     }
 }

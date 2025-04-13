@@ -40,10 +40,14 @@ public class BTOProject {
         this.pendingRegistrations = new HashMap<>();
     }
 
+    public void addOfficer(Officer officer) {
+        this.assignedOfficers.add(officer);   
+    }
+
     // Assign officer to project
-    public void addOfficer(Registration registration) {
+    public void assignOfficer(Registration registration) {
         Officer officer = registration.getOfficer();
-        this.assignedOfficers.add(officer);             // Add to assigned officer list
+        addOfficer(officer);
         this.availableOfficerSlots--;
         String nric = officer.getNRIC();
         this.pendingRegistrations.remove(nric); // Remove registration from pending registrations
@@ -63,7 +67,7 @@ public class BTOProject {
 
     // Add application to project
     public void addApplication(BTOApplication application) {
-        String nric = application.getApplicantNRIC();
+        String nric = application.getApplicant().getNRIC();
         applications.put(nric, application);
     }
 

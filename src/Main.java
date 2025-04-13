@@ -57,8 +57,8 @@ public class Main {
 
         // Save CSV files
         SaveCSV.saveProject();
-        SaveCSV.saveManageras();
-        SaveCSV.saveApplicantas();
+        SaveCSV.saveManagers();
+        SaveCSV.saveApplicants();
         SaveCSV.saveEnquiries();
     }
 }

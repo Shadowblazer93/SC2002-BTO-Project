@@ -13,7 +13,6 @@ public class EnquiryMain {
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     public void viewProjectEnquiries(Officer officer) {
-        PrintEnquiries enquiryPrinter = new PrintEnquiries();
         BTOProject project = officer.getAssignedProject();
         
         if (project == null) {

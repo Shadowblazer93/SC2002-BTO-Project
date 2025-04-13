@@ -11,6 +11,7 @@ import enums.FlatType;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import enums.ApplicationStatus;
 
 public class ApplicationMain {
     ApplicationController applicationController = new ApplicationController();
@@ -61,10 +62,12 @@ public class ApplicationMain {
                 ------------------------
                     Application Menu
                 ------------------------
-                1. Approve application
-                2. Reject application
-                3. Filter applications
-                4. Exit
+                1. Approve applications
+                2. Reject applications
+                3. Approve applcation withdrawals
+                4. Reject application withdrawals
+                5. Filter applications
+                6. Exit
             """);
             System.out.print("Option: ");
             int choice = sc.nextInt();
@@ -72,15 +75,21 @@ public class ApplicationMain {
 
             switch (choice) {
                 case 1 -> {
-                    processApplication(sc, manager, true);
+                    processApplication(sc, manager, true);  // Approve applications
                 }
                 case 2 -> {
-                    processApplication(sc, manager, false);
+                    processApplication(sc, manager, false); // Reject applications
                 }
                 case 3 -> {
-                    filterApplication(sc, manager);
+                    processWithdrawals(sc, manager, true);  // Approve withdrawals
                 }
                 case 4 -> {
+                    processWithdrawals(sc, manager, false); // Reject withdrawals
+                }
+                case 5 -> {
+                    filterApplication(sc, manager);
+                }
+                case 6 -> {
                     System.out.println("Exiting application menu...");
                     running = false;
                 }
@@ -108,19 +117,31 @@ public class ApplicationMain {
         officer.generateReceipt(applicant);
     }
 
-    private void processApplication(Scanner sc, Manager manager, boolean isApproval) {
+    private Map<String, BTOApplication> retrieveApplications(Manager manager, boolean withdrawal) {
         if (manager.getCurrentProject() == null) {
             System.out.println("You are not managing any project.");
-            return;
+            return null;
         }
 
         Map<String, BTOApplication> applications = manager.getCurrentProject().getApplications();
         if (applications.isEmpty()) {
             System.out.printf("No applications found for your project '%s'.\n", manager.getCurrentProject().getProjectName());
-            return;
+            return null;
         }
         // Print list of applications
-        printApplications.printMap(applications);
+        if (withdrawal) {
+            printApplications.printWithdrawals(applications);
+        } else {
+            printApplications.printMap(applications);
+        }
+        return applications;
+    }
+
+    private void processApplication(Scanner sc, Manager manager, boolean isApproval) {
+        Map<String, BTOApplication> applications = retrieveApplications(manager, false);
+        if (applications == null) {
+            return; // Error message already printed in retrieveApplications()
+        }
 
         System.out.println("Select applications to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
@@ -134,16 +155,52 @@ public class ApplicationMain {
                 System.out.println("Application not found.");
                 continue;
             }
-            // Reject application
-            boolean success = isApproval
-                    ? applicationController.approveApplication(application)
-                    : applicationController.rejectApplication(application);
-            if (success) {
-                System.out.println("Application " + (isApproval ? "approved" : "rejected") + " successfully.");
+            // Approve/Reject application
+            if (isApproval) {
+                applicationController.approveApplication(application);
             } else {
-                System.out.println("Failed to " + (isApproval ? "approve" : "reject") + " application.");
+                applicationController.rejectApplication(application);
             }
+            System.out.println("Application " + (isApproval ? "approved" : "rejected") + " successfully.");
         }
+    }
+
+    private void processWithdrawals(Scanner sc, Manager manager, boolean isApproval) {
+        Map<String, BTOApplication> applications = retrieveApplications(manager, true);
+        if (applications == null) {
+            return; // Error message already printed in retrieveApplications()
+        }
+        System.out.println("Select withdrawal to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
+        String nric = "";
+        while (!nric.equals("0")) {
+            nric = sc.nextLine();
+            // Retrieve application by NRIC
+            BTOApplication application;
+            if (applications.containsKey(nric)) {
+                application = applications.get(nric);
+            } else {
+                System.out.println("Application not found.");
+                continue;
+            }
+
+            if (!application.getWithdrawal()) {
+                System.out.println("Applicant has not requested withdrawal.");
+                continue;
+            }
+            if (application.getStatus() == ApplicationStatus.BOOKED || application.getStatus() == ApplicationStatus.SUCCESSFUL) {
+                System.out.println("Application is already successful. Cannot approve/reject withdrawal.");
+                continue;
+            }
+
+            // Approve/Reject application
+            if (isApproval) {
+                applicationController.approveWithdrawal(application);
+            } else {
+                applicationController.rejectWithdrawal(application);
+            }
+            System.out.println("Withdrawal " + (isApproval ? "approved" : "rejected") + " successfully.");
+        }
+        
     }
 
     private void filterApplication(Scanner sc, Manager manager) {

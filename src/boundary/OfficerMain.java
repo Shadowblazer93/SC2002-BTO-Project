@@ -20,6 +20,7 @@ public class OfficerMain {
     RegistrationController registrationController = new RegistrationController();
     OfficerController officerController = new OfficerController();
     ApplicantController applicantController = new ApplicantController();
+    EnquiryMain enquiryMain = new EnquiryMain();
     public static void main(String[] args) {
         
     }
@@ -29,6 +30,7 @@ public class OfficerMain {
             System.out.println();
             System.out.println();
             System.out.printf("""
+                
                     Hi %s
                     ------------------------------
                         HDB Officer Main Page
@@ -50,7 +52,7 @@ public class OfficerMain {
 
             switch (choice) {
                 case 1 -> manageFlatBookings(officer);
-                case 2 -> manageEnquiries(sc, officer);
+                case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
                 case 3 -> updateApplicantStatus(sc, officer);
                 case 4 -> generateReceipt(sc, officer);
                 case 5 -> registerProject(sc, officer);
@@ -70,19 +72,7 @@ public class OfficerMain {
         //print proj
         System.out.print(project);
     }
-    private void manageEnquiries(Scanner sc, Officer officer) {
-        EnquiryMain enquiryMain = new EnquiryMain();
-        
-        // Use the extracted method for viewing enquiries
-        enquiryMain.viewProjectEnquiries(officer);
-        
-        // Continue with reply functionality
-        System.out.print("Enter Enquiry ID to reply: ");
-        String enquiryId = sc.nextLine();
-        System.out.print("Enter reply: ");
-        String reply = sc.nextLine();
-        enquiryController.replyEnquiry(officer, enquiryId, reply);
-    }
+    
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
         System.out.print("Enter the NRIC of the applicant: ");

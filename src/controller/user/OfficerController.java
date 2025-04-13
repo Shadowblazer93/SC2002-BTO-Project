@@ -1,18 +1,14 @@
 package controller.user;
 
+import controller.ApplicationController;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.Applicant;
-import entity.user.Manager;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
-import controller.ApplicationController;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import com.apple.eawt.Application;
 
 public class OfficerController {
     private static final Map<String, Officer> allOfficers = new HashMap<>(); // NRIC + Officer
@@ -43,7 +39,8 @@ public class OfficerController {
         }
         return message;
     }
-        public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
+    
+    public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
         if (application == null || officer == null) {
             return false;
         }

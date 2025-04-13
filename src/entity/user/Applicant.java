@@ -1,31 +1,26 @@
 package entity.user;
 
-import entity.application.Application;
+import controller.EnquiryController;
+import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
-import java.util.ArrayList;
-import java.util.List;
-
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
-
 import java.util.Scanner;
 
-import controller.EnquiryController;
-
 public class Applicant extends User { 
-    private Application application;
+    private BTOApplication application;
     private FlatType flatType;
     // private List<Enquiry> enquiries;
     // private int maxEnqId;
 
-    public Applicant(String UserID, String name, int age, String maritalStatus, String password){
-        super(UserID, name, password, age, maritalStatus, UserRole.APPLICANT);
+    public Applicant(String nric, String name, int age, String maritalStatus, String password){
+        super(nric, name, password, age, maritalStatus, UserRole.APPLICANT);
         this.application = null;
 
-        if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
-        if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
+        //if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
+        //if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
     }
 
     public FlatType getflatType(){
@@ -42,29 +37,15 @@ public class Applicant extends User {
         else {return "Unknown flat type";}
     }
 
-    public Application getApplication(){
+    public BTOApplication getApplication(){
         return application;
     }
 
-    public void projectView(BTOProject p) {System.out.println(p);}
-
-    public void projectApply(BTOProject p) {
-        if (this.application!=null) {
-            System.out.println("You have already applied for a project. Withdraw your current application before applying for a new one.");
-            return;
-        }
-
-        this.application = new Application(this.getNRIC(), p, this.flatType, ApplicationStatus.PENDING);
-        p.setApplication(application);
-        System.out.println("Application submitted successfully!");
-    }
-
-    public void projectWithdraw() {
-        BTOProject p = this.application.getProject();
+    public void removeApplication() {
         this.application = null;
-        p.setApplication(null);
-        System.out.println("You have successfully withdrawn from the project.");
     }
+
+    public void projectView(BTOProject p) {System.out.println(p);}
 
     public void updateStatus(ApplicationStatus status) {
         if (this.application==null) {

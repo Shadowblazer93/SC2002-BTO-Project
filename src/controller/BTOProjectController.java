@@ -46,6 +46,17 @@ public class BTOProjectController {
         return allProjects.containsKey(projectName);
     }
 
+    // Check if project is open to applications
+    public boolean isProjectOpen(BTOProject project) {
+        LocalDate today = LocalDate.now();
+        return project.getOpeningDate().isBefore(today) && project.getClosingDate().isAfter(today);
+    }
+
+    // Check if flats available for flat type
+    public boolean flatTypeAvailable(BTOProject project, FlatType flatType) {
+        return project.getUnitCounts().get(flatType) > 0;
+    }
+
     /*
      * Methods to edit project details
      * @param manager       Manager in charge of project

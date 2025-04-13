@@ -6,7 +6,7 @@ import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
-import entity.user.Manager;
+import entity.user.*;
 import enums.FlatType;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -97,6 +97,7 @@ public class ReadCSV {
     public static void loadProject() {
         BTOProjectController projectController = new BTOProjectController();
         ManagerController managerController = new ManagerController();
+        OfficerController officerController = new OfficerController();
         File file = new File("src/database/ProjectList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -119,6 +120,10 @@ public class ReadCSV {
                 LocalDate closingDate = LocalDate.parse(data[6].replace("\"", "").trim());
                 int officerSlots = Integer.parseInt(data[7].trim());
                 boolean visible = Boolean.parseBoolean(data[8].trim());
+                String enquiries = data[9].replace("\"", "").trim();
+                String applications = data[10].replace("\"", "").trim();
+                String assignedOfficers = data[11].replace("\"", "").trim();
+                String pendingRegistrations = data[12].replace("\"", "").trim();
 
                 // Get manager
                 Manager manager = managerController.getManager(managerNRIC);
@@ -131,6 +136,19 @@ public class ReadCSV {
                     project.setVisible(visible);
                 }
                 manager.getManagedProjects().put(projectName, project);
+
+                // Parse enquiries
+
+                // Parse applications
+
+                // Parse assigned officers
+                String[] assignedOfficerArray = assignedOfficers.split("|");
+                Map<String, Officer> allOfficers = officerController.getAllOfficers();
+                for (String officerNRIC : assignedOfficerArray) {
+                    officerNRIC = officerNRIC.trim();
+                    project.addOfficer(allOfficers.get(officerNRIC));
+                }
+                // Parse pending registrations
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());

@@ -48,7 +48,7 @@ public class RegistrationController {
         }
 
         registration.approveRegistration(); // Set as approved
-        project.addOfficer(registration);   // Add to project
+        project.assignOfficer(registration);   // Add to project
         return "Success";
     }
 

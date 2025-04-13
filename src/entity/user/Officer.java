@@ -1,26 +1,16 @@
 package entity.user;
 
-import entity.project.BTOProject;
-import entity.enquiry.Enquiry;
-import enums.*;
-import controller.ApplicationController;
-import controller.RegistrationController;
 import controller.user.OfficerController;
-import controller.user.ApplicantController;
-import entity.application.Application;
-import entity.registration.Registration;
-import java.time.LocalDate;
-import java.util.Map;
+import entity.project.BTOProject;
+import enums.*;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
 
     //hdb officer is a subset of applicant
-    public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, FlatType flatType, 
-                   Enquiry[] Enquiries, int maxEnqID) {
+    public Officer(String nric, String name, String password, int age, String maritalStatus) {
         super(nric, name, age, maritalStatus, password);    // Applicant constructor
         this.setUserRole(UserRole.OFFICER);
-        this.assignedProject = appliedProject;
     }
 
     public BTOProject getAssignedProject() {

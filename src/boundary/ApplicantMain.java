@@ -1,16 +1,20 @@
 package boundary;
 
+import controller.ApplicationController;
 import controller.BTOProjectController;
-import entity.application.Application;
+import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.Applicant;
-import java.util.Scanner;
+import enums.FlatType;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ApplicantMain {
+    BTOProjectController projectController = new BTOProjectController();
+    PrintProjects projectPrinter = new PrintProjects();
+    ApplicationController applicationController = new ApplicationController();
+
     public ApplicantMain(Applicant applicant, Scanner sc) {
-        BTOProjectController projectController = new BTOProjectController();
-        PrintProjects projectPrinter = new PrintProjects();
         int choice = 0;
 
         while (choice!=9) {
@@ -46,7 +50,7 @@ public class ApplicantMain {
 
                 case 3 -> {
                     // BTOProject appliedProject = applicant.getAppliedProject();
-                    Application application = applicant.getApplication();
+                    BTOApplication application = applicant.getApplication();
 
                     if (application==null) {
                         System.out.println("You have not applied to any project.");
@@ -61,7 +65,7 @@ public class ApplicantMain {
                 }
 
                 case 5 -> {
-                    withdrawProject(sc, applicant);
+                    withdrawProject(applicant);
                 }
 
                 case 6 -> {
@@ -98,44 +102,71 @@ public class ApplicantMain {
     }
 
     private void applyProject(Scanner sc, Applicant applicant, BTOProjectController controller) {
+        if (applicant.getApplication()!=null) {
+            System.out.println("You have already applied to a project.");
+            return;
+        }
+
+        // Print list of projects
+        projectPrinter.printVisibleProjects(controller.getAllProjects());
+        
         System.out.println("Enter name of project:");
         String projectName = sc.next();
 
         Map<String, BTOProject> allProjects = controller.getAllProjects();
         BTOProject project = allProjects.get(projectName);
 
-        if (applicant.getApplication()!=null) {
-            System.out.println("You have already applied to a project.");
-            return;
-        }
-
         if (project == null) {
             System.out.println("Project does not exist.");
             return;
         }
 
-        if (project.getApplication()!=null) {
-            if (project.getApplication().getApplicantNRIC()==applicant.getNRIC()) {
-                System.out.println("You have already applied to this project.");
-            } else {
-                System.out.println("Project has already been applied to by another applicant.");
-            }
+        // Check if project is open
+        if (!projectController.isProjectOpen(project) || !project.getVisibility()) {
+            System.out.println("Project is not open for applications.");
             return;
         }
-        
-        // Check if project exists
-        // Check if project is open
-        // Check if project is not full
-        // Check if applicant has not applied to any other project
-        // Check if applicant is eligible
-        // Apply to project
+
+        System.out.print("""
+            Select flat type to apply for
+            1. 2-room
+            2. 3-room
+            """);
+        int flatTypeInput = sc.nextInt();
+        sc.nextLine();
+        FlatType flatType;
+        switch (flatTypeInput) {
+            case 1 -> flatType = FlatType.TWO_ROOM;
+            case 2 -> flatType = FlatType.THREE_ROOM;
+            default -> {
+                System.out.println("Invalid flat type.");
+                return;
+            }
+        }
+
+        // Check if there are flats available
+        if (!projectController.flatTypeAvailable(project, flatType)) {
+            System.out.println("No flats available for this type.");
+            return;
+        }
+
+        // Check eligibility
+        if(!applicationController.isEligible(applicant, flatType)) {
+            System.out.println("You are not eligible to apply for this flat type.");
+            return;
+        }
+
+        applicationController.applyProject(applicant, project, flatType);
+        System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
     }
 
-    private void withdrawProject(Scanner sc, Applicant applicant) {
-        Application withdrawAppl = applicant.getApplication();
-        if (withdrawAppl==null) {System.out.println("You have not applied to any project.");}
+    private void withdrawProject(Applicant applicant) {
+        BTOApplication application = applicant.getApplication();
+        if (application == null) {
+            System.out.println("You have not applied to any project.");
+        }
         else {
-            applicant.projectWithdraw();
+            applicationController.requestWithdrawal(applicant);
         }
     }
 }
