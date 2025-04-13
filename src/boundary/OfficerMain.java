@@ -9,6 +9,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
+import enums.ApplicationStatus;
 import enums.FlatType; // Ensure FlatType is imported from the correct package
 import java.time.LocalDate;
 import java.util.*;
@@ -81,10 +82,10 @@ public class OfficerMain {
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
         System.out.print("Enter the NRIC of the applicant: ");
-        String nric = sc.nextLine();
+        String NRIC = sc.nextLine();
+        Applicant applicant = applicantController.getApplicant(NRIC);
         
-        // Delegate to OfficerController
-        officerController.updateApplicantStatus(officer, nric);
+        OfficerController.updateApplicantStatus(officer, applicant, ApplicationStatus.BOOKED);
     }
 
     private void registerProject(Scanner sc, Officer officer) {
