@@ -2,6 +2,7 @@ package entity.user;
 
 import entity.project.BTOProject;
 import entity.enquiry.Enquiry;
+import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
 import controller.ApplicationController;
@@ -138,7 +139,7 @@ public class Officer extends Applicant{
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different project!");
         } else {
-            applicant.updateStatus("BOOKED");
+            applicant.updateStatus(ApplicationStatus.BOOKED);
             System.out.println("Applicant status updated!");
         }
     }
