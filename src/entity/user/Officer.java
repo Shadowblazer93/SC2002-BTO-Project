@@ -12,11 +12,12 @@ import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
+    private String username; // Declare username field
 
     //hdb officer is a subset of applicant
     public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-        super(username, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
+        super(username, password, maxEnqID, applicationStatus, flatType);
         this.username = username; // Initialize username field
     }
 
@@ -78,7 +79,7 @@ public class Officer extends Applicant{
         }
 
         // Get the list of all enquiries for the assigned project
-        Enquiry[] enquiries = assignedProject.getEnquiries();
+        Enquiry[] enquiries = assignedProject.getEnquiries().values().toArray(new Enquiry[0]);
         if (enquiries == null || enquiries.length == 0) {
             System.out.println("No enquiries for this project.");
         } else {
@@ -94,7 +95,7 @@ public class Officer extends Applicant{
 
     public void updateRemainingFlats(Applicant applicant){
         String NRIC = applicant.getNRIC();
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
+        Application application = (Application) ApplicationController.getApplicationByNRIC(NRIC);
         
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different Project!");
