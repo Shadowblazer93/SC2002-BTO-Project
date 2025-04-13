@@ -155,4 +155,14 @@ public class BTOProject {
 
         return sb.toString();
     }
+
+    // Getter
+    public Map<FlatType, Integer> getUnitCounts() {
+        return unitCounts;
+    }
+
+    // Setter (optional)
+    public void setUnitCounts(Map<FlatType, Integer> unitCounts) {
+        this.unitCounts = unitCounts;
+    }
 }

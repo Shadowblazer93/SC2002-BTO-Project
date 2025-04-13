@@ -11,6 +11,7 @@ public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
     private Manager projectManager;
     private User userManager;
+    private BTOProjectController projectController;
 
     public ApplicationController(Manager projectManager, User userManager) {
         this.projectManager = projectManager;
@@ -102,7 +103,7 @@ public class ApplicationController {
         app.setStatus(ApplicationStatus.BOOKED);
         app.setFlatType(flatType);
         projectManager.decrementFlatCount(app.getProjectID(), flatType);
-        ReceiptManager.generateReceipt(nric, app.getProjectID(), flatType, userManager);
+        //ReceiptManager.generateReceipt(nric, app.getProjectID(), flatType, userManager);
         System.out.println("Flat booked successfully.");
         return true;
     }
@@ -112,6 +113,7 @@ public class ApplicationController {
         if (app != null && app.hasRequestedWithdrawal()) {
             if (app.getStatus() == ApplicationStatus.BOOKED) {
                 projectManager.incrementFlatCount(app.getProjectID(), app.getFlatType());
+                // incrementFlatCount() --> update the available flat count for the given flat type within the specified project
             }
             applicationDatabase.remove(nric);
             System.out.println("Withdrawal approved. Application removed.");
@@ -125,6 +127,7 @@ public class ApplicationController {
             System.out.println("Withdrawal rejected.");
         }
     }
+
 
     public void hasAccessToApplication() {
         // Implement access control logic for officers if needed
