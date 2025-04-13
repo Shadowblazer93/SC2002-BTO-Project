@@ -7,7 +7,6 @@ import controller.user.ManagerController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.user.Manager;
-import enums.EnquiryStatus;
 import enums.FlatType;
 import java.io.File;
 import java.io.FileNotFoundException;
