@@ -1,6 +1,7 @@
 package database;
 
 import controller.BTOProjectController;
+import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import entity.enquiry.Enquiry;
@@ -131,6 +132,30 @@ public class SaveCSV {
             }
         } catch (IOException e) {
             System.out.println("Error saving applicants");
+        }
+    }
+
+    public static void saveEnquiries() {
+        EnquiryController enquiryController = new EnquiryController();
+        List<Enquiry> allEnquiries = enquiryController.getAllEnquiries();
+        File filePath = new File("src/database/EnquiryList.csv");
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // File header
+            writer.write("ID,Applicant NRIC,ProjectName,Message,Response,Status\n");
+
+            for (Enquiry enquiry : allEnquiries) {
+                int id = enquiry.getID();
+                String applicantNRIC = enquiry.getApplicantNRIC();
+                String projectName = enquiry.getProjectName();
+                String message = enquiry.getMessage();
+                String response = enquiry.getResponse();
+                String status = enquiry.getStatus().toString();
+
+                writer.write(String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                    id, applicantNRIC, projectName, message, response, status));
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving enquiries");
         }
     }
 }

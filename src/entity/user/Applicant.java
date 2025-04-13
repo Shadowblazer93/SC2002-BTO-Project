@@ -12,18 +12,17 @@ import enums.UserRole;
 
 import java.util.Scanner;
 
+import controller.EnquiryController;
+
 public class Applicant extends User { 
     private Application application;
     private FlatType flatType;
-    private List<Enquiry> enquiries;
-    private int maxEnqId;
+    // private List<Enquiry> enquiries;
+    // private int maxEnqId;
 
     public Applicant(String UserID, String name, int age, String maritalStatus, String password){
         super(UserID, name, password, age, maritalStatus, UserRole.APPLICANT);
         this.application = null;
-        // this.applicationStatus = null;
-        this.enquiries = new ArrayList<>();
-        this.maxEnqId = 0;
 
         if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
         if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
@@ -65,12 +64,12 @@ public class Applicant extends User {
 
     public void enquirySubmit(String msg) {
         // add id assignment to Enquiries
-        this.maxEnqId+=1;
+        EnquiryController.incrementEnquiryCount();
         System.out.println("Enter enquiry message: ");
         // Scanner sc = new Scanner(System.in);
         // String msg = sc.nextLine();
-        Enquiry enq = new Enquiry(maxEnqId,super.getNRIC(),this.getApplication().getProject(),msg);
-        this.enquiries.add(enq);
+        Enquiry enq = new Enquiry(EnquiryController.getEnquiryCount(),super.getNRIC(),this.getApplication().getProject().getProjectName(),msg);
+        EnquiryController.addEnquiry(enq);
         System.out.println("Enquiry submitted successfully!");
     }
 
@@ -81,7 +80,7 @@ public class Applicant extends User {
         int enqId = sc.nextInt();
         sc.close();
     
-        Enquiry enq = enquiries.stream()
+        Enquiry enq = EnquiryController.getAllEnquiries().stream()
             .filter(e -> e.id==enqId)
             .findFirst()
             .orElse(null);
@@ -100,7 +99,7 @@ public class Applicant extends User {
         int enqId = sc.nextInt();
         sc.close();
 
-        Enquiry enq = enquiries.stream()
+        Enquiry enq = EnquiryController.getAllEnquiries().stream()
             .filter(e -> e.id==enqId)
             .findFirst()
             .orElse(null);
@@ -122,7 +121,7 @@ public class Applicant extends User {
         int enqId = sc.nextInt();
         sc.close();
 
-        Enquiry enq = enquiries.stream()
+        Enquiry enq = EnquiryController.getAllEnquiries().stream()
             .filter(e -> e.id==enqId)
             .findFirst()
             .orElse(null);
@@ -132,7 +131,7 @@ public class Applicant extends User {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         } else {
-            enquiries.remove(enq);
+            EnquiryController.removeEnquiry(enq);
             System.out.println("Enquiry deleted successfully!");
         }
     }

@@ -1,11 +1,13 @@
 package database;
 
 import controller.BTOProjectController;
+import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.user.Manager;
+import enums.EnquiryStatus;
 import enums.FlatType;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -136,8 +138,30 @@ public class ReadCSV {
         }
     }
 
-    public void loadEnquiry() {
+    public static void loadEnquiry() {
+        EnquiryController enquiryController = new EnquiryController();
+        File file = new File("src/database/EnquiryList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
 
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+
+                String[] data = line.split(",");
+                int id = Integer.parseInt(data[0].replace("\"", "").trim());
+                String applicantNRIC = data[1].replace("\"", "").trim();
+                String projectName = data[2].replace("\"", "").trim();
+                String message = data[3].replace("\"", "").trim();
+                String response = data[4].replace("\"", "").trim();
+                String status = data[5].replace("\"", "").trim();
+
+                enquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
     }
 
     public void loadApplication() {

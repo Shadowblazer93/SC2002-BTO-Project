@@ -6,31 +6,51 @@ import enums.EnquiryStatus;
 public class Enquiry {
     public int id;
     private String applicantNRIC;
-    private BTOProject project;
+    private String projectName;
     private String message;
     private String response;
     private EnquiryStatus status;
 
-    public Enquiry(int id, String applicantNRIC, BTOProject project, String message) {
+    public Enquiry(int id, String applicantNRIC, String projectName, String message) {
         this.id = id;
         this.applicantNRIC = applicantNRIC;
-        this.project = project;
+        this.projectName = projectName;
         this.message = message;
-        this.response = "";
+        this.response = null;
         this.status = EnquiryStatus.OPEN;
+    }
+
+    public Enquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
+        this.id = id;
+        this.applicantNRIC = applicantNRIC;
+        this.projectName = projectName;
+        this.message = message;
+        this.response = response;
+
+        if (status.equalsIgnoreCase("OPEN")) {this.status = EnquiryStatus.OPEN;}
+        else {this.status = EnquiryStatus.CLOSED;}
     }
 
     public int getID() {
         return id;
     }
+    public String getApplicantNRIC() {
+        return applicantNRIC;
+    }
     public String getMessage() {
         return message;
     }
-    public BTOProject getProject() {
-        return project;
+    public String getProjectName() {
+        return projectName;
     }
     public EnquiryStatus getStatus() {
         return status;
+    }
+    public String getResponse() {
+        if (response == null) {
+            return "No response yet.";
+        }
+        return response;
     }
 
     public void setReply(String resp) {
@@ -49,7 +69,7 @@ public class Enquiry {
         str+= "Enquiry details: \n";
         str+= "ID: "+this.id+"\n";
         str+= "Applicant NRIC:" +this.applicantNRIC+"\n";
-        str+= "BTO Project Details:"+this.project.getProjectName()+"\n";
+        str+= "BTO Project Details:"+this.projectName+"\n";
         str+= "Message: "+this.message+"\n";
         str+= "Status: "+this.status+"\n";
         return str;

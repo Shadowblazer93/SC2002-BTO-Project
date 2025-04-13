@@ -1,11 +1,15 @@
 
 import boundary.Menu;
+import controller.EnquiryController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import database.ReadCSV;
 import database.SaveCSV;
+import entity.enquiry.Enquiry;
 import entity.user.Applicant;
 import entity.user.Manager;
+
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +36,10 @@ public class Main {
             Applicant applicant = entry.getValue();
             System.out.printf("NRIC: %s Name: %s Role: %s\n", nric, applicant.getName(), applicant.getUserRole());
         }
+
+        ReadCSV.loadEnquiry();
+        EnquiryController enquiryController = new EnquiryController();
+        List<Enquiry> allEnquiries = enquiryController.getAllEnquiries();
 
         // Start menu
         Menu menu = new Menu();
