@@ -8,7 +8,7 @@ import entity.user.*;
 
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
-    private Manager projectManager;
+    //private Manager projectManager;
     private User userManager;
     private BTOProjectController projectController;
 
@@ -71,7 +71,7 @@ public class ApplicationController {
     public void approveApplication(String nric) {
         BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
-            if (projectManager.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
+            if (projectController.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
                 app.setStatus(ApplicationStatus.SUCCESSFUL);
                 System.out.println("Application approved.");
             } else {
@@ -95,7 +95,7 @@ public class ApplicationController {
             System.out.println("Booking not allowed. You must have a successful application.");
             return false;
         }
-        if (!projectManager.hasAvailableFlat(app.getProjectID(), flatType)) {
+        if (!projectController.hasAvailableFlat(app.getProjectID(), flatType)) {
             System.out.println("Selected flat type is no longer available.");
             return false;
         }

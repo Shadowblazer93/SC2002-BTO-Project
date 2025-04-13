@@ -129,6 +129,21 @@ public class BTOProjectController {
         }
     }
 
+    public boolean hasAvailableFlat(String projectName, String flatType) {
+        BTOProject project = allProjects.get(projectName);
+        if (project == null) {
+            System.out.println("Project not found.");
+            return false;
+        }
+        try {
+            FlatType type = FlatType.valueOf(flatType.replace("-", "_").toUpperCase());
+            int currentCount = project.getUnitCounts().getOrDefault(type, 0);
+            return currentCount > 0;
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid flat type.");
+            return false;
+        }
+    }
 
     public boolean isProjectVisible(String projectName) {
         BTOProject project = allProjects.get(projectName);
@@ -148,4 +163,5 @@ public class BTOProjectController {
         LocalDate today = LocalDate.now();
         return project.isVisible() && !today.isBefore(project.getOpeningDate()) && !today.isAfter(project.getClosingDate());
     }
+    
 }
