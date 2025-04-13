@@ -29,13 +29,8 @@ public class Manager extends User {
 	public void deleteProject(BTOProject project) {
 		managedProjects.remove(project.getProjectName());
 	}
-<<<<<<< HEAD
 
 	public BTOProject getCurrentProject() {
 		return currentProject;
 	}
-=======
-	
-	
->>>>>>> 4583d49e0b693d620c54d17a58f08f8c9e97f0dc
 }

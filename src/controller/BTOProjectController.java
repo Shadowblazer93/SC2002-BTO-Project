@@ -90,16 +90,15 @@ public class BTOProjectController {
     }
 
     // Increment flat count by flat type for a given project
-    public boolean incrementFlatCount(String projectName, String flatType) {
-        BTOProject project = allProjects.get(projectName);
-        if (project == null) {
+    public boolean incrementFlatCount(BTOProject projectName, String flatType) {
+        if (projectName == null) {
             System.out.println("Project not found.");
             return false;
         }
         try {
             FlatType type = FlatType.valueOf(flatType.replace("-", "_").toUpperCase());
-            int currentCount = project.getUnitCounts().getOrDefault(type, 0);
-            project.getUnitCounts().put(type, currentCount + 1);
+            int currentCount = projectName.getUnitCounts().getOrDefault(type, 0);
+            projectName.getUnitCounts().put(type, currentCount + 1);
             return true;
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid flat type.");
@@ -108,20 +107,19 @@ public class BTOProjectController {
     }
 
     // Decrement flat count by flat type for a given project
-    public boolean decrementFlatCount(String projectName, String flatType) {
-        BTOProject project = allProjects.get(projectName);
-        if (project == null) {
+    public boolean decrementFlatCount(BTOProject projectName, String flatType) {
+        if (projectName == null) {
             System.out.println("Project not found.");
             return false;
         }
         try {
             FlatType type = FlatType.valueOf(flatType.replace("-", "_").toUpperCase());
-            int currentCount = project.getUnitCounts().getOrDefault(type, 0);
+            int currentCount = projectName.getUnitCounts().getOrDefault(type, 0);
             if (currentCount <= 0) {
                 System.out.println("No more units left of this flat type.");
                 return false;
             }
-            project.getUnitCounts().put(type, currentCount - 1);
+            projectName.getUnitCounts().put(type, currentCount - 1);
             return true;
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid flat type.");
