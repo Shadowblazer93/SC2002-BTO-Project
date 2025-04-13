@@ -7,12 +7,12 @@ import controller.user.ApplicantController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import entity.user.Applicant;
 import entity.user.Officer;
+import enums.FlatType; // Ensure FlatType is imported from the correct package
 import java.time.LocalDate;
 import java.util.*;
 public class OfficerMain {
-    EnquiryMain enquiryMain = new EnquiryMain();
-    ApplicationMain applicationMain = new ApplicationMain();
     PrintProjects projectPrinter = new PrintProjects();
     EnquiryController enquiryController = new EnquiryController();
     BTOProjectController projectController = new BTOProjectController();
@@ -31,10 +31,12 @@ public class OfficerMain {
                         HDB Officer Main Page
                     ------------------------------
                     1. View and manage flat bookings
-                    2. Manage enquiries
-                    3. Manage applications
-                    4. Register for project
-                    5. Logout
+                    2. View and reply to enquiries
+                    3. Update applicant status
+                    4. Generate receipt for bookings
+                    5. Register for project
+                    6. Book flat for applicant
+                    7. Logout
                     ------------------------------
                     """, officer.getName());
             
@@ -43,10 +45,12 @@ public class OfficerMain {
 
             switch (choice) {
                 case 1 -> manageFlatBookings(officer);
-                case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
-                case 3 -> applicationMain.displayMenuOfficer(sc, officer);
-                case 4 -> registerProject(sc, officer);
-                case 5 -> {
+                case 2 -> manageEnquiries(sc, officer);
+                case 3 -> updateApplicantStatus(sc, officer);
+                case 4 -> generateReceipt(sc, officer);
+                case 5 -> registerProject(sc, officer);
+                case 6 -> bookFlat(sc, officer);
+                case 7 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -55,14 +59,57 @@ public class OfficerMain {
         }
     }
 
+    private void bookFlat(Scanner sc, Officer officer) {
+        System.out.println("Booking flat for applicant");
+        System.out.print("Enter the NRIC of the applicant: ");
+        String nric = sc.next();
+        Applicant applicant = applicantController.getAllApplicants().get(nric);
+        if (applicant == null) {
+            System.out.println("Applicant not found.");
+            return;
+        }
+        System.out.print("Enter the flat type: ");
+        String flatTypeInput = sc.next();
+        FlatType flatType = FlatType.valueOf(flatTypeInput.toUpperCase());
+        officer.bookFlat(applicant, flatType);
+    }
     private void manageFlatBookings(Officer officer){
         System.out.println("Managing flat bookings!");
         BTOProject project = officer.viewHandledProject();
         //print proj
         System.out.print(project);
     }
-    
-    
+    private void manageEnquiries(Scanner sc, Officer officer) {
+        PrintEnquiries enquiryPrinter = new PrintEnquiries();
+        System.out.println("Viewing and replying to enquiries...");
+        BTOProject project = officer.viewHandledProject();
+        if (project != null) {
+            System.out.println("Project Enquiries for " + project.getProjectName());
+            enquiryPrinter.printMap(project.getEnquiries());    // Print enquiries
+            // Simulate replying to an enquiry
+            System.out.print("Enter Enquiry ID to reply: ");
+            String enquiryId = sc.nextLine();
+            System.out.print("Enter reply: ");
+            String reply = sc.nextLine();
+            enquiryController.replyEnquiry(officer, enquiryId, reply);
+        } else {
+            System.out.println("No project assigned yet.");
+        }
+    }
+    private void updateApplicantStatus(Scanner sc, Officer officer){
+        System.out.print("Enter the NRIC of the applicant to update: ");
+        String nric = sc.next();
+        // Retrieve applicant and update status
+        Applicant applicant = applicantController.getAllApplicants().get(nric);
+        officer.updateApplicantStatus(applicant);
+    }
+    private void generateReceipt(Scanner sc, Officer officer) {
+        System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
+        String nric = sc.next();
+        // Retrieve applicant and generate receipt
+        Applicant applicant = applicantController.getAllApplicants().get(nric);
+        officer.generateReceipt(applicant);
+    }
 
     private void registerProject(Scanner sc, Officer officer) {
         // Check if eligible to register

@@ -9,8 +9,9 @@ import entity.user.*;
 
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();
-    //private Manager projectManager;
-    //private User userManager;
+    private Manager projectManager;
+    private User userManager;
+    private BTOProjectController projectController;
 
     /*public ApplicationController(Manager projectManager, User userManager) {
         this.projectManager = projectManager;
@@ -31,7 +32,7 @@ public class ApplicationController {
             return false;
         }
 
-        if (!projectManager.isProjectVisibleAndOpen(projectID)) {
+        if (!projectController.isProjectVisibleAndOpen(projectID)) {
             System.out.println("Project is not open or visible.");
             return false;
         }
@@ -103,8 +104,7 @@ public class ApplicationController {
         }
         app.setStatus(ApplicationStatus.BOOKED);
         app.setFlatType(flatType);
-        projectManager.decrementFlatCount(app.getProjectID(), flatType);
-        ReceiptManager.generateReceipt(nric, app.getProjectID(), flatType, userManager);
+        projectController.decrementFlatCount(app.getProjectID(), flatType);
         System.out.println("Flat booked successfully.");
         return true;
     }
@@ -113,7 +113,8 @@ public class ApplicationController {
         BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.hasRequestedWithdrawal()) {
             if (app.getStatus() == ApplicationStatus.BOOKED) {
-                projectManager.incrementFlatCount(app.getProjectID(), app.getFlatType());
+                projectController.incrementFlatCount(app.getProjectID(), app.getFlatType());
+                // incrementFlatCount() --> update the available flat count for the given flat type within the specified project
             }
             applicationDatabase.remove(nric);
             System.out.println("Withdrawal approved. Application removed.");
