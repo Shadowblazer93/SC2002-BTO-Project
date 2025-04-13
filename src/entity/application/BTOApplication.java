@@ -1,5 +1,6 @@
 package entity.application;
 
+import enums.ApplicationStatus;
 import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.ApplicationStatus;
@@ -13,7 +14,7 @@ public class BTOApplication {
     private ApplicationStatus status;
     private boolean hasRequestedWithdrawal;
 
-    public BTOApplication(String nric, Applicant applicant, BTOProject project, FlatType flatType) {
+    public BTOApplication(String nric, BTOProject project, String flatType) {
         this.applicantNRIC = nric;
         this.applicant = applicant;
         this.project = project;

@@ -2,10 +2,10 @@ package entity.user;
 
 import entity.project.BTOProject;
 import entity.enquiry.Enquiry;
-import enums.FlatType;
-import enums.UserRole;
+import enums.*;
 import controller.ApplicationController;
 import controller.RegistrationController;
+import controller.user.ApplicantController;
 import entity.application.Application;
 import entity.registration.Registration;
 import java.time.LocalDate;
@@ -15,8 +15,8 @@ public class Officer extends Applicant{
     private BTOProject assignedProject;
 
     //hdb officer is a subset of applicant
-    public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, String flatType, 
-                   Enquiry[] Enquiries, int maxEnqID) {
+    public Officer(String nric, String name, String password, int age, String maritalStatus,
+    BTOProject appliedProject, String applicationStatus, FlatType flatType) {
         super(nric, name, age, maritalStatus, password);    // Applicant constructor
         this.setUserRole(UserRole.OFFICER);
         this.assignedProject = appliedProject;
@@ -52,15 +52,6 @@ public class Officer extends Applicant{
         this.assignedProject = project;
     }
 
-    private boolean hasAccessToApplication(Application application) {
-        if (application == null) {
-            return false;
-        }
-        
-        return assignedProject != null && 
-               application.getProject() != null && 
-               application.getProject().getProjectName().equals(assignedProject.getProjectName());
-    }
     /*public void replyEnquiries(String enquiryID, String responseMessage) {
         // Find the enquiry based on ID
         Enquiry enquiry = assignedProject.getEnquiries().get(enquiryID);
@@ -126,95 +117,19 @@ public void bookFlat(Applicant applicant, FlatType flatType) {
             }
         }
     }
-
-
-    public void updateRemainingFlats(Applicant applicant){
-        String NRIC = applicant.getNRIC();
-        Application application = (Application) ApplicationController.getApplicationByNRIC(NRIC);
-        
-        if (!hasAccessToApplication(application)) {
-            System.out.println("Officer is assigned to a different Project!");
-        } else {
-            FlatType flatType = application.getflatType();
-            Map<FlatType,Integer> unitCounts = assignedProject.getunitCounts();
-            unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
-        }
+    public void updateApplicantStatus(Applicant applicant, ApplicationStatus status){
+        ApplicationController.updateApplicantStatus(this, applicant, ApplicationStatus.BOOKED);
     }
-
-    public Application retrieveApplicantApplication(Applicant applicant) {
-        String NRIC = applicant.getNRIC();
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
-        
-        if (application == null) {
-            System.out.println("No application found for NRIC: " + NRIC);
-            return null;
-        }
-        
-        if (hasAccessToApplication(application)) {
-            return application;
-        } else {
-            System.out.println("Officer does not have access to this application!");
-            return null;
-        }
-    }
-
-    public void updateApplicantStatus(Applicant applicant) {
-        String NRIC = applicant.getNRIC();
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
-        
-        if (!hasAccessToApplication(application)) {
-            System.out.println("Officer is assigned to a different project!");
-        } else {
-            applicant.updateStatus("BOOKED");
-            System.out.println("Applicant status updated!");
-        }
-    }
-
     public void updateApplicantProfile(Applicant applicant){
-        String NRIC = applicant.getNRIC();
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
-        FlatType flatType = application.getflatType();
-        
-        if (!hasAccessToApplication(application)) {
-            System.out.println("Officer is assigned to a different project!");
-        } else {
-            applicant.updateflatType(flatType);
-            System.out.println("Applicant profile updated!");
-        }
+        ApplicationController.updateApplicantProfile(this, applicant);
     }
-
+    public void retrieveApplicantApplication(Applicant applicant){
+        ApplicationController.retrieveApplicantApplication(this, applicant);
+    }
+    public void updateRemainingFlats(Applicant applicant){
+        ApplicationController.updateRemainingFlats(this, applicant);
+    }
     public void generateReceipt(Applicant applicant){
-        String NRIC = applicant.getNRIC();
-        String name = applicant.getName();
-        int age = applicant.getAge();
-        String maritalStatus = applicant.getMaritalStatus();
-        FlatType flatType = applicant.getflatType();
-
-        Application application = ApplicationController.getApplicationByNRIC(NRIC);
-
-        BTOProject project = application.getProject();
-        String projectName = project.getProjectName();
-        String neighbourhood = project.getNeighbourhood();
-        Map<FlatType,Integer> unitCounts = project.getunitCounts();
-        
-        if (!hasAccessToApplication(application)) {
-            System.out.println("Officer does not have access to this application!");
-        } else {
-            System.out.println("===== BOOKING RECEIPT =====");
-            System.out.println("Applicant name: " + name);
-            System.out.println("NRIC: " + NRIC);
-            System.out.println("Age: " + age);
-            System.out.println("Marital status: " + maritalStatus);
-            System.out.println("Flat type booked: " + flatType);
-            System.out.println("Project name: " + projectName);
-            System.out.println("Neighbourhood: " + neighbourhood);
-            for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
-                FlatType ProjectflatType = entry.getKey();
-                int numRooms = ProjectflatType.getNumRooms();
-                Integer units = entry.getValue();
-                System.out.printf("%d-Room has %d units\n", numRooms, units);
-            System.out.println("===========================");
-            }
-        }   
+        ApplicationController.generateReceipt(this, applicant);
     }
 }

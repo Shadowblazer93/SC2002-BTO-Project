@@ -129,7 +129,7 @@ public class ApplicationController {
         }
     }
 
-    public boolean hasAccessToApplication(Officer officer, BTOApplication application) {
+    public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
         if (application == null || officer == null) {
             return false;
         }
@@ -138,5 +138,96 @@ public class ApplicationController {
         return assignedProject != null && 
                application.getProject() != null && 
                application.getProject().getProjectName().equals(assignedProject.getProjectName());
+    }
+
+    public static void updateApplicantStatus(Officer officer, Applicant applicant, ApplicationStatus status) {
+        String NRIC = applicant.getNRIC();
+        BTOApplication application = getApplicationByNRIC(NRIC);
+        
+        if (!hasAccessToApplication(officer, application)) {
+            System.out.println("Officer is assigned to a different project!");
+        } else {
+            applicant.updateStatus(status);
+            System.out.println("Applicant status updated!");
+        }
+    }
+
+    public static void updateApplicantProfile(Officer officer, Applicant applicant){
+        String NRIC = applicant.getNRIC();
+        BTOApplication application = getApplicationByNRIC(NRIC);
+        FlatType flatType = application.getFlatType();
+        
+        if (!hasAccessToApplication(officer, application)) {
+            System.out.println("Officer is assigned to a different project!");
+        } else {
+            applicant.updateFlatType(flatType);
+            System.out.println("Applicant profile updated!");
+        }
+    }
+
+    public static BTOApplication retrieveApplicantApplication(Officer officer, Applicant applicant) {
+        String NRIC = applicant.getNRIC();
+        BTOApplication application = getApplicationByNRIC(NRIC);
+        
+        if (application == null) {
+            System.out.println("No application found for NRIC: " + NRIC);
+            return null;
+        }
+        
+        if (hasAccessToApplication(officer, application)) {
+            return application;
+        } else {
+            System.out.println("Officer does not have access to this application!");
+            return null;
+        }
+    }
+
+    public static void updateRemainingFlats(Officer officer, Applicant applicant){
+        String NRIC = applicant.getNRIC();
+        BTOApplication application = getApplicationByNRIC(NRIC);
+        BTOProject assignedProject = officer.getAssignedProject();
+        
+        if (!hasAccessToApplication(officer, application)) {
+            System.out.println("Officer is assigned to a different Project!");
+        } else {
+            FlatType flatType = application.getFlatType();
+            Map<FlatType,Integer> unitCounts = assignedProject.getunitCounts();
+            unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
+        }
+    }
+
+    public static void generateReceipt(Officer officer, Applicant applicant){
+        String NRIC = applicant.getNRIC();
+        String name = applicant.getName();
+        int age = applicant.getAge();
+        String maritalStatus = applicant.getMaritalStatus();
+        FlatType flatType = applicant.getflatType();
+
+        BTOApplication application = getApplicationByNRIC(NRIC);
+
+        BTOProject project = application.getProject();
+        String projectName = project.getProjectName();
+        String neighbourhood = project.getNeighbourhood();
+        Map<FlatType,Integer> unitCounts = project.getunitCounts();
+        
+        if (!hasAccessToApplication(officer, application)) {
+            System.out.println("Officer does not have access to this application!");
+        } else {
+            System.out.println("===== BOOKING RECEIPT =====");
+            System.out.println("Applicant name: " + name);
+            System.out.println("NRIC: " + NRIC);
+            System.out.println("Age: " + age);
+            System.out.println("Marital status: " + maritalStatus);
+            System.out.println("Flat type booked: " + flatType);
+            System.out.println("Project name: " + projectName);
+            System.out.println("Neighbourhood: " + neighbourhood);
+            for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {
+                FlatType ProjectflatType = entry.getKey();
+                int numRooms = ProjectflatType.getNumRooms();
+                Integer units = entry.getValue();
+                System.out.printf("%d-Room has %d units\n", numRooms, units);
+            System.out.println("===========================");
+            }
+        }   
     }
 }
