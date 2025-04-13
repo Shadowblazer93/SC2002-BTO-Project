@@ -2,7 +2,6 @@ package controller;
 
 import entity.application.BTOApplication;
 import enums.ApplicationStatus;
-import utils.ReceiptManager;
 import java.util.HashMap;
 import java.util.Map;
 import entity.user.*;
@@ -32,7 +31,7 @@ public class ApplicationController {
             return false;
         }
 
-        if (!projectManager.isProjectVisibleAndOpen(projectID)) {
+        if (!projectController.isProjectVisibleAndOpen(projectID)) {
             System.out.println("Project is not open or visible.");
             return false;
         }

@@ -128,4 +128,24 @@ public class BTOProjectController {
             return false;
         }
     }
+
+
+    public boolean isProjectVisible(String projectName) {
+        BTOProject project = allProjects.get(projectName);
+        if (project == null) {
+            System.out.println("Project not found.");
+            return false;
+        }
+        return project.isVisible();
+    }
+
+    public boolean isProjectVisibleAndOpen(String projectName) {
+        BTOProject project = allProjects.get(projectName);
+        if (project == null) {
+            System.out.println("Project not found.");
+            return false;
+        }
+        LocalDate today = LocalDate.now();
+        return project.isVisible() && !today.isBefore(project.getOpeningDate()) && !today.isAfter(project.getClosingDate());
+    }
 }
