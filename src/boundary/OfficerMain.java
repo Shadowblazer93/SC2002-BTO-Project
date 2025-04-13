@@ -9,6 +9,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
+import enums.ApplicationStatus;
 import enums.FlatType; // Ensure FlatType is imported from the correct package
 import java.time.LocalDate;
 import java.util.*;
@@ -63,20 +64,6 @@ public class OfficerMain {
         }
     }
 
-    private void bookFlat(Scanner sc, Officer officer) {
-        System.out.println("Booking flat for applicant");
-        System.out.print("Enter the NRIC of the applicant: ");
-        String nric = sc.next();
-        Applicant applicant = applicantController.getAllApplicants().get(nric);
-        if (applicant == null) {
-            System.out.println("Applicant not found.");
-            return;
-        }
-        System.out.print("Enter the flat type: ");
-        String flatTypeInput = sc.next();
-        FlatType flatType = FlatType.valueOf(flatTypeInput.toUpperCase());
-        officer.bookFlat(applicant, flatType);
-    }
     private void manageFlatBookings(Officer officer){
         System.out.println("Managing flat bookings!");
         BTOProject project = officer.viewHandledProject();
@@ -84,35 +71,25 @@ public class OfficerMain {
         System.out.print(project);
     }
     private void manageEnquiries(Scanner sc, Officer officer) {
-        PrintEnquiries enquiryPrinter = new PrintEnquiries();
-        System.out.println("Viewing and replying to enquiries...");
-        BTOProject project = officer.viewHandledProject();
-        if (project != null) {
-            System.out.println("Project Enquiries for " + project.getProjectName());
-            enquiryPrinter.printMap(project.getEnquiries());    // Print enquiries
-            // Simulate replying to an enquiry
-            System.out.print("Enter Enquiry ID to reply: ");
-            String enquiryId = sc.nextLine();
-            System.out.print("Enter reply: ");
-            String reply = sc.nextLine();
-            enquiryController.replyEnquiry(officer, enquiryId, reply);
-        } else {
-            System.out.println("No project assigned yet.");
-        }
+        EnquiryMain enquiryMain = new EnquiryMain();
+        
+        // Use the extracted method for viewing enquiries
+        enquiryMain.viewProjectEnquiries(officer);
+        
+        // Continue with reply functionality
+        System.out.print("Enter Enquiry ID to reply: ");
+        String enquiryId = sc.nextLine();
+        System.out.print("Enter reply: ");
+        String reply = sc.nextLine();
+        enquiryController.replyEnquiry(officer, enquiryId, reply);
     }
-    private void updateApplicantStatus(Scanner sc, Officer officer){
-        System.out.print("Enter the NRIC of the applicant to update: ");
-        String nric = sc.next();
-        // Retrieve applicant and update status
-        Applicant applicant = applicantController.getAllApplicants().get(nric);
-        officer.updateApplicantStatus(applicant);
-    }
-    private void generateReceipt(Scanner sc, Officer officer) {
-        System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
-        String nric = sc.next();
-        // Retrieve applicant and generate receipt
-        Applicant applicant = applicantController.getAllApplicants().get(nric);
-        officer.generateReceipt(applicant);
+
+    private void updateApplicantStatus(Scanner sc, Officer officer) {
+        System.out.print("Enter the NRIC of the applicant: ");
+        String NRIC = sc.nextLine();
+        Applicant applicant = applicantController.getApplicant(NRIC);
+        
+        OfficerController.updateApplicantStatus(officer, applicant, ApplicationStatus.BOOKED);
     }
 
     private void registerProject(Scanner sc, Officer officer) {
