@@ -2,9 +2,7 @@ package entity.user;
 
 import entity.project.BTOProject;
 import entity.enquiry.Enquiry;
-import enums.ApplicationStatus;
 import enums.FlatType;
-import enums.UserRole;
 import controller.ApplicationController;
 import controller.RegistrationController;
 import entity.application.Application;
@@ -17,17 +15,10 @@ public class Officer extends Applicant{
     private String username; // Declare username field
 
     //hdb officer is a subset of applicant
-    public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, String flatType, 
+    public Officer(String username, String password, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-<<<<<<< HEAD
-        super(nric, name, age, maritalStatus, password);    // Applicant constructor
-        this.setUserRole(UserRole.OFFICER);
-        this.assignedProject = appliedProject;
-        //super(nric, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
-=======
         super(username, password, maxEnqID, applicationStatus, flatType);
         this.username = username; // Initialize username field
->>>>>>> d1f2c92edf50cb13746bdebe844553e110d170b8
     }
 
     public BTOProject getAssignedProject() {
@@ -80,6 +71,39 @@ public class Officer extends Applicant{
         }
     }*/
     
+public void bookFlat(Applicant applicant, FlatType flatType) {
+    // Check if the officer is assigned to a project
+    if (assignedProject == null) {
+        System.out.println("No project assigned to the officer.");
+        return;
+    }
+
+    // Check if the applicant has already booked a flat
+    if (applicant.getApplication() == null) {
+        System.out.println("The applicant has not applied for any project.");
+        return;
+    }
+
+    // Retrieve the project associated with the applicant's application
+    BTOProject project = applicant.getApplication().getProject();
+    if (project == null || !project.getProjectName().equals(assignedProject.getProjectName())) {
+        System.out.println("The applicant's application is not linked to the officer's assigned project.");
+        return;
+    }
+
+    // Check if the selected flat type is available
+    Map<FlatType, Integer> unitCounts = project.getunitCounts();
+    if (!unitCounts.containsKey(flatType) || unitCounts.get(flatType) <= 0) {
+        System.out.println("The selected flat type is not available.");
+        return;
+    }
+
+    // Book the flat
+    unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Decrease the count of available flats
+    applicant.updateStatus("BOOKED"); // Update the applicant's status to "BOOKED"
+    System.out.println("Flat successfully booked for applicant " + applicant.getName() + " in project " + project.getProjectName());
+}
+
     public void viewProjectEnquiries() {    // Can use PrintEnquiries instead
     // Check if the officer is assigned to a project
         if (assignedProject == null) {
@@ -139,7 +163,7 @@ public class Officer extends Applicant{
         if (!hasAccessToApplication(application)) {
             System.out.println("Officer is assigned to a different project!");
         } else {
-            applicant.updateStatus(ApplicationStatus.BOOKED);
+            applicant.updateStatus("BOOKED");
             System.out.println("Applicant status updated!");
         }
     }
