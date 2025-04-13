@@ -13,12 +13,9 @@ import enums.UserRole;
 import java.util.Scanner;
 
 public class Applicant extends User { 
-    // private BTOProject appliedProject;
     private Application application;
-    // private String applicationStatus;
     private FlatType flatType;
     private List<Enquiry> enquiries;
-    // private UserRole role = UserRole.APPLICANT;
     private int maxEnqId;
 
     public Applicant(String UserID, String name, int age, String maritalStatus, String password){

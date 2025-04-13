@@ -1,8 +1,10 @@
 
 import boundary.Menu;
+import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import database.ReadCSV;
 import database.SaveCSV;
+import entity.user.Applicant;
 import entity.user.Manager;
 import java.util.Map;
 
@@ -21,6 +23,16 @@ public class Main {
         }
         ReadCSV.loadProject();
 
+        System.out.println();
+        ReadCSV.loadApplicant();
+        ApplicantController applicantController = new ApplicantController();
+        Map<String, Applicant> allApplicants = applicantController.getAllApplicants();
+        for (Map.Entry<String, Applicant> entry : allApplicants.entrySet()) {
+            String nric = entry.getKey();
+            Applicant applicant = entry.getValue();
+            System.out.printf("NRIC: %s Name: %s Role: %s\n", nric, applicant.getName(), applicant.getUserRole());
+        }
+
         // Start menu
         Menu menu = new Menu();
         menu.displayMenu();
@@ -28,5 +40,6 @@ public class Main {
         // Save CSV files
         SaveCSV.saveProject();
         SaveCSV.saveManageras();
+        SaveCSV.saveApplicantas();
     }
 }

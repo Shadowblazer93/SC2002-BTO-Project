@@ -19,26 +19,29 @@ public class Enquiry {
         this.response = "";
         this.status = EnquiryStatus.OPEN;
     }
-    
-    public void editMessage(String msg) {
-        this.message = msg;
-        System.out.println("Successfully edited the enquiry message!");
-    }
 
-    // public void view() {
-    //     System.out.println("Enquiry details: ");
-    //     System.out.println("ID: "+this.id);
-    //     System.out.println("Applicant NRIC:" +this.applicantNRIC);
-    //     // System.out.println("BTO Project Details");
-    //     System.out.println("Message: "+this.message);
-    //     System.out.println("Status: "+this.status);
-    //     if (status==EnquiryStatus.CLOSED) System.out.println("Response:"+this.response);
-    // }
+    public int getID() {
+        return id;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public BTOProject getProject() {
+        return project;
+    }
+    public EnquiryStatus getStatus() {
+        return status;
+    }
 
     public void setReply(String resp) {
         this.response = resp;
         this.status = EnquiryStatus.CLOSED;
         System.out.println("Successfully responded to the enquiry.");
+    }
+
+    public void editMessage(String msg) {
+        this.message = msg;
+        System.out.println("Successfully edited the enquiry message!");
     }
 
     public String toString() {
@@ -51,12 +54,5 @@ public class Enquiry {
         str+= "Status: "+this.status+"\n";
         return str;
         // System.out.println("BTO Project Details");
-    }
-
-    public int getID() {
-        return id;
-    }
-    public String getMessage() {
-        return message;
     }
 }

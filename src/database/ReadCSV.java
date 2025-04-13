@@ -1,6 +1,7 @@
 package database;
 
 import controller.BTOProjectController;
+import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
@@ -66,8 +67,30 @@ public class ReadCSV {
         }
     }
 
-    public void loadApplicant() {
+    public static void loadApplicant() {
+        ApplicantController applicantController = new ApplicantController();
+        File file = new File("src/database/ApplicantList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
 
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+                
+                String[] data = line.split(",");
+                String name = data[0].replace("\"", "").trim();
+                String nric = data[1].replace("\"", "").trim();
+                int age = Integer.parseInt(data[2].trim());
+                String maritalStatus = data[3].replace("\"", "").trim();
+                String password = data[4].replace("\"", "").trim();
+
+                // Create Applicant
+                applicantController.createApplicant(nric, name, age, maritalStatus, password);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
     }
 
     public static void loadProject() {

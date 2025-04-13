@@ -1,10 +1,12 @@
 package database;
 
 import controller.BTOProjectController;
+import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
@@ -107,6 +109,28 @@ public class SaveCSV {
             }
         } catch (IOException e) {
             System.out.println("Error saving managers");
+        }
+    }
+
+    public static void saveApplicantas() {
+        ApplicantController applicantController = new ApplicantController();
+        Map<String, Applicant> allApplicants = applicantController.getAllApplicants();
+        File filePath = new File("src/database/ApplicantList.csv");
+
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("Name,NRIC,Age,Marital Status,Password\n");
+            for (Applicant applicant : allApplicants.values()) {
+                String name = applicant.getName();
+                String nric = applicant.getNRIC();
+                int age = applicant.getAge();
+                String maritalStatus = applicant.getMaritalStatus();
+                String password = applicant.getPassword();
+
+                writer.write(String.format("\"%s\",\"%s\",%d,\"%s\",\"%s\"\n",
+                    name, nric, age, maritalStatus, password));
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving applicants");
         }
     }
 }
