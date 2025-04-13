@@ -2,7 +2,6 @@ package controller;
 
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
-import entity.user.Officer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,24 +35,9 @@ public class EnquiryController {
         return allEnquiries;
     }
 
-    public void replyEnquiry(Officer officer, String enquiryId, String reply) {
-        BTOProject assignedProject = officer.getAssignedProject();
-        if (assignedProject == null) {
-            System.out.println("Officer has no assigned project.");
-            return;
-        }
-        
-        // Parse the enquiry ID to an integer
-        int enquiryIdInt;
-        try {
-            enquiryIdInt = Integer.parseInt(enquiryId);
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid enquiry ID format.");
-            return;
-        }
-        
+    public void replyEnquiry(BTOProject project, int enquiryId, String reply) {
         // Find the enquiry based on ID
-        Enquiry enquiry = assignedProject.getEnquiries().get(enquiryIdInt);
+        Enquiry enquiry = project.getEnquiries().get(enquiryId);
         if (enquiry != null) {
             enquiry.setReply(reply);
             System.out.println("Response sent successfully.");

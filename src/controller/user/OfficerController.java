@@ -1,19 +1,14 @@
 package controller.user;
 
 import controller.ApplicationController;
+import controller.BTOProjectController;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
+import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
-<<<<<<< HEAD
-=======
-import controller.ApplicationController;
-import entity.registration.Registration;
-import controller.BTOProjectController;
-
->>>>>>> 27bf637e2fe92c5f8bd1ec5ba799155fad83c7a8
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +16,7 @@ public class OfficerController {
     private static final Map<String, Officer> allOfficers = new HashMap<>(); // NRIC + Officer
     private BTOProjectController projectController = new BTOProjectController();
     public Officer createOfficer(String nric, String name, String password, int age, String maritalStatus) {
-        Officer officer = new Officer(nric, name, password, age, maritalStatus, null, null, null);
+        Officer officer = new Officer(nric, name, password, age, maritalStatus);
         allOfficers.put(nric, officer);
         return officer;
     }
@@ -61,11 +56,7 @@ public class OfficerController {
         
         return message;
     }
-<<<<<<< HEAD
     
-=======
-
->>>>>>> 27bf637e2fe92c5f8bd1ec5ba799155fad83c7a8
     public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
         if (application == null || officer == null) {
             return false;
@@ -195,7 +186,7 @@ public class OfficerController {
         
         // 3. If no application exists, create one
         if (application == null) {
-            application = new BTOApplication(NRIC, applicant, assignedProject, flatType);
+            application = new BTOApplication(applicant, assignedProject, flatType);
             ApplicationController.addApplication(application);
         }
         

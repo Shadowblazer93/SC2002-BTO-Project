@@ -68,29 +68,7 @@ public class OfficerMain {
         //print proj
         System.out.print(project);
     }
-<<<<<<< HEAD
     
-=======
-    private void manageEnquiries(Scanner sc, Officer officer) {
-        EnquiryMain enquiryMain = new EnquiryMain();
-        
-        BTOProject project = officer.getAssignedProject();
-        if (project == null) {
-            System.out.println("No project assigned to the officer.");
-            return; // Exit the method early
-        }
-        
-        // Only continue if project exists
-        enquiryMain.viewProjectEnquiries(officer);
-        
-        sc.nextLine(); // Clear buffer after previous nextInt()
-        System.out.print("Enter Enquiry ID to reply: ");
-        String enquiryId = sc.nextLine();
-        System.out.print("Enter reply: ");
-        String reply = sc.nextLine();
-        enquiryController.replyEnquiry(officer, enquiryId, reply);
-    }
->>>>>>> 27bf637e2fe92c5f8bd1ec5ba799155fad83c7a8
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
         sc.nextLine(); // Consume the leftover newline from previous input
