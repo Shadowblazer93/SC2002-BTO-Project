@@ -136,8 +136,8 @@ public class SaveCSV {
     }
 
     public static void saveEnquiries() {
-        EnquiryController enquiryController = new EnquiryController();
-        List<Enquiry> allEnquiries = enquiryController.getAllEnquiries();
+        // EnquiryController enquiryController = new EnquiryController();
+        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
         File filePath = new File("src/database/EnquiryList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
