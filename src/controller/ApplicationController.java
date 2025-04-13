@@ -27,7 +27,7 @@ public class ApplicationController {
         return applicationDatabase.get(nric);
     }
 
-    public boolean applyForBTO(String nric, String projectID, String flatType) {
+    public boolean applyForBTO(String nric, BTOProject projectID, String flatType) {
         if (applicationDatabase.containsKey(nric)) {
             System.out.println("You have already applied for a project.");
             return false;
@@ -99,13 +99,13 @@ public class ApplicationController {
             System.out.println("Booking not allowed. You must have a successful application.");
             return false;
         }
-        if (!projectController.hasAvailableFlat(app.getProjectID(), flatType)) {
+        if (!projectController.hasAvailableFlat(app.getProject(), flatType)) {
             System.out.println("Selected flat type is no longer available.");
             return false;
         }
         app.setStatus(ApplicationStatus.BOOKED);
         app.setFlatType(flatType);
-        projectController.decrementFlatCount(app.getProjectID(), flatType);
+        projectController.decrementFlatCount(app.getProject(), flatType);
         System.out.println("Flat booked successfully.");
         return true;
     }
@@ -114,7 +114,7 @@ public class ApplicationController {
         BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.hasRequestedWithdrawal()) {
             if (app.getStatus() == ApplicationStatus.BOOKED) {
-                projectController.incrementFlatCount(app.getProjectID(), app.getFlatType());
+                projectController.incrementFlatCount(app.getProject(), app.getFlatType());
                 // incrementFlatCount() --> update the available flat count for the given flat type within the specified project
             }
             applicationDatabase.remove(nric);
