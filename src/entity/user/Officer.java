@@ -13,7 +13,6 @@ import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
-    private String username; // Declare username field
 
     //hdb officer is a subset of applicant
     public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, String flatType, 

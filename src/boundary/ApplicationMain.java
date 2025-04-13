@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class ApplicationMain {
     ApplicationController applicationController = new ApplicationController();
     ApplicantController applicantController = new ApplicantController();
+    PrintApplications printApplications = new PrintApplications();
 
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
@@ -74,7 +75,7 @@ public class ApplicationMain {
                     processApplication(sc, manager, false);
                 }
                 case 3 -> {
-
+                    filterApplication(sc, manager);
                 }
                 case 4 -> {
                     System.out.println("Exiting application menu...");
@@ -111,12 +112,12 @@ public class ApplicationMain {
         }
 
         Map<String, Application> applications = manager.getCurrentProject().getApplications();
-        // Print list of applications
-
         if (applications.isEmpty()) {
-            System.out.println("No applications found for this project.");
+            System.out.printf("No applications found for your project '%s'.\n", manager.getCurrentProject().getProjectName());
             return;
         }
+        // Print list of applications
+        printApplications.printMap(applications);
 
         System.out.println("Select applications to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
@@ -140,5 +141,21 @@ public class ApplicationMain {
                 System.out.println("Failed to " + (isApproval ? "approve" : "reject") + " application.");
             }
         }
+    }
+
+    private void filterApplication(Scanner sc, Manager manager) {
+        if (manager.getCurrentProject() == null) {
+            System.out.println("You are not managing any project.");
+            return;
+        }
+
+        Map<String, Application> applications = manager.getCurrentProject().getApplications();
+        if (applications.isEmpty()) {
+            System.out.printf("No applications found for your project '%s'.\n", manager.getCurrentProject().getProjectName());
+            return;
+        }
+
+        // Select filter
+        
     }
 }
