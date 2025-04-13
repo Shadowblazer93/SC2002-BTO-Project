@@ -12,6 +12,19 @@ public class EnquiryMain {
     EnquiryController enquiryController = new EnquiryController();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
+    public void viewProjectEnquiries(Officer officer) {
+        PrintEnquiries enquiryPrinter = new PrintEnquiries();
+        BTOProject project = officer.getAssignedProject();
+        
+        if (project == null) {
+            System.out.println("No project assigned to the officer.");
+            return;
+        }
+        
+        System.out.println("Project Enquiries for " + project.getProjectName());
+        enquiryPrinter.printMap(project.getEnquiries());
+    }
+
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
