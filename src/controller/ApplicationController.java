@@ -2,7 +2,7 @@ package controller;
 
 import entity.application.BTOApplication;
 import enums.ApplicationStatus;
-import utils.ReceiptManager;
+import entity.application.Application;
 import java.util.HashMap;
 import java.util.Map;
 import entity.user.*;
@@ -68,8 +68,8 @@ public class ApplicationController {
         System.out.println("Withdrawal requested.");
     }
 
-    public void approveApplication(String nric) {
-        BTOApplication app = getApplicationByNRIC(nric);
+    public boolean approveApplication(Application application) {
+        /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             if (projectManager.hasAvailableFlat(app.getProjectID(), app.getFlatType())) {
                 app.setStatus(ApplicationStatus.SUCCESSFUL);
@@ -78,15 +78,17 @@ public class ApplicationController {
                 app.setStatus(ApplicationStatus.UNSUCCESSFUL);
                 System.out.println("Application rejected due to unavailability.");
             }
-        }
+        }*/
+        return true;
     }
 
-    public void rejectApplication(String nric) {
-        BTOApplication app = getApplicationByNRIC(nric);
+    public boolean rejectApplication(Application application) {
+        /*BTOApplication app = getApplicationByNRIC(nric);
         if (app != null && app.getStatus() == ApplicationStatus.PENDING) {
             app.setStatus(ApplicationStatus.UNSUCCESSFUL);
             System.out.println("Application rejected.");
-        }
+        }*/
+        return true;
     }
 
     public boolean bookFlat(String nric, String flatType) {

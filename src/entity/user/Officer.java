@@ -18,15 +18,10 @@ public class Officer extends Applicant{
     //hdb officer is a subset of applicant
     public Officer(String nric, String name, String password, int age, String maritalStatus, BTOProject appliedProject, String applicationStatus, String flatType, 
                    Enquiry[] Enquiries, int maxEnqID) {
-<<<<<<< HEAD
         super(nric, name, age, maritalStatus, password);    // Applicant constructor
         this.setUserRole(UserRole.OFFICER);
         this.assignedProject = appliedProject;
         //super(nric, password, maxEnqID, applicationStatus, flatType, appliedProject, "Officer");
-=======
-        super(username, password, maxEnqID, applicationStatus, flatType);
-        this.username = username; // Initialize username field
->>>>>>> d1f2c92edf50cb13746bdebe844553e110d170b8
     }
 
     public BTOProject getAssignedProject() {

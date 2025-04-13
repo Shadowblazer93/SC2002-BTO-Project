@@ -19,7 +19,7 @@ public class BTOProject {
     private int availableOfficerSlots;
     private boolean visible;
     private Map<String, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
-    private Application application;                // Application for project
+    private Map<String, Application> applications;           // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
     private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
 
@@ -34,7 +34,8 @@ public class BTOProject {
         this.closingDate = closingDate;
         this.availableOfficerSlots = availableOfficerSlots;
         this.visible = false;
-        this.application = null;
+        this.enquiries = new HashMap<>();
+        this.applications = new HashMap<>();
         this.assignedOfficers = new ArrayList<>();
         this.pendingRegistrations = new HashMap<>();
     }
@@ -58,6 +59,12 @@ public class BTOProject {
     public void removeRegistration(Registration registration) {
         Officer officer = registration.getOfficer();
         pendingRegistrations.remove(officer.getNRIC());
+    }
+
+    // Add application to project
+    public void addApplication(Application application) {
+        String nric = application.getApplicantNRIC();
+        applications.put(nric, application);
     }
 
     // Getters and setters
@@ -104,8 +111,8 @@ public class BTOProject {
         return pendingRegistrations;
     }
 
-    public Application getApplication() {
-        return application;
+    public Map<String, Application> getApplications() {
+        return applications;
     }
 
     public void setProjectName(String projectName) {
@@ -130,10 +137,6 @@ public class BTOProject {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
-    }
-
-    public void setApplication(Application application) {
-        this.application = application;
     }
 
     @Override
