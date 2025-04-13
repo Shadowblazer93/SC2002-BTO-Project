@@ -2,7 +2,6 @@ package controller;
 
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
-import entity.user.Officer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +35,9 @@ public class EnquiryController {
         return allEnquiries;
     }
 
-    public void replyEnquiry(Officer officer, String enquiryID, String reply) {
-        BTOProject assignedProject = officer.getAssignedProject();
+    public void replyEnquiry(BTOProject project, int enquiryID, String reply) {
         // Find the enquiry based on ID
-        Enquiry enquiry = assignedProject.getEnquiries().get(enquiryID);
+        Enquiry enquiry = project.getEnquiries().get(enquiryID);
         // If the enquiry is found, reply to it
         if (enquiry != null) {
             enquiry.setReply(reply);  // Set the response and update the status to CLOSED

@@ -6,7 +6,7 @@ import entity.user.Applicant;
 import java.util.List;
 import java.util.Map;
 
-public class PrintApplications implements Print<BTOApplication> {
+public class PrintApplications implements Print<String, BTOApplication> {
     @Override
     public void printMapList(Map<String, List<BTOApplication>> allApplications) {
         throw new UnsupportedOperationException("Not supported.");

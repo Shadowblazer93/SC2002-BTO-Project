@@ -18,7 +18,7 @@ public class BTOProject {
     private final Manager managerInCharge;              // Manager in charge does not change
     private int availableOfficerSlots;
     private boolean visible;
-    private Map<String, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
+    private Map<Integer, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
     private Map<String, BTOApplication> applications;           // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
     private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
@@ -73,7 +73,7 @@ public class BTOProject {
         return projectName;
     }
 
-    public Map<String, Enquiry> getEnquiries() {
+    public Map<Integer, Enquiry> getEnquiries() {
         return this.enquiries;
     }
     public String getNeighbourhood(){

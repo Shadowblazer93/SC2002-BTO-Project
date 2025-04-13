@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 public class RegistrationController {
+    // NRIC + Registration
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
     private static int registrationCount = 0;   // Track registration ID
 

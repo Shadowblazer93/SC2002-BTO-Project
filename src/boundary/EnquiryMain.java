@@ -1,12 +1,16 @@
 package boundary;
 
 import controller.EnquiryController;
+import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.*;
+import enums.UserRole;
+import java.util.List;
 import java.util.Scanner;
 
 public class EnquiryMain {
     EnquiryController enquiryController = new EnquiryController();
+    PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
@@ -19,6 +23,22 @@ public class EnquiryMain {
                 2. Reply enquiries (managed project)
                 3. Exit
             """);
+            System.out.print("Option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            
+            switch (choice) {
+                case 1 -> {
+                    viewManagedEnquiries(officer);
+                }
+                case 2 -> {
+                    replyEnquiry(sc, officer);
+                }
+                case 3 -> {
+                    System.out.println("Exiting enquiry menu...");
+                    running = false;
+                }
+            }
         }
     }
 
@@ -34,24 +54,71 @@ public class EnquiryMain {
                 3. Reply enquiries (managed project)
                 4. Exit
             """);
+            System.out.print("Option: ");
+            int choice = sc.nextInt();
+            sc.nextLine();
+            
+            switch (choice) {
+                case 1 -> {
+                    viewAllEnquiries();
+                }
+                case 2 -> {
+                    viewManagedEnquiries(manager);
+                }
+                case 3 -> {
+                    replyEnquiry(sc, manager);
+                }
+                case 4 -> {
+                    System.out.println("Exiting enquiry menu...");
+                    running = false;
+                }
+            }
         }
     }
 
-    private void manageEnquiries(Scanner sc, Officer officer) {
-        PrintEnquiries enquiryPrinter = new PrintEnquiries();
-        System.out.println("Viewing and replying to enquiries...");
-        BTOProject project = officer.viewHandledProject();
+    private void viewAllEnquiries() {
+        List<Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+        enquiryPrinter.printList(allEnquiries);
+    }
+
+    private BTOProject viewManagedEnquiries(User user) {
+        UserRole role = user.getUserRole();
+        BTOProject project = null;
+        switch (role) {
+            case MANAGER -> {
+                Manager manager = (Manager) user;
+                project = manager.getCurrentProject();
+            }
+            case OFFICER -> {
+                Officer officer = (Officer) user;
+                project = officer.getAssignedProject();
+            }
+            default -> {
+                System.out.println("Invalid user role. Cannot view enquiries.");
+            }
+        }
+        
         if (project != null) {
             System.out.println("Project Enquiries for " + project.getProjectName());
-            enquiryPrinter.printMap(project.getEnquiries());    // Print enquiries
-            // Simulate replying to an enquiry
-            System.out.print("Enter Enquiry ID to reply: ");
-            String enquiryId = sc.nextLine();
-            System.out.print("Enter reply: ");
-            String reply = sc.nextLine();
-            enquiryController.replyEnquiry(officer, enquiryId, reply);
+            enquiryPrinter.printMap(project.getEnquiries());
         } else {
-            System.out.println("No project assigned yet.");
+            System.out.println("You are not managing any project.");
         }
+
+        return project;
+    }
+
+    private void replyEnquiry(Scanner sc, User user) {
+        BTOProject project = viewManagedEnquiries(user);
+        if (project == null) {
+            return; // Error message already printed in viewManagedEnquiries()
+        }
+
+        System.out.print("Enter Enquiry ID to reply: ");
+        int enquiryId = sc.nextInt();
+        sc.nextLine();
+        System.out.print("Enter reply: ");
+        String reply = sc.nextLine();
+        enquiryController.replyEnquiry(project, enquiryId, reply);
     }
 }

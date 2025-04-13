@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class PrintRegistrations implements Print<Registration> {
+public class PrintRegistrations implements Print<String, Registration> {
     @Override
     public void printMapList(Map<String, List<Registration>> allRegistrations) {
         if (allRegistrations == null || allRegistrations.isEmpty()) {
