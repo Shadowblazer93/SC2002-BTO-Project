@@ -33,7 +33,7 @@ public class OfficerMain {
                     ------------------------------
                         HDB Officer Main Page
                     ------------------------------
-                    1. View and manage flat bookings
+                    1. Register for project
                     2. View and reply to enquiries
                     3. Update applicant status
                     4. Generate receipt for bookings
@@ -47,7 +47,7 @@ public class OfficerMain {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> manageFlatBookings(officer);
+                case 1 -> registerForProject(sc, officer);
                 case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
                 case 3 -> updateApplicantStatus(sc, officer);
                 case 4 -> generateReceipt(sc, officer);
@@ -61,12 +61,34 @@ public class OfficerMain {
             }
         }
     }
-    // wrong
-    private void manageFlatBookings(Officer officer){
-        System.out.println("Managing flat bookings!");
-        BTOProject project = officer.viewHandledProject();
-        //print proj
-        System.out.print(project);
+    private void registerForProject(Scanner sc, Officer officer) {
+        // Check if eligible to register
+        String message = officerController.registerProject(officer);
+        if (!message.equals("success")) {
+            System.out.println(message);
+            return; // Only return early if validation fails
+        }
+        
+        // View list of projects
+        System.out.println("Available projects you can register for:");
+        projectPrinter.printMap(projectController.getAllProjects());
+        
+        sc.nextLine(); // Clear buffer after previous nextInt()
+        System.out.print("Enter project name to register: ");
+        String projectName = sc.nextLine();
+        
+        BTOProject project = projectController.getAllProjects().get(projectName);
+        if (project == null) {
+            System.out.println("Project not found.");
+            return;
+        }
+        
+        // Create registration
+        Registration registration = registrationController.createRegistration(officer, project, LocalDate.now());
+        
+        // Apply to the given BTO project
+        project.addRegistration(registration);  // Add registration to project
+        System.out.println("Registration submitted to project: " + project.getProjectName());
     }
     
 
