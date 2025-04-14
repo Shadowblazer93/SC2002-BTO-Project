@@ -45,7 +45,8 @@ public class Main {
         }
 
         ReadCSV.loadEnquiry();
-
+        ReadCSV.loadBTOApplication();
+        ReadCSV.loadRegistration();
         ReadCSV.loadProject();
         
         // Start menu
@@ -53,9 +54,13 @@ public class Main {
         menu.displayMenu();
 
         // Save CSV files
-        SaveCSV.saveProject();
         SaveCSV.saveManagers();
         SaveCSV.saveApplicants();
+        SaveCSV.saveOfficers();
+
+        SaveCSV.saveProject();
         SaveCSV.saveEnquiries();
+        SaveCSV.saveBTOApplications();
+        SaveCSV.saveRegistrations();
     }
 }

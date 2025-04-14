@@ -1,31 +1,30 @@
 package entity.application;
 
-import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.ApplicationStatus;
 import enums.FlatType;
 
 public class BTOApplication {
     private Applicant applicant;
-    private BTOProject project;
+    private String projectName;
     private FlatType flatType;
     private ApplicationStatus status;
     private boolean withdrawal;    // Whether applicant has requested for withdrawal
 
-    public BTOApplication(Applicant applicant, BTOProject project, FlatType flatType) {
+    public BTOApplication(Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
         this.applicant = applicant;
-        this.project = project;
+        this.projectName = projectName;
         this.flatType = flatType;
-        this.status = ApplicationStatus.PENDING;
-        this.withdrawal = false;
+        this.status = status;
+        this.withdrawal = withdrawal;
     }
 
     public Applicant getApplicant() {
         return applicant;
     }
 
-    public BTOProject getProject() {
-        return project;
+    public String getProjectName() {
+        return projectName;
     }
 
     public FlatType getFlatType() {

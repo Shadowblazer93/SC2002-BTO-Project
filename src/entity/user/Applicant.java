@@ -8,10 +8,12 @@ import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
 import java.util.Scanner;
+import controller.BTOProjectController;
 
 public class Applicant extends User { 
     private BTOApplication application;
     private FlatType flatType;
+    BTOProjectController projectController = new BTOProjectController();
     // private List<Enquiry> enquiries;
     // private int maxEnqId;
 
@@ -77,7 +79,8 @@ public class Applicant extends User {
         // String msg = sc.nextLine();
         Enquiry enq = new Enquiry(EnquiryController.getEnquiryCount(),super.getNRIC(),this.getApplication().getProject().getProjectName(),msg);
         EnquiryController.addEnquiry(enq);
-        BTOProject project = this.getApplication().getProject();
+        String projectName = this.getApplication().getProjectName();
+        BTOProject project = projectController.getAllProjects().get(projectName);
         project.addEnquiry(enq);  // Add enquiry to project
         System.out.println("Enquiry submitted successfully!");
     }

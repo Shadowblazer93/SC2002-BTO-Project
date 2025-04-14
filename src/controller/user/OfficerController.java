@@ -15,6 +15,7 @@ import java.util.Map;
 public class OfficerController {
     private static final Map<String, Officer> allOfficers = new HashMap<>(); // NRIC + Officer
     private BTOProjectController projectController = new BTOProjectController();
+    private ApplicationController applicationController = new ApplicationController();
     public Officer createOfficer(String nric, String name, String password, int age, String maritalStatus) {
         Officer officer = new Officer(nric, name, password, age, maritalStatus);
         allOfficers.put(nric, officer);
@@ -64,8 +65,8 @@ public class OfficerController {
         
         BTOProject assignedProject = officer.getAssignedProject();
         return assignedProject != null && 
-               application.getProject() != null && 
-               application.getProject().getProjectName().equals(assignedProject.getProjectName());
+               application.getProjectName() != null && 
+               application.getProjectName().equals(assignedProject.getProjectName());
     }
 
     public static void updateApplicantStatus(Officer officer, Applicant applicant, ApplicationStatus status) {
@@ -79,9 +80,9 @@ public class OfficerController {
         
         if (officer.getAssignedProject() == null) {
             System.out.println("Officer has no assigned project!");
-        } else if (application == null || application.getProject() == null) {
+        } else if (application == null || application.getProjectName() == null) {
             System.out.println("No valid application found for this applicant!");
-        } else if (!officer.getAssignedProject().getProjectName().equals(application.getProject().getProjectName())) {
+        } else if (!officer.getAssignedProject().getProjectName().equals(application.getProjectName())) {
             System.out.println("Officer is assigned to a different project!");
         } else {
             applicant.updateStatus(status);
@@ -131,7 +132,7 @@ public class OfficerController {
             unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
         }
     }
-        public static void generateReceipt(Officer officer, Applicant applicant){
+    public void generateReceipt(Officer officer, Applicant applicant){
         String NRIC = applicant.getNRIC();
         String name = applicant.getName();
         int age = applicant.getAge();
@@ -146,8 +147,8 @@ public class OfficerController {
             return;
         }
 
-        BTOProject project = application.getProject();
-        String projectName = project.getProjectName();
+        String projectName = application.getProjectName();
+        BTOProject project = projectController.getAllProjects().get(projectName);
         String neighbourhood = project.getNeighbourhood();
         Map<FlatType,Integer> unitCounts = project.getunitCounts();
         
@@ -172,7 +173,7 @@ public class OfficerController {
         }   
     }
 
-    public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
+    public void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
         // 1. Check if officer has assigned project
         BTOProject assignedProject = officer.getAssignedProject();
         if (assignedProject == null) {
@@ -186,8 +187,7 @@ public class OfficerController {
         
         // 3. If no application exists, create one
         if (application == null) {
-            application = new BTOApplication(applicant, assignedProject, flatType);
-            ApplicationController.addApplication(application);
+            application = applicationController.applyProject(applicant, assignedProject, flatType);
         }
         
         // 4. Verify officer has permission

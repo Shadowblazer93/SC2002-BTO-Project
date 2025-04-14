@@ -18,7 +18,7 @@ public class EnquiryController {
 
     public Enquiry createEnquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
         enquiryCount = Math.max(enquiryCount,id)+1;
-        Enquiry enquiry = new Enquiry(id,applicantNRIC,projectName,message,response,status);
+        Enquiry enquiry = new Enquiry(enquiryCount,applicantNRIC,projectName,message,response,status);
         allEnquiries.put(enquiry.getID(), enquiry);  // Add the enquiry to the list
         return enquiry;
     }

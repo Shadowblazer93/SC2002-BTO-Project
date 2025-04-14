@@ -1,7 +1,6 @@
 package boundary;
 
 import entity.application.BTOApplication;
-import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.ApplicationStatus;
 import java.util.List;
@@ -26,11 +25,11 @@ public class PrintApplications implements Print<String, BTOApplication> {
             "NRIC", "Name", "Age", "Marital Status", "Project", "Flat Type");
         for (BTOApplication application : applicationList) {
             Applicant applicant = application.getApplicant();
-            BTOProject project = application.getProject();
+            String project = application.getProjectName();
             String flatType = application.getFlatType().getNumRooms() + "-Room";
             System.out.printf("| %-9s | %-20s | %-3d | %-15s | %-20s | %-10s |\n", 
                 applicant.getNRIC(), applicant.getName(), applicant.getAge(), applicant.getMaritalStatus(), 
-                project.getProjectName(), flatType);
+                project, flatType);
         }
         System.out.println("-".repeat(96));
     }

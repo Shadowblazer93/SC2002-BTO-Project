@@ -1,6 +1,5 @@
 package entity.registration;
 
-import entity.project.BTOProject;
 import entity.user.Officer;
 import enums.RegistrationStatus;
 import java.time.LocalDate;
@@ -8,16 +7,16 @@ import java.time.LocalDate;
 public class Registration {
     private final int id;
     private final Officer officer;
-    private final BTOProject project;
+    private final String projectName;
     private final LocalDate registrationDate;
     private RegistrationStatus status;
 
-    public Registration(int id, Officer officer, BTOProject project, LocalDate registrationDate) {
+    public Registration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
         this.id = id;
         this.officer = officer;
-        this.project = project;
+        this.projectName = projectName;
         this.registrationDate = registrationDate;
-        this.status = RegistrationStatus.PENDING; 
+        this.status = status; 
     }
 
     public RegistrationStatus getRegistrationStatus() {
@@ -30,6 +29,14 @@ public class Registration {
 
     public Officer getOfficer() {
         return this.officer;
+    }
+
+    public String getProjectName() {
+        return this.projectName;
+    }
+
+    public LocalDate getRegistrationDate() {
+        return this.registrationDate;
     }
 
     public RegistrationStatus getStatus() {

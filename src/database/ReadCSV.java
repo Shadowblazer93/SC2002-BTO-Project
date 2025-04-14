@@ -1,22 +1,31 @@
 package database;
 
+import controller.ApplicationController;
 import controller.BTOProjectController;
 import controller.EnquiryController;
-import controller.user.ApplicantController;
-import controller.user.ManagerController;
-import controller.user.OfficerController;
+import controller.RegistrationController;
+import controller.user.*;
+import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
+import entity.registration.Registration;
 import entity.user.*;
+import enums.ApplicationStatus;
 import enums.FlatType;
+import enums.RegistrationStatus;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class ReadCSV {
+    static ApplicantController applicantController = new ApplicantController();
+    static ManagerController managerController = new ManagerController();
+    static OfficerController officerController = new OfficerController();
+
     public static void loadManager() {
         ManagerController managerController = new ManagerController();
         File file = new File("src/database/ManagerList.csv");
@@ -97,8 +106,9 @@ public class ReadCSV {
 
     public static void loadProject() {
         BTOProjectController projectController = new BTOProjectController();
-        ManagerController managerController = new ManagerController();
-        OfficerController officerController = new OfficerController();
+        ApplicationController applicationController = new ApplicationController();
+        RegistrationController registrationController = new RegistrationController();
+
         File file = new File("src/database/ProjectList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -148,9 +158,20 @@ public class ReadCSV {
                     if (enquiryID.isEmpty()) continue; 
                     int id = Integer.parseInt(enquiryID.trim());
                     Enquiry enquiry = allEnquiries.get(id);
+                    if (enquiry == null) {
+                        System.out.println("Enquiry not found for ID: " + id);
+                        continue;
+                    }
                     project.addEnquiry(enquiry);
                 }
                 // Parse applications
+                String[] applicationArray = applications.split("\\|");
+                Map<String, BTOApplication> allApplications = applicationController.getAllApplications();
+                for (String nric : applicationArray) {
+                    if (nric.isEmpty()) continue;
+                    BTOApplication application = allApplications.get(nric);
+                    project.addApplication(application);
+                }
 
                 // Parse assigned officers
                 String[] assignedOfficerArray = assignedOfficers.split("\\|");
@@ -159,8 +180,29 @@ public class ReadCSV {
                     officerNRIC = officerNRIC.trim();
                     project.addOfficer(allOfficers.get(officerNRIC));
                 }
+
                 // Parse pending registrations
+                String[] pendingRegistrationsArray = pendingRegistrations.split("\\|");
+                Map<String, List<Registration>> allRegistrations = registrationController.getAllRegistrations();
+                List<Registration> registrationList = allRegistrations.get(projectName);
+                if (registrationList != null) {
+                    Map<Integer, Registration> registrationMap = new HashMap<>();
+                    for (Registration registration : registrationList) {
+                        registrationMap.put(registration.getID(), registration);
+                    }
+                    for (String registrationId : pendingRegistrationsArray) {
+                        if (registrationId.isEmpty()) continue;
+                        int id = Integer.parseInt(registrationId.trim());
+                        Registration registration = registrationMap.get(id);
+                        project.addRegistration(registration);
+                    }
+                } else {
+                    System.out.println("No registrations found for project: " + projectName);
+                }
+                
+                
             }
+            
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
         }
@@ -192,11 +234,103 @@ public class ReadCSV {
         }
     }
 
-    public void loadApplication() {
+    public static void loadBTOApplication() {
+        ApplicationController applicationController = new ApplicationController();
+        File file = new File("src/database/ApplicationList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
 
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+
+                String[] data = line.split(",");
+                String applicantNRIC = data[0].replace("\"", "").trim();
+                String projectName = data[1].replace("\"", "").trim();
+                FlatType flatType = parseFlatType((data[2].replace("\"", "").trim()));
+                ApplicationStatus status = parseApplicationStatus(data[3].replace("\"", "").trim());
+                boolean withdrawal = Boolean.parseBoolean(data[4].replace("\"", "").trim());
+
+                Applicant applicant = applicantController.getApplicant(applicantNRIC);
+                applicationController.createApplication(applicant, projectName, flatType, status, withdrawal);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
     }
 
-    public void loadRegistration() {
+    public static void loadRegistration() {
+        RegistrationController registrationController = new RegistrationController();
+        File file = new File("src/database/RegistrationList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
 
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+
+                String[] data = line.split(",");
+                int id = Integer.parseInt(data[0].replace("\"", "").trim());
+                String officerNRIC = data[1].replace("\"", "").trim();
+                String projectName = (data[2].replace("\"", "").trim());
+                LocalDate registrationDate = LocalDate.parse(data[3].replace("\"", "").trim());
+                RegistrationStatus status = parseRegistrationStatus(data[3].replace("\"", "").trim());
+
+                Officer officer = officerController.getOfficer(officerNRIC);
+                registrationController.createRegistration(id, officer, projectName, registrationDate, status);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
+    private static FlatType parseFlatType(String flatType) {
+        switch (flatType.toUpperCase()) {
+            case "TWO_ROOM" -> {
+                return FlatType.TWO_ROOM;
+            }
+            case "THREE_ROOM" -> {
+                return FlatType.THREE_ROOM;
+            }
+            default -> throw new IllegalArgumentException("Invalid flat type: " + flatType);
+        }
+    }
+
+    private static ApplicationStatus parseApplicationStatus(String status) {
+        switch (status.toUpperCase()) {
+            case "PENDING" -> {
+                return ApplicationStatus.PENDING;
+            }
+            case "SUCCESSFUL" -> {
+                return ApplicationStatus.SUCCESSFUL;
+            }
+            case "UNSUCCESSFUL" -> {
+                return ApplicationStatus.UNSUCCESSFUL;
+            }
+            case "BOOKED" -> {
+                return ApplicationStatus.BOOKED;
+            }
+            case "WITHDRAWN" -> {
+                return ApplicationStatus.WITHDRAWN;
+            }
+            default -> throw new IllegalArgumentException("Invalid application status: " + status);
+        }
+    }
+
+    private static RegistrationStatus parseRegistrationStatus(String status) {
+        switch (status.toUpperCase()) {
+            case "PENDING" -> {
+                return RegistrationStatus.PENDING;
+            }
+            case "APPROVED" -> {
+                return RegistrationStatus.APPROVED;
+            }
+            case "REJECTED" -> {
+                return RegistrationStatus.REJECTED;
+            }
+            default -> throw new IllegalArgumentException("Invalid registration status: " + status);
+        }
     }
 }

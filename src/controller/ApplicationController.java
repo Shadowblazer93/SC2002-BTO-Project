@@ -11,6 +11,10 @@ import java.util.Map;
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();   // NRIC + Application
 
+    public BTOApplication createApplication(Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
+        return new BTOApplication(applicant, projectName, flatType, status, withdrawal);
+    }
+
     public static void addApplication(BTOApplication application) {
         applicationDatabase.put(application.getApplicant().getNRIC(), application);
     }
@@ -35,11 +39,12 @@ public class ApplicationController {
         return false;
     }
 
-    public void applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
+    public BTOApplication applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
         // Create application
-        BTOApplication application = new BTOApplication(applicant, project, flatType);
+        BTOApplication application = createApplication(applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
         applicant.setApplication(application);
         addApplication(application);
+        return application;
     }
 
     public void requestWithdrawal(Applicant applicant) {

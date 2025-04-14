@@ -3,8 +3,10 @@ package database;
 import controller.ApplicationController;
 import controller.BTOProjectController;
 import controller.EnquiryController;
+import controller.RegistrationController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
+import controller.user.OfficerController;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
@@ -13,6 +15,7 @@ import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
+import enums.RegistrationStatus;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -155,6 +158,29 @@ public class SaveCSV {
         }
     }
 
+    public static void saveOfficers() {
+        OfficerController officerController = new OfficerController();
+        Map<String, Officer> allOfficers = officerController.getAllOfficers();
+        File filePath = new File("src/database/OfficerList.csv");
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // File header
+            writer.write("Name,NRIC,Age,Marital Status,Password\n");
+
+            for (Officer officer : allOfficers.values()) {
+                String name = officer.getName();
+                String nric = officer.getNRIC();
+                int age = officer.getAge();
+                String maritalStatus = officer.getMaritalStatus();
+                String password = officer.getPassword();
+
+                writer.write(String.format("\"%s\",\"%s\",%d,\"%s\",\"%s\"\n",
+                    name, nric, age, maritalStatus, password));
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving officers");
+        }
+    }
+
     public static void saveEnquiries() {
         // EnquiryController enquiryController = new EnquiryController();
         Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
@@ -189,16 +215,41 @@ public class SaveCSV {
 
             for (BTOApplication application : allApplications.values()) {
                 String applicant = application.getApplicant().getNRIC();
-                String project = application.getProject().getProjectName();
-                int flatType = application.getFlatType().getNumRooms();
+                String project = application.getProjectName();
+                FlatType flatType = application.getFlatType();
                 String status = application.getStatus().toString();
                 boolean withdrawal = application.getWithdrawal();
 
-                writer.write(String.format("\"%s\",\"%s\",%d,\"%s\",%b\n",
+                writer.write(String.format("\"%s\",\"%s\",\"%s\",\"%s\",%b\n",
                     applicant, project, flatType, status, withdrawal));
             }
         } catch (IOException e) {
             System.out.println("Error saving applications");
+        }
+    }
+
+    public static void saveRegistrations() {
+        RegistrationController registrationController = new RegistrationController();
+        Map<String, List<Registration>> allRegistrations = registrationController.getAllRegistrations();
+        File filePath = new File("src/database/RegistrationList.csv");
+        try (FileWriter writer = new FileWriter(filePath)) {
+            // File header
+            writer.write("ID,Officer,Project,RegistrationDate,Status\n");
+
+            for (List<Registration> projectRegistrations : allRegistrations.values()) {
+                for (Registration registration : projectRegistrations) {
+                    int id = registration.getID();
+                    String officer = registration.getOfficer().getNRIC();
+                    String project = registration.getProjectName();
+                    LocalDate registrationDate = registration.getRegistrationDate();
+                    RegistrationStatus status = registration.getStatus();
+
+                    writer.write(String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                        id, officer, project, registrationDate, status));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error saving registrations");
         }
     }
 }

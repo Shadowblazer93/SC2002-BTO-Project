@@ -3,20 +3,22 @@ package controller;
 import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
+import enums.RegistrationStatus;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 public class RegistrationController {
     // NRIC + Registration
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
     private static int registrationCount = 0;   // Track registration ID
 
-    public Registration createRegistration(Officer officer, BTOProject project, LocalDate registrationDate) {
-        registrationCount++;    // Increment ID
-        Registration registration = new Registration(registrationCount, officer, project, registrationDate);
-        addRegistration(project.getProjectName(), registration);
+    public Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
+        registrationCount = Math.max(registrationCount,id)+1;   // Increment ID
+        Registration registration = new Registration(registrationCount, officer, projectName, registrationDate, status);
+        addRegistration(projectName, registration);
         return registration;
     }
 

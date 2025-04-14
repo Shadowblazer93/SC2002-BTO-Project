@@ -4,14 +4,13 @@ import controller.ApplicationController;
 import controller.Filter;
 import controller.user.ApplicantController;
 import entity.application.BTOApplication;
-import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
+import enums.ApplicationStatus;
 import enums.FlatType;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import enums.ApplicationStatus;
 
 public class ApplicationMain {
     ApplicationController applicationController = new ApplicationController();
@@ -100,7 +99,7 @@ public class ApplicationMain {
         }
     }
 
-    private void updateApplicantStatus(Scanner sc, Officer officer){
+    /*private void updateApplicantStatus(Scanner sc, Officer officer){
         System.out.print("Enter the NRIC of the applicant to update: ");
         String nric = sc.next();
         // Retrieve applicant and update status
@@ -115,7 +114,7 @@ public class ApplicationMain {
         // Retrieve applicant and generate receipt
         Applicant applicant = applicantController.getAllApplicants().get(nric);
         officer.generateReceipt(applicant);
-    }
+    }*/
 
     private Map<String, BTOApplication> retrieveApplications(Manager manager, boolean withdrawal) {
         if (manager.getCurrentProject() == null) {

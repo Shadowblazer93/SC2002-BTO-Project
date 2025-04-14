@@ -11,6 +11,7 @@ import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType; // Ensure FlatType is imported from the correct package
+import enums.RegistrationStatus;
 import java.time.LocalDate;
 import java.util.*;
 public class OfficerMain {
@@ -138,7 +139,7 @@ public class OfficerMain {
         }
         
         // Create registration
-        Registration registration = registrationController.createRegistration(officer, project, LocalDate.now());
+        Registration registration = registrationController.createRegistration(officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
         
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project
