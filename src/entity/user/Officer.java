@@ -3,9 +3,12 @@ package entity.user;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import enums.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
+    private Map<String, BTOProject> registeredProjects = new HashMap<>();
 
     //hdb officer is a subset of applicant
     public Officer(String nric, String name, String password, int age, String maritalStatus) {
@@ -43,5 +46,15 @@ public class Officer extends Applicant{
     
     public void generateReceipt(Applicant applicant){
         OfficerController.generateReceipt(this, applicant);
+    }
+    public void registerProject(BTOProject project) {
+        registeredProjects.put(project.getProjectName(), project);
+    }
+    
+    public Map<String, BTOProject> getRegisteredProjects() {
+        return registeredProjects;
+    }
+    public boolean isAlreadyRegistered(String projectName) {
+        return registeredProjects.containsKey(projectName);
     }
 }
