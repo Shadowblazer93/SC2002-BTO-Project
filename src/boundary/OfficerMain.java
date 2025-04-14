@@ -34,12 +34,13 @@ public class OfficerMain {
                         HDB Officer Main Page
                     ------------------------------
                     1. Register for project
-                    2. View and reply to enquiries
-                    3. Update applicant status
-                    4. Generate receipt for bookings
-                    5. Register for project
-                    6. Book flat for applicant
-                    7. Logout
+                    2. View Registration status
+                    3. View and reply to enquiries
+                    4. Update applicant status
+                    5. Generate receipt for bookings
+                    6. Register for project
+                    7. Book flat for applicant
+                    8. Logout
                     ------------------------------
                     """, officer.getName());
             
@@ -48,12 +49,13 @@ public class OfficerMain {
 
             switch (choice) {
                 case 1 -> registerForProject(sc, officer);
-                case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
-                case 3 -> updateApplicantStatus(sc, officer);
-                case 4 -> generateReceipt(sc, officer);
-                case 5 -> registerProject(sc, officer);
-                case 6 -> bookFlat(sc, officer);
-                case 7 -> {
+                case 2 -> viewRegistrationStatus(sc, officer);
+                case 3 -> enquiryMain.displayMenuOfficer(sc, officer);
+                case 4 -> updateApplicantStatus(sc, officer);
+                case 5 -> generateReceipt(sc, officer);
+                case 6 -> registerProject(sc, officer);
+                case 7 -> bookFlat(sc, officer);
+                case 8 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -90,6 +92,30 @@ public class OfficerMain {
         project.addRegistration(registration);  // Add registration to project
         System.out.println("Registration submitted to project: " + project.getProjectName());
     }
+
+    private void viewRegistrationStatus(Scanner sc, Officer officer) {
+        sc.nextLine(); // Consume the leftover newline from previous input
+        
+        System.out.print("Enter the NRIC of the applicant: ");
+        String NRIC = sc.nextLine();
+        
+        Applicant applicant = applicantController.getApplicant(NRIC);
+        if (applicant == null) {
+            System.out.println("Applicant not found with NRIC: " + NRIC);
+            return;
+        }
+        
+        // Check if officer has access to the application
+        if (!OfficerController.hasAccessToApplication(officer, applicant.getApplication())) {
+            System.out.println("You do not have access to this application.");
+            return;
+        }
+        
+        // Display registration status
+        System.out.println("Registration Status: " + applicant.getApplication().getStatus());
+    }
+
+    
     
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {

@@ -27,9 +27,22 @@ public class Menu {
                     2. Change password
                     3. Exit
                     """);
-                System.out.print("Option: ");
-                choice = sc.nextInt();
-                sc.nextLine();
+                while (true) {
+                    System.out.print("Option (1-3): ");
+                    if (sc.hasNextInt()) {
+                        choice = sc.nextInt();
+                        sc.nextLine(); // consume newline
+                        if (choice >= 1 && choice <= 3) {
+                            break; // valid option, exit loop
+                        } else {
+                            System.out.println("Invalid option. Please enter a number between 1 and 3.");
+                        }
+                    } else {
+                        System.out.println("Invalid input. Please enter a number.");
+                        sc.nextLine(); // consume invalid token
+                    }
+                }
+                    
                 switch (choice) {
                     case 1 -> {
                         login(sc);
