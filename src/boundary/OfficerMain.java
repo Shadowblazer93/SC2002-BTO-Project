@@ -128,14 +128,14 @@ public class OfficerMain {
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
         
-        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
         
         // Create registration
-        Registration registration = RegistrationController.createRegistration(RegistrationController.getRegistrationCount(), officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
+        Registration registration = RegistrationController.createRegistration(0, officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
         
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project

@@ -10,9 +10,13 @@ import java.util.Map;
 
 public class ApplicationController {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();   // NRIC + Application
+    private static int applicationCount = 1;
 
-    public static BTOApplication createApplication(Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
-        return new BTOApplication(applicant, projectName, flatType, status, withdrawal);
+    public static BTOApplication createApplication(int id, Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
+        applicationCount = Math.max(applicationCount,id);
+        BTOApplication application = new BTOApplication(applicationCount, applicant, projectName, flatType, status, withdrawal);
+        applicationCount++;
+        return application;
     }
 
     public static void addApplication(BTOApplication application) {
@@ -45,7 +49,7 @@ public class ApplicationController {
 
     public static BTOApplication applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
         // Create application
-        BTOApplication application = createApplication(applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
+        BTOApplication application = createApplication(0,applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
         applicant.setApplication(application);
         addApplication(application);
         return application;

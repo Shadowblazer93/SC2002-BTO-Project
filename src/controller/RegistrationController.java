@@ -13,16 +13,17 @@ import java.util.Map;
 public class RegistrationController {
     // NRIC + Registration
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
-    private static int registrationCount = 0;   // Track registration ID
+    private static int registrationCount = 1;   // Track registration ID
 
     public static int getRegistrationCount (){
         return registrationCount;
     }
 
     public static Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
-        registrationCount = Math.max(registrationCount,id)+1;   // Increment ID
-        Registration registration = new Registration(registrationCount, officer, projectName, registrationDate, status);
+        registrationCount = Math.max(registrationCount,id);
+        Registration registration = new Registration(id, officer, projectName, registrationDate, status);
         addRegistration(projectName, registration);
+        registrationCount++;
         return registration;
     }
 
@@ -39,6 +40,10 @@ public class RegistrationController {
 
     public static Map<String, List<Registration>> getAllRegistrations() {
         return allRegistrations;
+    }
+
+    public static List<Registration> getRegistrationsByProject(String projectName) {
+        return allRegistrations.get(projectName);
     }
 
     public static String approveRegistration(BTOProject project, Registration registration) {

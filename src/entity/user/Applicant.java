@@ -1,25 +1,25 @@
 package entity.user;
 
-import controller.EnquiryController;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
-import java.util.Scanner;
-import controller.BTOProjectController;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Applicant extends User { 
     private BTOApplication application;
     private FlatType flatType;
-    BTOProjectController projectController = new BTOProjectController();
+    private Map<Integer, Enquiry> enquiries; // Store applicant enquiries
     // private List<Enquiry> enquiries;
     // private int maxEnqId;
 
     public Applicant(String nric, String name, int age, String maritalStatus, String password){
         super(nric, name, password, age, maritalStatus, UserRole.APPLICANT);
         this.application = null;
+        this.enquiries = new HashMap<>();
 
         //if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
         //if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
@@ -51,6 +51,22 @@ public class Applicant extends User {
         this.application = null;
     }
 
+    public void addEnquiry(Enquiry enquiry) {
+        enquiries.put(enquiry.getID(), enquiry);
+    }
+
+    public void removeEnquiry(Enquiry enquiry) {
+        enquiries.remove(enquiry.getID());
+    }
+
+    public Enquiry getEnquiry(int id) {
+        return enquiries.get(id);
+    }
+
+    public Map<Integer, Enquiry> getEnquiries() {
+        return enquiries;
+    }
+
     public void projectView(BTOProject p) {System.out.println(p);}
 
     public void updateStatus(ApplicationStatus status) {
@@ -62,7 +78,7 @@ public class Applicant extends User {
         System.out.println("Application status updated to: " + status);
     }
 
-    public void enquirySubmit(String msg) {
+    /*public void enquirySubmit(String msg) {
         if (application==null) {
             System.out.println("You have not applied for any project. Please apply for a project before submitting an enquiry.");
             return;
@@ -73,19 +89,18 @@ public class Applicant extends User {
         }
 
         // add id assignment to Enquiries
-        EnquiryController.incrementEnquiryCount();
         System.out.println("Enter enquiry message: ");
         // Scanner sc = new Scanner(System.in);
         // String msg = sc.nextLine();
         Enquiry enq = new Enquiry(EnquiryController.getEnquiryCount(),super.getNRIC(),this.getApplication().getProject().getProjectName(),msg);
         EnquiryController.addEnquiry(enq);
         String projectName = this.getApplication().getProjectName();
-        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
         project.addEnquiry(enq);  // Add enquiry to project
         System.out.println("Enquiry submitted successfully!");
-    }
+    }*/
 
-    public void enquiryView() {
+    /*public void enquiryView() {
         // input enquiry ID
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter ID of enquiry you want to view: ");
@@ -102,9 +117,9 @@ public class Applicant extends User {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         } else {System.out.println(enq);}
-    }
+    }*/
 
-    public void enquiryEdit(int enqID, String newMessage) {
+    /*public void enquiryEdit(int enqID, String newMessage) {
         // input enquiry ID
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter ID of enquiry you want to view: ");
@@ -124,9 +139,9 @@ public class Applicant extends User {
             enq.editMessage(newMessage);
             System.out.println("Enquiry message updated successfully!");
         }
-    }
+    }*/
 
-    public void enquiryDelete(int enqID) {
+    /*public void enquiryDelete(int enqID) {
         // input enquiry ID
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter ID of enquiry you want to view: ");
@@ -146,5 +161,5 @@ public class Applicant extends User {
             EnquiryController.removeEnquiry(enq);
             System.out.println("Enquiry deleted successfully!");
         }
-    }
+    }*/
 }

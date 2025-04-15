@@ -2,8 +2,10 @@ package boundary;
 
 import controller.ApplicationController;
 import controller.BTOProjectController;
+import controller.EnquiryController;
 import controller.Filter;
 import entity.application.BTOApplication;
+import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.FlatType;
@@ -13,6 +15,7 @@ import java.util.Scanner;
 
 public class ApplicantMain {
     PrintProjects projectPrinter = new PrintProjects();
+    PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     public ApplicantMain(Applicant applicant, Scanner sc) {
         boolean running = true;
@@ -72,19 +75,11 @@ public class ApplicantMain {
                 }
 
                 case 7 -> {
-                    System.out.print("Enter submitted enquiry ID: ");
-                    int enqid = sc.nextInt();
-                    sc.nextLine();
-                    System.out.print("Enter new message: ");
-                    String newMsg = sc.nextLine();
-                    applicant.enquiryEdit(enqid,newMsg);
+                    editEnquiry(sc, applicant);
                 }
                 
                 case 8 -> {
-                    System.out.print("Enter submitted enquiry ID: ");
-                    int enqId = sc.nextInt();
-                    sc.nextLine();
-                    applicant.enquiryDelete(enqId);
+                    deleteEnquiry(sc, applicant);
                 }
                 
                 case 9 -> {
@@ -103,9 +98,71 @@ public class ApplicantMain {
     }
 
     private void submitEnquiry(Scanner sc, Applicant applicant) {
-        System.out.println("Enter enquiry message: ");
+        // select project to enquire about
+        viewProjectList();
+        System.out.print("Project for enquiry: ");
+        String projectName = sc.nextLine();
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        if (project == null) {
+            System.out.println("Project does not exist.");
+            return;
+        }
+
+        // Enquiry message
+        System.out.print("Enter enquiry message: ");
         String msg = sc.nextLine();
-        applicant.enquirySubmit(msg);
+        EnquiryController.submitEnquiry(applicant, project, msg);
+        System.out.println("Enquiry submitted successfully!");
+    }
+
+    private Map<Integer, Enquiry> viewEnquiries(Applicant applicant) {
+        Map<Integer, Enquiry> enquiries = applicant.getEnquiries();
+        if (enquiries.isEmpty()) {
+            return null;
+        }
+        enquiryPrinter.printMap(enquiries);
+        return enquiries;
+    }
+
+    private void deleteEnquiry(Scanner sc, Applicant applicant) {
+        // Print enquiries submitted
+        if (viewEnquiries(applicant) == null) {
+            return;
+        }
+        // Select enquiry
+        System.out.print("Enter submitted enquiry ID: ");
+        int enqId = sc.nextInt();
+        sc.nextLine();
+
+        // Get enquiry
+        Enquiry enquiry = EnquiryController.getEnquiryByID(enqId);
+        if (enquiry == null) {
+            System.out.println("Could not find an enquiry with that ID!");
+            return;
+        }
+        EnquiryController.deleteEnquiry(applicant, enquiry);
+    }
+
+    private void editEnquiry(Scanner sc, Applicant applicant) {
+        // Print enquiries submitted
+        if (viewEnquiries(applicant) == null) {
+            return;
+        }
+        // Select enquiry
+        System.out.print("Enter submitted enquiry ID: ");
+        int enqId = sc.nextInt();
+        sc.nextLine();
+        // Get enquiry
+        Enquiry enquiry = EnquiryController.getEnquiryByID(enqId);
+        if (enquiry == null) {
+            System.out.println("Could not find an enquiry with that ID!");
+            return;
+        }
+        // Edit enquiry message
+        System.out.print("Enter new enquiry message: ");
+        String newMessage = sc.nextLine();
+        EnquiryController.editEnquiry(enquiry, newMessage);
+        System.out.println("Enquiry message updated successfully!");
     }
 
     private void applyProject(Scanner sc, Applicant applicant) {
@@ -117,12 +174,9 @@ public class ApplicantMain {
         // Print list of projects
         viewProjectList();
         
-        System.out.println("Enter name of project:");
+        System.out.print("Enter name of project:");
         String projectName = sc.next();
-
-        Map<String, BTOProject> allProjects = BTOProjectController.getAllProjects();
-        BTOProject project = allProjects.get(projectName);
-
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project does not exist.");
             return;

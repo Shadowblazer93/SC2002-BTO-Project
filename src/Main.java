@@ -16,8 +16,7 @@ public class Main {
     public static void main(String[] args) {
         // Read save files
         ReadCSV.loadManager();
-        ManagerController managerController = new ManagerController();
-        Map<String, Manager> all = managerController.getAllManagers();
+        Map<String, Manager> all = ManagerController.getAllManagers();
         for (Map.Entry<String, Manager> entry : all.entrySet()) {
             String nric = entry.getKey();
             Manager manager = entry.getValue();
@@ -27,8 +26,7 @@ public class Main {
 
         System.out.println();
         ReadCSV.loadApplicant();
-        ApplicantController applicantController = new ApplicantController();
-        Map<String, Applicant> allApplicants = applicantController.getAllApplicants();
+        Map<String, Applicant> allApplicants = ApplicantController.getAllApplicants();
         for (Map.Entry<String, Applicant> entry : allApplicants.entrySet()) {
             String nric = entry.getKey();
             Applicant applicant = entry.getValue();
@@ -36,8 +34,7 @@ public class Main {
         }
 
         ReadCSV.loadOfficer();
-        OfficerController officerController = new OfficerController();
-        Map<String, Officer> allOfficers = officerController.getAllOfficers();
+        Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
         for (Map.Entry<String, Officer> entry : allOfficers.entrySet()) {
             String nric = entry.getKey();
             Officer officer = entry.getValue();

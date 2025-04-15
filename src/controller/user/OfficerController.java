@@ -146,7 +146,7 @@ public class OfficerController {
         }
 
         String projectName = application.getProjectName();
-        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
         String neighbourhood = project.getNeighbourhood();
         Map<FlatType,Integer> unitCounts = project.getunitCounts();
         

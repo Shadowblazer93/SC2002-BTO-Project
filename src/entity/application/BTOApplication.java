@@ -5,18 +5,24 @@ import enums.ApplicationStatus;
 import enums.FlatType;
 
 public class BTOApplication {
+    private int ID;
     private Applicant applicant;
     private String projectName;
     private FlatType flatType;
     private ApplicationStatus status;
     private boolean withdrawal;    // Whether applicant has requested for withdrawal
 
-    public BTOApplication(Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
+    public BTOApplication(int ID, Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
+        this.ID = ID;
         this.applicant = applicant;
         this.projectName = projectName;
         this.flatType = flatType;
         this.status = status;
         this.withdrawal = withdrawal;
+    }
+
+    public int getID() {
+        return ID;
     }
 
     public Applicant getApplicant() {

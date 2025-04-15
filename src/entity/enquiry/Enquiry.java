@@ -12,13 +12,13 @@ public class Enquiry {
     private String response;
     private EnquiryStatus status;
 
-    public Enquiry(int id, String applicantNRIC, String projectName, String message) {
+    public Enquiry(int id, String applicantNRIC, String projectName, String message, String response, EnquiryStatus status) {
         this.id = id;
         this.applicantNRIC = applicantNRIC;
         this.projectName = projectName;
         this.message = message;
-        this.response = null;
-        this.status = EnquiryStatus.OPEN;
+        this.response = response;
+        this.status = status;
     }
 
     public Enquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
@@ -63,9 +63,8 @@ public class Enquiry {
         System.out.println("Successfully responded to the enquiry.");
     }
 
-    public void editMessage(String msg) {
+    public void setMessage(String msg) {
         this.message = msg;
-        System.out.println("Successfully edited the enquiry message!");
     }
 
     public String toString() {

@@ -11,6 +11,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.*;
 import enums.ApplicationStatus;
+import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
 import java.io.File;
@@ -157,10 +158,9 @@ public class ReadCSV {
                 }
                 // Parse applications
                 String[] applicationArray = applications.split("\\|");
-                Map<String, BTOApplication> allApplications = ApplicationController.getAllApplications();
                 for (String nric : applicationArray) {
                     if (nric.isEmpty()) continue;
-                    BTOApplication application = allApplications.get(nric);
+                    BTOApplication application = ApplicationController.getApplicationByNRIC(nric);
                     project.addApplication(application);
                 }
 
@@ -174,9 +174,9 @@ public class ReadCSV {
 
                 // Parse pending registrations
                 String[] pendingRegistrationsArray = pendingRegistrations.split("\\|");
-                Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
-                List<Registration> registrationList = allRegistrations.get(projectName);
+                List<Registration> registrationList = RegistrationController.getRegistrationsByProject(projectName);
                 if (registrationList != null) {
+                    // Convert list to map
                     Map<Integer, Registration> registrationMap = new HashMap<>();
                     for (Registration registration : registrationList) {
                         registrationMap.put(registration.getID(), registration);
@@ -216,7 +216,7 @@ public class ReadCSV {
                 String projectName = data[2].replace("\"", "").trim();
                 String message = data[3].replace("\"", "").trim();
                 String response = data[4].replace("\"", "").trim();
-                String status = data[5].replace("\"", "").trim();
+                EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
 
                 EnquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
             }
@@ -236,14 +236,15 @@ public class ReadCSV {
                 String line = Reader.nextLine();
 
                 String[] data = line.split(",");
-                String applicantNRIC = data[0].replace("\"", "").trim();
-                String projectName = data[1].replace("\"", "").trim();
-                FlatType flatType = parseFlatType((data[2].replace("\"", "").trim()));
-                ApplicationStatus status = parseApplicationStatus(data[3].replace("\"", "").trim());
-                boolean withdrawal = Boolean.parseBoolean(data[4].replace("\"", "").trim());
+                int id = Integer.parseInt(data[0].replace("\"", "").trim());
+                String applicantNRIC = data[1].replace("\"", "").trim();
+                String projectName = data[2].replace("\"", "").trim();
+                FlatType flatType = parseFlatType((data[3].replace("\"", "").trim()));
+                ApplicationStatus status = parseApplicationStatus(data[4].replace("\"", "").trim());
+                boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
-                ApplicationController.createApplication(applicant, projectName, flatType, status, withdrawal);
+                ApplicationController.createApplication(id, applicant, projectName, flatType, status, withdrawal);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -321,6 +322,18 @@ public class ReadCSV {
                 return RegistrationStatus.REJECTED;
             }
             default -> throw new IllegalArgumentException("Invalid registration status: " + status);
+        }
+    }
+
+    private static EnquiryStatus parseEnquiryStatus(String status) {
+        switch (status.toUpperCase()) {
+            case "OPEN" -> {
+                return EnquiryStatus.OPEN;
+            }
+            case "CLOSED" -> {
+                return EnquiryStatus.CLOSED;
+            }
+            default -> throw new IllegalArgumentException("Invalid enquiry status: " + status);
         }
     }
 }
