@@ -10,14 +10,17 @@ import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
-import java.util.*; // Ensure FlatType is imported from the correct package
+import java.time.LocalDate;
+import java.util.*;
+import java.util.InputMismatchException;
+
 public class OfficerMain {
     PrintProjects projectPrinter = new PrintProjects();
     EnquiryMain enquiryMain = new EnquiryMain();
     public static void main(String[] args) {
 
     }
-    public OfficerMain(Officer officer, Scanner sc){
+    public OfficerMain(Officer officer, Scanner sc) {
         boolean running = true;
         while (running) {
             System.out.printf("""
@@ -36,8 +39,20 @@ public class OfficerMain {
                     ------------------------------
                     """, officer.getName());
             
-            System.out.print("Choose an option: ");
-            int choice = sc.nextInt();
+            int choice = 0;
+            boolean validInput = false;
+            
+            while (!validInput) {
+                try {
+                    System.out.print("Choose an option: ");
+                    choice = sc.nextInt();
+                    validInput = true;
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    // Clear the invalid input
+                    sc.next();
+                }
+            }
 
             switch (choice) {
                 case 1 -> viewRegistrationStatus(officer);
@@ -54,34 +69,35 @@ public class OfficerMain {
             }
         }
     }
-   
-
-    private void viewRegistrationStatus(Officer officer) {
-        Map<String, BTOProject> registered = officer.getRegisteredProjects();
-        
-        if (registered.isEmpty()) {
-            System.out.println("You have not registered for any projects.");
-            return;
-        }
-    
-        System.out.println("Your project registrations:");
-        for (BTOProject project : registered.values()) {
-            String projectName = project.getProjectName();
-            String status = "Pending";
-            
-            // Check if officer is approved
-            if (officer.viewHandledProject() != null &&
-                officer.viewHandledProject().getProjectName().equals(projectName)) {
-                status = "Approved";
-            }
-    
-            System.out.printf("- %s: %s\n", projectName, status);
-        }
+    // wrong
+    private void manageFlatBookings(Officer officer){
+        System.out.println("Managing flat bookings!");
+        BTOProject project = officer.viewHandledProject();
+        //print proj
+        System.out.print(project);
     }
-    
+    private void manageEnquiries(Scanner sc, Officer officer) {
+        EnquiryMain enquiryMain = new EnquiryMain();
+        
+        BTOProject project = officer.getAssignedProject();
+        if (project == null) {
+            System.out.println("No project assigned to the officer.");
+            return; 
+        }
+        
+        // Only continue if project exists
+        enquiryMain.viewProjectEnquiries(officer);
+        
+        sc.nextLine(); // Clear buffer after previous nextInt()
+        System.out.print("Enter Enquiry ID to reply: ");
+        String enquiryId = sc.nextLine();
+        System.out.print("Enter reply: ");
+        String reply = sc.nextLine();
+        enquiryController.replyEnquiry(officer, enquiryId, reply);
+    }
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
-        sc.nextLine(); // Consume the leftover newline from previous input
+        sc.nextLine();
         
         System.out.print("Enter the NRIC of the applicant: ");
         String NRIC = sc.nextLine();
@@ -120,7 +136,7 @@ public class OfficerMain {
         System.out.println("Available projects you can register for:");
         projectPrinter.printMap(BTOProjectController.getAllProjects());
         
-        sc.nextLine(); // Clear buffer after previous nextInt()
+        sc.nextLine();
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
         
@@ -142,7 +158,8 @@ public class OfficerMain {
     private void bookFlat(Scanner sc, Officer officer) {
         System.out.print("Enter the NRIC of the applicant: ");
         String nric = sc.next();
-        sc.nextLine(); // Clear buffer
+        // Clear buffer
+        sc.nextLine();
         
         Applicant applicant = ApplicantController.getApplicant(nric);
         if (applicant == null) {
@@ -157,7 +174,8 @@ public class OfficerMain {
         
         System.out.print("Enter flat type (2 or 3): ");
         int roomNumber = sc.nextInt();
-        sc.nextLine(); // Clear buffer
+        // Clear buffer
+        sc.nextLine();
         
         FlatType flatType = FlatType.getFlatType(roomNumber);
         if (flatType == null) {
