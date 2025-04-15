@@ -12,7 +12,6 @@ import enums.ApplicationStatus;
 import enums.FlatType;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.InputMismatchException;
 
 public class OfficerMain {
     PrintProjects projectPrinter = new PrintProjects();
@@ -69,6 +68,21 @@ public class OfficerMain {
             }
         }
     }
+    private void viewRegistrationStatus(Officer officer) {
+        System.out.println("Viewing registration status!");
+        officer.getRegisteredProjects().forEach((projectName, project) -> {
+            System.out.println("Project Name: " + projectName);
+            
+            //get the registration status of the officer
+            Registration registration = project.getRegistrations().get(officer.getNRIC());
+            if (registration != null) {
+                System.out.println("Registration Status: " + registration.getStatus());
+            } else {
+                System.out.println("Registration Status: Not Found");
+            }
+        });
+    }
+
     // wrong
     private void manageFlatBookings(Officer officer){
         System.out.println("Managing flat bookings!");
