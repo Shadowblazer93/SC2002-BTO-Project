@@ -4,7 +4,6 @@ import controller.ApplicationController;
 import controller.BTOProjectController;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
-import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
@@ -28,33 +27,25 @@ public class OfficerController {
         return allOfficers;
     }
 
-    // Check if officer is eligible for registration of project
-    public static String registerProject(Officer officer) {   
-        String message = "success";
-        
-        // Check if officer is already assigned to a project
-        if (officer.getAssignedProject() != null) {
-            message = "You are already assigned to a project: " + officer.getAssignedProject().getProjectName();
-            return message;
+    public static String registerProject(Officer officer, BTOProject project) {
+        // Rule 1: Cannot be applicant for same project
+        if (officer.getAssignedProject() != null &&
+            officer.getAssignedProject().getProjectName().equals(project.getProjectName())) {
+            return "You have already applied for this project. Cannot register as officer.";
         }
-        
-        // Check if officer has applied for a project as an applicant
-        if (officer.getApplication() != null) {
-            message = "You cannot register as an officer for any project while you have an active application as an applicant.";
-            return message;
-        }
-        
-        // Check if the officer has any pending registrations
-        for (BTOProject project : BTOProjectController.getAllProjects().values()) {
-            Map<String, Registration> pendingRegs = project.getRegistrations();
-            if (pendingRegs != null && pendingRegs.containsKey(officer.getNRIC())) {
-                message = "You already have a pending registration for project: " + project.getProjectName();
-                return message;
+    
+        // Rule 2: Cannot be registered as officer for overlapping project
+        for (BTOProject registered : officer.getRegisteredProjects().values()) {
+            boolean overlaps = !(project.getClosingDate().isBefore(registered.getOpeningDate()) ||
+                                 project.getOpeningDate().isAfter(registered.getClosingDate()));
+            if (overlaps) {
+                return "You are already registered as officer for another project in the same period.";
             }
         }
-        
-        return message;
+    
+        return "success"; // Passed all checks
     }
+    
     
     public static boolean hasAccessToApplication(Officer officer, BTOApplication application) {
         if (application == null || officer == null) {
