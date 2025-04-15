@@ -144,35 +144,37 @@ public class OfficerMain {
     }
 
     private void registerProject(Scanner sc, Officer officer) {
-        // Check if eligible to register
-        String message = OfficerController.registerProject(officer);
-        if (!message.equals("success")) {
-            System.out.println(message);
-            return; // Only return early if validation fails
-        }
-        
         // View list of projects
         System.out.println("Available projects you can register for:");
         projectPrinter.printMap(BTOProjectController.getAllProjects());
-        
+    
         sc.nextLine();
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
-        
+    
+        // Get selected project
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
-        
+    
+        // Check if eligible to register
+        String message = OfficerController.registerProject(officer, project);
+        if (!message.equals("success")) {
+            System.out.println(message);
+            return;
+        }
+    
         // Create registration
         Registration registration = RegistrationController.registerProject(officer, project);
-        
-        // Apply to the given BTO project
-        project.addRegistration(registration);  // Add registration to project
+        project.addRegistration(registration);
+        officer.addRegisteredProject(project);
+    
         System.out.println("Registration submitted to project: " + project.getProjectName());
         System.out.println("Awaiting manager approval.");
     }
+    
 
     private void bookFlat(Scanner sc, Officer officer) {
         System.out.print("Enter the NRIC of the applicant: ");

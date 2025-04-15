@@ -48,7 +48,7 @@ public class Officer extends Applicant{
     public void generateReceipt(Applicant applicant){
         OfficerController.generateReceipt(this, applicant);
     }
-    public void registerProject(BTOProject project) {
+    public void addRegisteredProject(BTOProject project) {
         registeredProjects.put(project.getProjectName(), project);
     }
     
