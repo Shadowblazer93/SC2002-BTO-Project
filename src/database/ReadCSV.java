@@ -22,12 +22,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ReadCSV {
-    static ApplicantController applicantController = new ApplicantController();
-    static ManagerController managerController = new ManagerController();
-    static OfficerController officerController = new OfficerController();
 
     public static void loadManager() {
-        ManagerController managerController = new ManagerController();
         File file = new File("src/database/ManagerList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -45,7 +41,7 @@ public class ReadCSV {
                 String password = managerData[4].replace("\"", "").trim();
 
                 // Create Manager
-                managerController.createManager(nric, name, password, age, maritalStatus);
+                ManagerController.createManager(nric, name, password, age, maritalStatus);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -53,7 +49,6 @@ public class ReadCSV {
     }
 
     public static void loadOfficer() {
-        OfficerController officerController = new OfficerController();
         File file = new File("src/database/OfficerList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -71,7 +66,7 @@ public class ReadCSV {
                 String password = data[4].replace("\"", "").trim();
 
                 // Create Officer
-                officerController.createOfficer(nric, name, password, age, maritalStatus);
+                OfficerController.createOfficer(nric, name, password, age, maritalStatus);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -79,7 +74,6 @@ public class ReadCSV {
     }
 
     public static void loadApplicant() {
-        ApplicantController applicantController = new ApplicantController();
         File file = new File("src/database/ApplicantList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -97,7 +91,7 @@ public class ReadCSV {
                 String password = data[4].replace("\"", "").trim();
 
                 // Create Applicant
-                applicantController.createApplicant(nric, name, age, maritalStatus, password);
+                ApplicantController.createApplicant(nric, name, age, maritalStatus, password);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -105,9 +99,6 @@ public class ReadCSV {
     }
 
     public static void loadProject() {
-        BTOProjectController projectController = new BTOProjectController();
-        ApplicationController applicationController = new ApplicationController();
-        RegistrationController registrationController = new RegistrationController();
 
         File file = new File("src/database/ProjectList.csv");
         try (Scanner Reader = new Scanner(file)) {
@@ -137,12 +128,12 @@ public class ReadCSV {
                 String pendingRegistrations = data[12].replace("\"", "").trim();
 
                 // Get manager
-                Manager manager = managerController.getManager(managerNRIC);
+                Manager manager = ManagerController.getManager(managerNRIC);
                 if (manager == null) {
                     System.out.println("Manager not found for NRIC: " + managerNRIC);
                     continue; // or throw an exception
                 }
-                BTOProject project = projectController.createProject(manager, projectName, neighbourhood, unitCounts, openingDate, closingDate, officerSlots);
+                BTOProject project = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, openingDate, closingDate, officerSlots);
                 if (visible) {  // Default visibility is false
                     project.setVisible(visible);
                 }
@@ -166,7 +157,7 @@ public class ReadCSV {
                 }
                 // Parse applications
                 String[] applicationArray = applications.split("\\|");
-                Map<String, BTOApplication> allApplications = applicationController.getAllApplications();
+                Map<String, BTOApplication> allApplications = ApplicationController.getAllApplications();
                 for (String nric : applicationArray) {
                     if (nric.isEmpty()) continue;
                     BTOApplication application = allApplications.get(nric);
@@ -175,7 +166,7 @@ public class ReadCSV {
 
                 // Parse assigned officers
                 String[] assignedOfficerArray = assignedOfficers.split("\\|");
-                Map<String, Officer> allOfficers = officerController.getAllOfficers();
+                Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();
                     project.addOfficer(allOfficers.get(officerNRIC));
@@ -183,7 +174,7 @@ public class ReadCSV {
 
                 // Parse pending registrations
                 String[] pendingRegistrationsArray = pendingRegistrations.split("\\|");
-                Map<String, List<Registration>> allRegistrations = registrationController.getAllRegistrations();
+                Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
                 List<Registration> registrationList = allRegistrations.get(projectName);
                 if (registrationList != null) {
                     Map<Integer, Registration> registrationMap = new HashMap<>();
@@ -209,7 +200,7 @@ public class ReadCSV {
     }
 
     public static void loadEnquiry() {
-        EnquiryController enquiryController = new EnquiryController();
+
         File file = new File("src/database/EnquiryList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -227,7 +218,7 @@ public class ReadCSV {
                 String response = data[4].replace("\"", "").trim();
                 String status = data[5].replace("\"", "").trim();
 
-                enquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
+                EnquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -235,7 +226,6 @@ public class ReadCSV {
     }
 
     public static void loadBTOApplication() {
-        ApplicationController applicationController = new ApplicationController();
         File file = new File("src/database/ApplicationList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -252,8 +242,8 @@ public class ReadCSV {
                 ApplicationStatus status = parseApplicationStatus(data[3].replace("\"", "").trim());
                 boolean withdrawal = Boolean.parseBoolean(data[4].replace("\"", "").trim());
 
-                Applicant applicant = applicantController.getApplicant(applicantNRIC);
-                applicationController.createApplication(applicant, projectName, flatType, status, withdrawal);
+                Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
+                ApplicationController.createApplication(applicant, projectName, flatType, status, withdrawal);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -261,7 +251,7 @@ public class ReadCSV {
     }
 
     public static void loadRegistration() {
-        RegistrationController registrationController = new RegistrationController();
+
         File file = new File("src/database/RegistrationList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -278,8 +268,8 @@ public class ReadCSV {
                 LocalDate registrationDate = LocalDate.parse(data[3].replace("\"", "").trim());
                 RegistrationStatus status = parseRegistrationStatus(data[3].replace("\"", "").trim());
 
-                Officer officer = officerController.getOfficer(officerNRIC);
-                registrationController.createRegistration(id, officer, projectName, registrationDate, status);
+                Officer officer = OfficerController.getOfficer(officerNRIC);
+                RegistrationController.createRegistration(id, officer, projectName, registrationDate, status);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());

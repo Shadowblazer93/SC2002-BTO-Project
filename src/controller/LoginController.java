@@ -10,20 +10,17 @@ import entity.user.User;
 
 public class LoginController {
     public static User validateLogin(String nric, String password) {
-        OfficerController officerController = new OfficerController();
-        Officer officer = officerController.getOfficer(nric);
+        Officer officer = OfficerController.getOfficer(nric);
         if (officer != null && officer.getPassword().equals(password)) {
             return officer;
         }
 
-        ManagerController managerController = new ManagerController();
-        Manager manager = managerController.getManager(nric);
+        Manager manager = ManagerController.getManager(nric);
         if (manager != null && manager.getPassword().equals(password)) {
             return manager;
         }
 
-        ApplicantController applicantController = new ApplicantController();
-        Applicant applicant = applicantController.getApplicant(nric);
+        Applicant applicant = ApplicantController.getApplicant(nric);
         if (applicant != null && applicant.getPassword().equals(password)) {
             return applicant;
         }

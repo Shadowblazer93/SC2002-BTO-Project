@@ -80,7 +80,7 @@ public class Applicant extends User {
         Enquiry enq = new Enquiry(EnquiryController.getEnquiryCount(),super.getNRIC(),this.getApplication().getProject().getProjectName(),msg);
         EnquiryController.addEnquiry(enq);
         String projectName = this.getApplication().getProjectName();
-        BTOProject project = projectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
         project.addEnquiry(enq);  // Add enquiry to project
         System.out.println("Enquiry submitted successfully!");
     }

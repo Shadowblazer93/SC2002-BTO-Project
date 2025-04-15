@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 public class BTOProjectMain {
     PrintProjects printer = new PrintProjects();
-    BTOProjectController projectController = new BTOProjectController();
 
     public void displayMenu(Manager manager, Scanner sc) {
         int choice = 0;
@@ -55,7 +54,7 @@ public class BTOProjectMain {
                     break;
                 }
                 case 4 -> {
-                    printer.printMap(projectController.getAllProjects());
+                    printer.printMap(BTOProjectController.getAllProjects());
                     break;
                 }
                 case 5 -> {
@@ -78,7 +77,7 @@ public class BTOProjectMain {
         // Project name
         System.out.print("Project name: ");
         String projectName = sc.nextLine();
-        if (projectController.projectExist(projectName)) {
+        if (BTOProjectController.projectExist(projectName)) {
             System.out.println("Project already exists.");
             return;
         }
@@ -147,7 +146,7 @@ public class BTOProjectMain {
             } 
         }
 
-        BTOProject createdProject = projectController.createProject(manager, projectName, neighbourhood, unitCounts, oDate, cDate, slots);
+        BTOProject createdProject = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, oDate, cDate, slots);
         if (createdProject == null) {
             System.out.println("Could not create project.");
         } else {
@@ -191,12 +190,12 @@ public class BTOProjectMain {
                 case 1 -> {
                     System.out.print("New project name: ");
                     String newProjectName = sc.nextLine();
-                    edited = projectController.editProjectName(manager, projectName, newProjectName, projectEdit);
+                    edited = BTOProjectController.editProjectName(manager, projectName, newProjectName, projectEdit);
                 }
                 case 2 -> {
                     System.out.print("New neighbourhood: ");
                     String newNeighbourhood = sc.nextLine();
-                    edited = projectController.editNeighbourhood(newNeighbourhood, projectEdit);
+                    edited = BTOProjectController.editNeighbourhood(newNeighbourhood, projectEdit);
                 }
                 case 3 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -207,24 +206,24 @@ public class BTOProjectMain {
                     }
                     System.out.print("New number of units: ");
                     int newNumUnits = sc.nextInt();
-                    edited = projectController.editNumUnits(flatType, newNumUnits, projectEdit);
+                    edited = BTOProjectController.editNumUnits(flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
                     System.out.print("New application opening date (YYYY-MM-DD): ");
                     String oDateInput = sc.nextLine();
                     LocalDate oDate = LocalDate.parse(oDateInput);
-                    edited = projectController.editOpeningDate(oDate, projectEdit);
+                    edited = BTOProjectController.editOpeningDate(oDate, projectEdit);
                 }
                 case 5 -> {
                     System.out.print("New application closing date (YYYY-MM-DD): ");
                     String cDateInput = sc.nextLine();
                     LocalDate cDate = LocalDate.parse(cDateInput);
-                    edited = projectController.editClosingDate(cDate, projectEdit);
+                    edited = BTOProjectController.editClosingDate(cDate, projectEdit);
                 }
                 case 6 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
-                    edited = projectController.editVisibility(visible, projectEdit);
+                    edited = BTOProjectController.editVisibility(visible, projectEdit);
                 }
                 case 7 -> {
                     System.out.println("Exiting edit project menu.");
@@ -249,7 +248,7 @@ public class BTOProjectMain {
         }
         System.out.print("Delete project: ");
         String projectName = sc.nextLine();
-        boolean deleted = projectController.deleteProject(manager, projectName);
+        boolean deleted = BTOProjectController.deleteProject(manager, projectName);
         if (deleted) {
             System.out.printf("Project %s successfully deleted!\n", projectName);
         } else {

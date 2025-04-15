@@ -12,13 +12,11 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ApplicantMain {
-    BTOProjectController projectController = new BTOProjectController();
     PrintProjects projectPrinter = new PrintProjects();
-    ApplicationController applicationController = new ApplicationController();
 
     public ApplicantMain(Applicant applicant, Scanner sc) {
         boolean running = true;
-        while (true) {
+        while (running) {
             System.out.printf("""
                     
                     Hi %s
@@ -46,7 +44,7 @@ public class ApplicantMain {
                 }
 
                 case 2 -> {
-                    applyProject(sc, applicant, projectController);
+                    applyProject(sc, applicant);
                 }
 
                 case 3 -> {
@@ -92,7 +90,6 @@ public class ApplicantMain {
                 case 9 -> {
                     System.out.println("Logging out...");
                     running = false;
-                    return;
                 }
 
                 default -> System.out.println("Unknown choice!");
@@ -101,7 +98,7 @@ public class ApplicantMain {
     }
 
     private void viewProjectList() {
-        List<BTOProject> visibleProjects = Filter.filterVisibleProjects(projectController.getAllProjects());
+        List<BTOProject> visibleProjects = Filter.filterVisibleProjects(BTOProjectController.getAllProjects());
         projectPrinter.printList(visibleProjects);
     }
 
@@ -111,7 +108,7 @@ public class ApplicantMain {
         applicant.enquirySubmit(msg);
     }
 
-    private void applyProject(Scanner sc, Applicant applicant, BTOProjectController controller) {
+    private void applyProject(Scanner sc, Applicant applicant) {
         if (applicant.getApplication()!=null) {
             System.out.println("You have already applied to a project.");
             return;
@@ -123,7 +120,7 @@ public class ApplicantMain {
         System.out.println("Enter name of project:");
         String projectName = sc.next();
 
-        Map<String, BTOProject> allProjects = controller.getAllProjects();
+        Map<String, BTOProject> allProjects = BTOProjectController.getAllProjects();
         BTOProject project = allProjects.get(projectName);
 
         if (project == null) {
@@ -132,7 +129,7 @@ public class ApplicantMain {
         }
 
         // Check if project is open
-        if (!projectController.isProjectOpen(project) || !project.getVisibility()) {
+        if (!BTOProjectController.isProjectOpen(project) || !project.getVisibility()) {
             System.out.println("Project is not open for applications.");
             return;
         }
@@ -155,18 +152,18 @@ public class ApplicantMain {
         }
 
         // Check if there are flats available
-        if (!projectController.flatTypeAvailable(project, flatType)) {
+        if (!BTOProjectController.flatTypeAvailable(project, flatType)) {
             System.out.println("No flats available for this type.");
             return;
         }
 
         // Check eligibility
-        if(!applicationController.isEligible(applicant, flatType)) {
+        if(!ApplicationController.isEligible(applicant, flatType)) {
             System.out.println("You are not eligible to apply for this flat type.");
             return;
         }
 
-        applicationController.applyProject(applicant, project, flatType);
+        ApplicationController.applyProject(applicant, project, flatType);
         System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
     }
 
@@ -176,7 +173,7 @@ public class ApplicantMain {
             System.out.println("You have not applied to any project.");
         }
         else {
-            applicationController.requestWithdrawal(applicant);
+            ApplicationController.requestWithdrawal(applicant);
         }
     }
 }

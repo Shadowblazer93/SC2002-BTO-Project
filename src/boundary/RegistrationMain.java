@@ -33,7 +33,7 @@ public class RegistrationMain {
             switch(choice) {
                 case 1 -> {
                     // Print registrations for each project managed
-                    printRegistrations.printMapList(registrationController.getAllRegistrations());
+                    printRegistrations.printMapList(RegistrationController.getAllRegistrations());
                 }
                 case 2 -> {
                     approveRegistrations(manager, sc);
@@ -109,8 +109,8 @@ public class RegistrationMain {
             }
             // Reject registration
             String result = isApproval
-                ? registrationController.approveRegistration(project, registration)
-                : registrationController.rejectRegistration(project, registration);
+                ? RegistrationController.approveRegistration(project, registration)
+                : RegistrationController.rejectRegistration(project, registration);
             System.out.println(result);
         }
     }

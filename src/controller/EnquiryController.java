@@ -16,7 +16,7 @@ public class EnquiryController {
         enquiryCount++;
     }
 
-    public Enquiry createEnquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
+    public static Enquiry createEnquiry(int id, String applicantNRIC, String projectName, String message, String response, String status) {
         enquiryCount = Math.max(enquiryCount,id)+1;
         Enquiry enquiry = new Enquiry(enquiryCount,applicantNRIC,projectName,message,response,status);
         allEnquiries.put(enquiry.getID(), enquiry);  // Add the enquiry to the list
@@ -28,14 +28,18 @@ public class EnquiryController {
     }
 
     public static void removeEnquiry(Enquiry enquiry) {
-        allEnquiries.remove(enquiry.getID());  // Remove the enquiry from the list
+        allEnquiries.remove(enquiry.getID());
     }
     
     public static Map<Integer, Enquiry> getAllEnquiries() {
         return allEnquiries;
     }
 
-    public void replyEnquiry(BTOProject project, int enquiryId, String reply) {
+    public static Enquiry getEnquiryByID(int id) {
+        return allEnquiries.get(id);
+    }
+
+    public static void replyEnquiry(BTOProject project, int enquiryId, String reply) {
         // Find the enquiry based on ID
         Enquiry enquiry = project.getEnquiries().get(enquiryId);
         if (enquiry != null) {

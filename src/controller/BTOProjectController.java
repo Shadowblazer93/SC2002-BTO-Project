@@ -11,11 +11,15 @@ public class BTOProjectController {
     // Hashmap to store projects
     private static Map<String, BTOProject> allProjects = new HashMap<>();
 
-    public Map<String, BTOProject> getAllProjects() {
+    public static Map<String, BTOProject> getAllProjects() {
         return allProjects;
     }
 
-    public BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
+    public static BTOProject getProjectByName(String projectName) {
+        return allProjects.get(projectName);
+    }
+
+    public static BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
                                     Map<FlatType, Integer> unitCounts, LocalDate openingDate, 
                                     LocalDate closingDate, int availableOfficerSlots) {
         // Check if project exists
@@ -30,7 +34,7 @@ public class BTOProjectController {
         return project;
     }
 
-    public boolean deleteProject(Manager manager, String projectName) {
+    public static boolean deleteProject(Manager manager, String projectName) {
         BTOProject projectDelete = manager.getManagedProjects().get(projectName);
         if (projectDelete == null) {    // Project not found
             return false;
@@ -42,18 +46,18 @@ public class BTOProjectController {
         return true;
     }
 
-    public boolean projectExist(String projectName) {
+    public static boolean projectExist(String projectName) {
         return allProjects.containsKey(projectName);
     }
 
     // Check if project is open to applications
-    public boolean isProjectOpen(BTOProject project) {
+    public static boolean isProjectOpen(BTOProject project) {
         LocalDate today = LocalDate.now();
         return project.getOpeningDate().isBefore(today) && project.getClosingDate().isAfter(today);
     }
 
     // Check if flats available for flat type
-    public boolean flatTypeAvailable(BTOProject project, FlatType flatType) {
+    public static boolean flatTypeAvailable(BTOProject project, FlatType flatType) {
         return project.getUnitCounts().get(flatType) > 0;
     }
 
@@ -63,7 +67,7 @@ public class BTOProjectController {
      * @param (value)       Value to replace (E.g. neighbourhood, opening date, etc.)
      * @param projectEdit   Project to edit
      */
-    public boolean editProjectName(Manager manager, String currentName, String newName, BTOProject projectEdit) {
+    public static boolean editProjectName(Manager manager, String currentName, String newName, BTOProject projectEdit) {
         allProjects.remove(currentName);    // Remove project in hashmap
         manager.deleteProject(projectEdit); // Remove project for manager
         projectEdit.setProjectName(newName);
@@ -71,15 +75,15 @@ public class BTOProjectController {
         manager.addProject(projectEdit);
         return true;
     }
-    public boolean editNeighbourhood(String neighbourhood, BTOProject projectEdit) {
+    public static boolean editNeighbourhood(String neighbourhood, BTOProject projectEdit) {
         projectEdit.setNeighbourhood(neighbourhood);
         return true;
     }
-    public boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
+    public static boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
         projectEdit.setNumUnits(flatType, numUnits);
         return true;
     }
-    public boolean editOpeningDate(LocalDate openingDate, BTOProject projectEdit) {
+    public static boolean editOpeningDate(LocalDate openingDate, BTOProject projectEdit) {
         LocalDate closingDate = projectEdit.getClosingDate();
         if (openingDate.isAfter(closingDate)) {
             return false;
@@ -87,7 +91,7 @@ public class BTOProjectController {
         projectEdit.setOpeningDate(openingDate);
         return true;
     }
-    public boolean editClosingDate(LocalDate closingDate, BTOProject projectEdit) {
+    public static boolean editClosingDate(LocalDate closingDate, BTOProject projectEdit) {
         LocalDate openingDate = projectEdit.getOpeningDate();
         if (closingDate.isBefore(openingDate)) {
             return false;
@@ -95,13 +99,13 @@ public class BTOProjectController {
         projectEdit.setClosingDate(closingDate);
         return true;
     }
-    public boolean editVisibility(boolean visible, BTOProject projectEdit) {
+    public static boolean editVisibility(boolean visible, BTOProject projectEdit) {
         projectEdit.setVisible(visible);
         return true;
     }
 
     // Increment flat count by flat type for a given project
-    public boolean incrementFlatCount(BTOProject projectName, String flatType) {
+    public static boolean incrementFlatCount(BTOProject projectName, String flatType) {
         if (projectName == null) {
             System.out.println("Project not found.");
             return false;
@@ -118,7 +122,7 @@ public class BTOProjectController {
     }
 
     // Decrement flat count by flat type for a given project
-    public boolean decrementFlatCount(BTOProject projectName, String flatType) {
+    public static boolean decrementFlatCount(BTOProject projectName, String flatType) {
         if (projectName == null) {
             System.out.println("Project not found.");
             return false;

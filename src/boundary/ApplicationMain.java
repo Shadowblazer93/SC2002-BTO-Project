@@ -2,7 +2,6 @@ package boundary;
 
 import controller.ApplicationController;
 import controller.Filter;
-import controller.user.ApplicantController;
 import entity.application.BTOApplication;
 import entity.user.Manager;
 import entity.user.Officer;
@@ -13,8 +12,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class ApplicationMain {
-    ApplicationController applicationController = new ApplicationController();
-    ApplicantController applicantController = new ApplicantController();
     PrintApplications printApplications = new PrintApplications();
 
     public void displayMenuOfficer(Scanner sc, Officer officer) {
@@ -156,9 +153,9 @@ public class ApplicationMain {
             }
             // Approve/Reject application
             if (isApproval) {
-                applicationController.approveApplication(application);
+                ApplicationController.approveApplication(application);
             } else {
-                applicationController.rejectApplication(application);
+                ApplicationController.rejectApplication(application);
             }
             System.out.println("Application " + (isApproval ? "approved" : "rejected") + " successfully.");
         }
@@ -193,9 +190,9 @@ public class ApplicationMain {
 
             // Approve/Reject application
             if (isApproval) {
-                applicationController.approveWithdrawal(application);
+                ApplicationController.approveWithdrawal(application);
             } else {
-                applicationController.rejectWithdrawal(application);
+                ApplicationController.rejectWithdrawal(application);
             }
             System.out.println("Withdrawal " + (isApproval ? "approved" : "rejected") + " successfully.");
         }

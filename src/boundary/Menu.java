@@ -8,11 +8,6 @@ import entity.user.User;
 import java.util.Scanner;
 
 public class Menu {
-    private final LoginController loginController;
-
-    public Menu() {
-        this.loginController = new LoginController();
-    }
 
     public void displayMenu() {
         try (Scanner sc = new Scanner(System.in)) {

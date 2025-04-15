@@ -15,7 +15,11 @@ public class RegistrationController {
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
     private static int registrationCount = 0;   // Track registration ID
 
-    public Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
+    public static int getRegistrationCount (){
+        return registrationCount;
+    }
+
+    public static Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
         registrationCount = Math.max(registrationCount,id)+1;   // Increment ID
         Registration registration = new Registration(registrationCount, officer, projectName, registrationDate, status);
         addRegistration(projectName, registration);
@@ -23,7 +27,7 @@ public class RegistrationController {
     }
 
     // Add registration to list of registrations for a project
-    public void addRegistration(String project, Registration registration) {
+    public static void addRegistration(String project, Registration registration) {
         if (allRegistrations.containsKey(project)) {
             allRegistrations.get(project).add(registration);
         } else {
@@ -33,11 +37,11 @@ public class RegistrationController {
         }
     }
 
-    public Map<String, List<Registration>> getAllRegistrations() {
+    public static Map<String, List<Registration>> getAllRegistrations() {
         return allRegistrations;
     }
 
-    public String approveRegistration(BTOProject project, Registration registration) {
+    public static String approveRegistration(BTOProject project, Registration registration) {
         if (project.getAssignedOfficers().size() >= project.getAvailableOfficerSlots()) {
             return "No officer slots left for this project.";
         }
@@ -55,7 +59,7 @@ public class RegistrationController {
         return "Success";
     }
 
-    public String rejectRegistration(BTOProject project, Registration registration) {
+    public static String rejectRegistration(BTOProject project, Registration registration) {
         Officer officer = registration.getOfficer();
         if (project.getPendingRegistrations().isEmpty()) {
             return "No registrations found for this project.";
@@ -66,9 +70,5 @@ public class RegistrationController {
         registration.rejectRegistration();          // Set as rejected
         project.removeRegistration(registration);   // Remove from pending registrations in project
         return "Success";
-    }
-
-    public int getRegistrationCount (){
-        return registrationCount;
     }
 }

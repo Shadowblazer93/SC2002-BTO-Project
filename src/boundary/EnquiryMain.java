@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class EnquiryMain {
-    EnquiryController enquiryController = new EnquiryController();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     public void viewProjectEnquiries(Officer officer) {
@@ -131,6 +130,6 @@ public class EnquiryMain {
         sc.nextLine();
         System.out.print("Enter reply: ");
         String reply = sc.nextLine();
-        enquiryController.replyEnquiry(project, enquiryId, reply);
+        EnquiryController.replyEnquiry(project, enquiryId, reply);
     }
 }

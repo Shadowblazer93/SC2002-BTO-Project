@@ -14,24 +14,22 @@ import java.util.Map;
 
 public class OfficerController {
     private static final Map<String, Officer> allOfficers = new HashMap<>(); // NRIC + Officer
-    private BTOProjectController projectController = new BTOProjectController();
-    private ApplicationController applicationController = new ApplicationController();
-    public Officer createOfficer(String nric, String name, String password, int age, String maritalStatus) {
+    public static Officer createOfficer(String nric, String name, String password, int age, String maritalStatus) {
         Officer officer = new Officer(nric, name, password, age, maritalStatus);
         allOfficers.put(nric, officer);
         return officer;
     }
 
-    public Officer getOfficer(String nric) {
+    public static Officer getOfficer(String nric) {
         return allOfficers.get(nric);
     }
 
-    public Map<String, Officer> getAllOfficers() {
+    public static Map<String, Officer> getAllOfficers() {
         return allOfficers;
     }
 
     // Check if officer is eligible for registration of project
-    public String registerProject(Officer officer) {   
+    public static String registerProject(Officer officer) {   
         String message = "success";
         
         // Check if officer is already assigned to a project
@@ -47,7 +45,7 @@ public class OfficerController {
         }
         
         // Check if the officer has any pending registrations
-        for (BTOProject project : projectController.getAllProjects().values()) {
+        for (BTOProject project : BTOProjectController.getAllProjects().values()) {
             Map<String, Registration> pendingRegs = project.getPendingRegistrations();
             if (pendingRegs != null && pendingRegs.containsKey(officer.getNRIC())) {
                 message = "You already have a pending registration for project: " + project.getProjectName();
@@ -132,7 +130,7 @@ public class OfficerController {
             unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
         }
     }
-    public void generateReceipt(Officer officer, Applicant applicant){
+    public static void generateReceipt(Officer officer, Applicant applicant){
         String NRIC = applicant.getNRIC();
         String name = applicant.getName();
         int age = applicant.getAge();
@@ -148,7 +146,7 @@ public class OfficerController {
         }
 
         String projectName = application.getProjectName();
-        BTOProject project = projectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
         String neighbourhood = project.getNeighbourhood();
         Map<FlatType,Integer> unitCounts = project.getunitCounts();
         
@@ -173,7 +171,7 @@ public class OfficerController {
         }   
     }
 
-    public void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
+    public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
         // 1. Check if officer has assigned project
         BTOProject assignedProject = officer.getAssignedProject();
         if (assignedProject == null) {
@@ -187,7 +185,7 @@ public class OfficerController {
         
         // 3. If no application exists, create one
         if (application == null) {
-            application = applicationController.applyProject(applicant, assignedProject, flatType);
+            application = ApplicationController.applyProject(applicant, assignedProject, flatType);
         }
         
         // 4. Verify officer has permission

@@ -25,8 +25,7 @@ import java.util.Map;
 
 public class SaveCSV {
     public static void saveProject() {
-        BTOProjectController projectController = new BTOProjectController();
-        Map<String, BTOProject> allProjects = projectController.getAllProjects();
+        Map<String, BTOProject> allProjects = BTOProjectController.getAllProjects();
         File filePath = new File("src/database/ProjectList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -114,8 +113,7 @@ public class SaveCSV {
     }
 
     public static void saveManagers() {
-        ManagerController managerController = new ManagerController();
-        Map<String, Manager> allManagers = managerController.getAllManagers();
+        Map<String, Manager> allManagers = ManagerController.getAllManagers();
         File filePath = new File("src/database/ManagerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -137,8 +135,7 @@ public class SaveCSV {
     }
 
     public static void saveApplicants() {
-        ApplicantController applicantController = new ApplicantController();
-        Map<String, Applicant> allApplicants = applicantController.getAllApplicants();
+        Map<String, Applicant> allApplicants = ApplicantController.getAllApplicants();
         File filePath = new File("src/database/ApplicantList.csv");
 
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -159,8 +156,7 @@ public class SaveCSV {
     }
 
     public static void saveOfficers() {
-        OfficerController officerController = new OfficerController();
-        Map<String, Officer> allOfficers = officerController.getAllOfficers();
+        Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
         File filePath = new File("src/database/OfficerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -206,8 +202,7 @@ public class SaveCSV {
     }
 
     public static void saveBTOApplications() {
-        ApplicationController applicationController = new ApplicationController();
-        Map<String, BTOApplication> allApplications = applicationController.getAllApplications();
+        Map<String, BTOApplication> allApplications = ApplicationController.getAllApplications();
         File filePath = new File("src/database/ApplicationList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -229,8 +224,7 @@ public class SaveCSV {
     }
 
     public static void saveRegistrations() {
-        RegistrationController registrationController = new RegistrationController();
-        Map<String, List<Registration>> allRegistrations = registrationController.getAllRegistrations();
+        Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
         File filePath = new File("src/database/RegistrationList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header

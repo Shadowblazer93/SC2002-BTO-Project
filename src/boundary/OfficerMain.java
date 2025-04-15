@@ -1,7 +1,6 @@
 package boundary;
 
 import controller.BTOProjectController;
-import controller.EnquiryController;
 import controller.RegistrationController;
 import controller.user.ApplicantController;
 import controller.user.OfficerController;
@@ -10,15 +9,12 @@ import entity.registration.Registration;
 import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
-import enums.FlatType; // Ensure FlatType is imported from the correct package
-import enums.RegistrationStatus;
+import enums.FlatType;
+import enums.RegistrationStatus; // Ensure FlatType is imported from the correct package
 import java.time.LocalDate;
 import java.util.*;
 public class OfficerMain {
     PrintProjects projectPrinter = new PrintProjects();
-    EnquiryController enquiryController = new EnquiryController();
-    BTOProjectController projectController = new BTOProjectController();
-    RegistrationController registrationController = new RegistrationController();
     OfficerController officerController = new OfficerController();
     ApplicantController applicantController = new ApplicantController();
     EnquiryMain enquiryMain = new EnquiryMain();
@@ -48,7 +44,7 @@ public class OfficerMain {
             int choice = sc.nextInt();
 
             switch (choice) {
-                case 1 -> viewRegistrationStatus(sc, officer);
+                case 1 -> viewRegistrationStatus(officer);
                 case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
                 case 3 -> updateApplicantStatus(sc, officer);
                 case 4 -> generateReceipt(sc, officer);
@@ -64,7 +60,7 @@ public class OfficerMain {
     }
    
 
-    private void viewRegistrationStatus(Scanner sc, Officer officer) {
+    private void viewRegistrationStatus(Officer officer) {
         Map<String, BTOProject> registered = officer.getRegisteredProjects();
         
         if (registered.isEmpty()) {
@@ -126,20 +122,20 @@ public class OfficerMain {
         
         // View list of projects
         System.out.println("Available projects you can register for:");
-        projectPrinter.printMap(projectController.getAllProjects());
+        projectPrinter.printMap(BTOProjectController.getAllProjects());
         
         sc.nextLine(); // Clear buffer after previous nextInt()
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
         
-        BTOProject project = projectController.getAllProjects().get(projectName);
+        BTOProject project = BTOProjectController.getAllProjects().get(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
         
         // Create registration
-        Registration registration = registrationController.createRegistration(officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
+        Registration registration = RegistrationController.createRegistration(RegistrationController.getRegistrationCount(), officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
         
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project
