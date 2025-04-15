@@ -1,5 +1,6 @@
 package boundary;
 
+import controller.Filter;
 import controller.RegistrationController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
@@ -9,8 +10,6 @@ import java.util.*;
 
 public class RegistrationMain {
     PrintRegistrations printRegistrations = new PrintRegistrations();
-    PrintProjects printProjects = new PrintProjects();
-    RegistrationController registrationController = new RegistrationController();
 
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
@@ -32,20 +31,20 @@ public class RegistrationMain {
 
             switch(choice) {
                 case 1 -> {
-                    // Print registrations for each project managed
+                    // Print registrations for each project
                     printRegistrations.printMapList(RegistrationController.getAllRegistrations());
                 }
                 case 2 -> {
-                    approveRegistrations(manager, sc);
+                    processRegistrations(manager, sc, true);
                 }
                 case 3 -> {
-                    rejectRegistrations(manager, sc);
+                    processRegistrations(manager, sc, false);
                 }
                 case 4 -> {
-
+                    viewPendingRegistrations(manager);
                 }
                 case 5 -> {
-                    
+                    viewApprovedRegistrations(manager);
                 }
                 case 6 -> {
                     System.out.println("Exiting registration menu.");
@@ -58,42 +57,57 @@ public class RegistrationMain {
         }
     }
 
-    private void approveRegistrations(Manager manager, Scanner sc) {
-        BTOProject project = selectProject(manager, sc);
-        if (project != null) {
-            processRegistrations(project, sc, true);
-        }
-    }
-
-    private void rejectRegistrations(Manager manager, Scanner sc) {
-        BTOProject project = selectProject(manager, sc);
-        if (project != null) {
-            processRegistrations(project, sc, false);
-        }
-    }
-
-    private BTOProject selectProject(Manager manager, Scanner sc) {
-        // Print list of projects
-        printProjects.printMap(manager.getManagedProjects());
-        System.out.println("Select project: ");
-        String projectName = sc.nextLine();
-        BTOProject project = manager.getManagedProjects().get(projectName);
+    private Map<String, Registration> retrieveProjectRegistrations(Manager manager) {
+        BTOProject project = manager.getCurrentProject();
         if (project == null) {
-            System.out.println("Project not found.");
+            System.out.println("You are not managing any project.");
+            return null;
         }
-        return project;
+        Map<String, Registration> projectRegistrations = project.getRegistrations();
+        if (projectRegistrations.isEmpty()) {
+            System.out.printf("No registrations for your project '%s'.", project.getProjectName());
+            return null;
+        }
+        return projectRegistrations;
     }
 
-    public void processRegistrations(BTOProject project, Scanner sc, boolean isApproval) {
-        // Get pending registrations for project
-        Map<String, Registration> registrationList = project.getPendingRegistrations();
-        if (registrationList.isEmpty()) {
-            System.out.println("No pending registrations for this project.");
+    private Map<String, Registration> viewPendingRegistrations(Manager manager) {
+        Map<String, Registration> projectRegistrations = retrieveProjectRegistrations(manager);
+        if (projectRegistrations.isEmpty()) {
+            return null;
+        }
+        Map<String, Registration> pendingRegistrations = Filter.filterPendingRegistrations(projectRegistrations);
+        if (pendingRegistrations.isEmpty()) {
+            System.out.printf("No pending registrations for your project '%s'.", manager.getCurrentProject().getProjectName());
+            return null;
+        }
+        printRegistrations.printMap(pendingRegistrations);
+        return pendingRegistrations;
+    }
+
+    private Map<String, Registration> viewApprovedRegistrations(Manager manager) {
+        Map<String, Registration> projectRegistrations = retrieveProjectRegistrations(manager);
+        if (projectRegistrations.isEmpty()) {
+            return null;
+        }
+        Map<String, Registration> approvedRegistrations = Filter.filterApprovedRegistrations(projectRegistrations);
+        if (approvedRegistrations.isEmpty()) {
+            System.out.printf("No approved registrations for your project '%s'.", manager.getCurrentProject().getProjectName());
+            return null;
+        }
+        printRegistrations.printMap(approvedRegistrations);
+        return approvedRegistrations;
+    }
+
+    
+
+    public void processRegistrations(Manager manager, Scanner sc, boolean isApproval) {
+        // Get and print pending registrations for project
+        Map<String, Registration> pendingRegistrations = viewPendingRegistrations(manager);
+        if (pendingRegistrations == null) {
             return;
         }
-
-        // Print registrations in the project
-        printRegistrations.printMap(registrationList);
+        BTOProject project = manager.getCurrentProject();
 
         System.out.println("Select registrations to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
@@ -101,8 +115,8 @@ public class RegistrationMain {
             nric = sc.nextLine();
             // Retrieve registration by NRIC
             Registration registration;
-            if (registrationList.containsKey(nric)) {
-                registration = registrationList.get(nric);
+            if (pendingRegistrations.containsKey(nric)) {
+                registration = pendingRegistrations.get(nric);
             } else {
                 System.out.println("Registration not found.");
                 continue;

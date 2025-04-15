@@ -2,7 +2,9 @@ package controller;
 
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
+import entity.registration.Registration;
 import enums.FlatType;
+import enums.RegistrationStatus;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,30 @@ public class Filter {
                 .filter(BTOProject::isVisible)
                 .sorted(Comparator.comparing(BTOProject::getProjectName))
                 .collect(Collectors.toList());
+    }
+
+    public static Map<String, Registration> filterPendingRegistrations(Map<String, Registration> registrations) {
+        List<Registration> registrationList =  registrations.values().stream()
+                .filter(registration -> registration.getStatus() == RegistrationStatus.PENDING)
+                .collect(Collectors.toList());
+        // Convert back to map
+        Map<String, Registration> filteredMap = new HashMap<>();
+        for (Registration registration : registrationList) {
+            filteredMap.put(registration.getOfficer().getNRIC(), registration);
+        }
+        return filteredMap;
+    }
+
+    public static Map<String, Registration> filterApprovedRegistrations(Map<String, Registration> registrations) {
+        List<Registration> registrationList =  registrations.values().stream()
+                .filter(registration -> registration.getStatus() == RegistrationStatus.APPROVED)
+                .collect(Collectors.toList());
+        // Convert back to map
+        Map<String, Registration> filteredMap = new HashMap<>();
+        for (Registration registration : registrationList) {
+            filteredMap.put(registration.getOfficer().getNRIC(), registration);
+        }
+        return filteredMap;
     }
 
 

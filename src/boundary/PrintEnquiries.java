@@ -21,10 +21,10 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
 
         // Print sorted list of enquiries by project and ID
         enquiryList.sort(Comparator
-            .comparing((Enquiry e) -> e.getProject().getProjectName())
+            .comparing((Enquiry e) -> e.getProjectName())
             .thenComparing(Enquiry::getID));
         for (Enquiry enquiry : enquiryList) {
-            System.out.printf(" - Project: %s | %d: %s\n", enquiry.getProject().getProjectName(), enquiry.getID(), enquiry.getMessage());
+            System.out.printf(" - Project: %s | %d: %s\n", enquiry.getProjectName(), enquiry.getID(), enquiry.getMessage());
         }
     }
 

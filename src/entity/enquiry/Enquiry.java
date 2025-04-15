@@ -1,13 +1,11 @@
 package entity.enquiry;
 
-import entity.project.BTOProject;
 import enums.EnquiryStatus;
 
 public class Enquiry {
     public int id;
-    private String applicantNRIC;
-    private String projectName;
-    private BTOProject project;
+    private final String applicantNRIC;
+    private final String projectName;
     private String message;
     private String response;
     private EnquiryStatus status;
@@ -43,9 +41,6 @@ public class Enquiry {
     }
     public String getProjectName() {
         return projectName;
-    }
-    public BTOProject getProject() {
-        return project;
     }
     public EnquiryStatus getStatus() {
         return status;

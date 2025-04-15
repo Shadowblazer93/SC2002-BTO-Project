@@ -10,13 +10,9 @@ import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
-import enums.RegistrationStatus; // Ensure FlatType is imported from the correct package
-import java.time.LocalDate;
-import java.util.*;
+import java.util.*; // Ensure FlatType is imported from the correct package
 public class OfficerMain {
     PrintProjects projectPrinter = new PrintProjects();
-    OfficerController officerController = new OfficerController();
-    ApplicantController applicantController = new ApplicantController();
     EnquiryMain enquiryMain = new EnquiryMain();
     public static void main(String[] args) {
 
@@ -90,7 +86,7 @@ public class OfficerMain {
         System.out.print("Enter the NRIC of the applicant: ");
         String NRIC = sc.nextLine();
         
-        Applicant applicant = applicantController.getApplicant(NRIC);
+        Applicant applicant = ApplicantController.getApplicant(NRIC);
         if (applicant == null) {
             System.out.println("Applicant not found with NRIC: " + NRIC);
             return;
@@ -104,7 +100,7 @@ public class OfficerMain {
         String nric = sc.next();
         sc.nextLine();
         
-        Applicant applicant = applicantController.getApplicant(nric);
+        Applicant applicant = ApplicantController.getApplicant(nric);
         if (applicant == null) {
             System.out.println("Applicant not found.");
             return;
@@ -114,7 +110,7 @@ public class OfficerMain {
 
     private void registerProject(Scanner sc, Officer officer) {
         // Check if eligible to register
-        String message = officerController.registerProject(officer);
+        String message = OfficerController.registerProject(officer);
         if (!message.equals("success")) {
             System.out.println(message);
             return; // Only return early if validation fails
@@ -135,7 +131,7 @@ public class OfficerMain {
         }
         
         // Create registration
-        Registration registration = RegistrationController.createRegistration(0, officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
+        Registration registration = RegistrationController.registerProject(officer, project);
         
         // Apply to the given BTO project
         project.addRegistration(registration);  // Add registration to project
@@ -148,7 +144,7 @@ public class OfficerMain {
         String nric = sc.next();
         sc.nextLine(); // Clear buffer
         
-        Applicant applicant = applicantController.getApplicant(nric);
+        Applicant applicant = ApplicantController.getApplicant(nric);
         if (applicant == null) {
             System.out.println("Applicant not found.");
             return;

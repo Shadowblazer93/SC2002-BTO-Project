@@ -8,12 +8,13 @@ import java.util.Map;
 
 public class Officer extends Applicant{
     private BTOProject assignedProject;
-    private Map<String, BTOProject> registeredProjects = new HashMap<>();
+    private Map<String, BTOProject> registeredProjects;
 
     //hdb officer is a subset of applicant
     public Officer(String nric, String name, String password, int age, String maritalStatus) {
         super(nric, name, age, maritalStatus, password);    // Applicant constructor
         this.setUserRole(UserRole.OFFICER);
+        registeredProjects = new HashMap<>();
     }
 
     public BTOProject getAssignedProject() {

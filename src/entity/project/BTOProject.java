@@ -21,7 +21,7 @@ public class BTOProject {
     private Map<Integer, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
     private Map<String, BTOApplication> applications;       // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
-    private Map<String, Registration> pendingRegistrations; // Map of pending registrations (NRIC, Registration)
+    private Map<String, Registration> registrations; // Map of pending registrations (NRIC, Registration)
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -37,7 +37,7 @@ public class BTOProject {
         this.enquiries = new HashMap<>();
         this.applications = new HashMap<>();
         this.assignedOfficers = new ArrayList<>();
-        this.pendingRegistrations = new HashMap<>();
+        this.registrations = new HashMap<>();
     }
 
     public void addOfficer(Officer officer) {
@@ -50,19 +50,13 @@ public class BTOProject {
         addOfficer(officer);
         this.availableOfficerSlots--;
         String nric = officer.getNRIC();
-        this.pendingRegistrations.remove(nric); // Remove registration from pending registrations
+        this.registrations.remove(nric); // Remove registration from pending registrations
     }
 
     // Add officer to list of registrations
     public void addRegistration(Registration registration) {
         Officer officer = registration.getOfficer();
-        pendingRegistrations.put(officer.getNRIC(), registration);  
-    }
-
-    // Remove officer from list of registrations (Rejection)
-    public void removeRegistration(Registration registration) {
-        Officer officer = registration.getOfficer();
-        pendingRegistrations.remove(officer.getNRIC());
+        registrations.put(officer.getNRIC(), registration);  
     }
 
     // Add application to project
@@ -115,8 +109,8 @@ public class BTOProject {
         return assignedOfficers;
     }
 
-    public Map<String, Registration> getPendingRegistrations() {
-        return pendingRegistrations;
+    public Map<String, Registration> getRegistrations() {
+        return registrations;
     }
 
     public Map<String, BTOApplication> getApplications() {

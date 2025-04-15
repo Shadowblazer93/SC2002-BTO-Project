@@ -5,9 +5,9 @@ import enums.ApplicationStatus;
 import enums.FlatType;
 
 public class BTOApplication {
-    private int ID;
-    private Applicant applicant;
-    private String projectName;
+    private final int ID;
+    private final Applicant applicant;
+    private final String projectName;
     private FlatType flatType;
     private ApplicationStatus status;
     private boolean withdrawal;    // Whether applicant has requested for withdrawal

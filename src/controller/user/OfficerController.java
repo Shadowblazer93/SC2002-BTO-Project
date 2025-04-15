@@ -46,7 +46,7 @@ public class OfficerController {
         
         // Check if the officer has any pending registrations
         for (BTOProject project : BTOProjectController.getAllProjects().values()) {
-            Map<String, Registration> pendingRegs = project.getPendingRegistrations();
+            Map<String, Registration> pendingRegs = project.getRegistrations();
             if (pendingRegs != null && pendingRegs.containsKey(officer.getNRIC())) {
                 message = "You already have a pending registration for project: " + project.getProjectName();
                 return message;

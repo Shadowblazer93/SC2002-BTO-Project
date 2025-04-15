@@ -185,6 +185,10 @@ public class ReadCSV {
                         if (registrationId.isEmpty()) continue;
                         int id = Integer.parseInt(registrationId.trim());
                         Registration registration = registrationMap.get(id);
+                        if (registration == null) {
+                            System.out.println("Registration not found for ID: " + id);
+                            continue;
+                        }
                         project.addRegistration(registration);
                     }
                 } else {
@@ -267,7 +271,7 @@ public class ReadCSV {
                 String officerNRIC = data[1].replace("\"", "").trim();
                 String projectName = (data[2].replace("\"", "").trim());
                 LocalDate registrationDate = LocalDate.parse(data[3].replace("\"", "").trim());
-                RegistrationStatus status = parseRegistrationStatus(data[3].replace("\"", "").trim());
+                RegistrationStatus status = parseRegistrationStatus(data[4].replace("\"", "").trim());
 
                 Officer officer = OfficerController.getOfficer(officerNRIC);
                 RegistrationController.createRegistration(id, officer, projectName, registrationDate, status);

@@ -21,9 +21,9 @@ public class RegistrationController {
 
     public static Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
         registrationCount = Math.max(registrationCount,id);
-        Registration registration = new Registration(id, officer, projectName, registrationDate, status);
-        addRegistration(projectName, registration);
+        Registration registration = new Registration(registrationCount, officer, projectName, registrationDate, status);
         registrationCount++;
+        addRegistration(projectName, registration);
         return registration;
     }
 
@@ -46,15 +46,22 @@ public class RegistrationController {
         return allRegistrations.get(projectName);
     }
 
+    public static Registration registerProject(Officer officer, BTOProject project)  {
+        Registration registration = createRegistration(0, officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
+        officer.registerProject(project);       // Add project to officer's registered projects
+        project.addRegistration(registration);  // Add registration to project
+        return registration;
+    }
+
     public static String approveRegistration(BTOProject project, Registration registration) {
         if (project.getAssignedOfficers().size() >= project.getAvailableOfficerSlots()) {
             return "No officer slots left for this project.";
         }
 
         Officer officer = registration.getOfficer();
-        if (project.getPendingRegistrations().isEmpty()) {
+        if (project.getRegistrations().isEmpty()) {
             return "No registrations found for this project.";
-        } else if (!project.getPendingRegistrations().containsKey(officer.getNRIC())) {
+        } else if (!project.getRegistrations().containsKey(officer.getNRIC())) {
             return "This registration does not exist for this project.";
         }
 
@@ -66,14 +73,13 @@ public class RegistrationController {
 
     public static String rejectRegistration(BTOProject project, Registration registration) {
         Officer officer = registration.getOfficer();
-        if (project.getPendingRegistrations().isEmpty()) {
+        if (project.getRegistrations().isEmpty()) {
             return "No registrations found for this project.";
-        } else if (!project.getPendingRegistrations().containsKey(officer.getNRIC())) {
+        } else if (!project.getRegistrations().containsKey(officer.getNRIC())) {
             return "This registration does not exist for this project.";
         }
 
         registration.rejectRegistration();          // Set as rejected
-        project.removeRegistration(registration);   // Remove from pending registrations in project
         return "Success";
     }
 }
