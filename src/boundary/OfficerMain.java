@@ -1,6 +1,7 @@
 package boundary;
 
 import controller.BTOProjectController;
+import controller.EnquiryController;
 import controller.RegistrationController;
 import controller.user.ApplicantController;
 import controller.user.OfficerController;
@@ -10,7 +11,6 @@ import entity.user.Applicant;
 import entity.user.Officer;
 import enums.ApplicationStatus;
 import enums.FlatType;
-import java.time.LocalDate;
 import java.util.*;
 
 public class OfficerMain {
@@ -83,32 +83,37 @@ public class OfficerMain {
         });
     }
 
-    // wrong
-    private void manageFlatBookings(Officer officer){
-        System.out.println("Managing flat bookings!");
-        BTOProject project = officer.viewHandledProject();
-        //print proj
-        System.out.print(project);
-    }
+    //NOT USED, IF NOT NEEDED CAN DELETE
     private void manageEnquiries(Scanner sc, Officer officer) {
         EnquiryMain enquiryMain = new EnquiryMain();
-        
+        EnquiryController enquiryController = new EnquiryController(); // or use class-level if available
+    
         BTOProject project = officer.getAssignedProject();
         if (project == null) {
             System.out.println("No project assigned to the officer.");
             return; 
         }
-        
-        // Only continue if project exists
+    
+        // Show all enquiries
         enquiryMain.viewProjectEnquiries(officer);
-        
-        sc.nextLine(); // Clear buffer after previous nextInt()
+    
+        // Prompt for enquiry ID and reply
         System.out.print("Enter Enquiry ID to reply: ");
-        String enquiryId = sc.nextLine();
+        int enquiryId;
+        try {
+            enquiryId = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Enquiry ID. Must be a number.");
+            return;
+        }
+    
         System.out.print("Enter reply: ");
         String reply = sc.nextLine();
-        enquiryController.replyEnquiry(officer, enquiryId, reply);
+    
+        // Send reply using project and ID
+        enquiryController.replyEnquiry(project, enquiryId, reply);
     }
+    
 
     private void updateApplicantStatus(Scanner sc, Officer officer) {
         sc.nextLine();

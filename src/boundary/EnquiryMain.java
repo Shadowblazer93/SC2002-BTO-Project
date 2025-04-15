@@ -35,23 +35,27 @@ public class EnquiryMain {
             3. Exit
             """);
             System.out.print("Option: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number between 1 and 3.");
+                sc.nextLine(); // Clear invalid input
+                continue;
+            }
+    
             int choice = sc.nextInt();
             sc.nextLine();
-            
+    
             switch (choice) {
-                case 1 -> {
-                    viewManagedEnquiries(officer);
-                }
-                case 2 -> {
-                    replyEnquiry(sc, officer);
-                }
+                case 1 -> viewManagedEnquiries(officer);
+                case 2 -> replyEnquiry(sc, officer);
                 case 3 -> {
                     System.out.println("Exiting enquiry menu...");
                     running = false;
                 }
+                default -> System.out.println("Invalid choice. Please select a valid option (1–3).");
             }
         }
     }
+    
 
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
@@ -66,26 +70,28 @@ public class EnquiryMain {
             4. Exit
             """);
             System.out.print("Option: ");
+            if (!sc.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number between 1 and 4.");
+                sc.nextLine(); // Clear invalid input
+                continue;
+            }
+    
             int choice = sc.nextInt();
             sc.nextLine();
-            
+    
             switch (choice) {
-                case 1 -> {
-                    viewAllEnquiries();
-                }
-                case 2 -> {
-                    viewManagedEnquiries(manager);
-                }
-                case 3 -> {
-                    replyEnquiry(sc, manager);
-                }
+                case 1 -> viewAllEnquiries();
+                case 2 -> viewManagedEnquiries(manager);
+                case 3 -> replyEnquiry(sc, manager);
                 case 4 -> {
                     System.out.println("Exiting enquiry menu...");
                     running = false;
                 }
+                default -> System.out.println("Invalid choice. Please select a valid option (1–4).");
             }
         }
     }
+    
 
     private void viewAllEnquiries() {
         Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
