@@ -6,7 +6,7 @@ import enums.FlatType;
 
 public class BTOApplication {
     private final int ID;
-    private final Applicant applicant;
+    private Applicant applicant;
     private final String projectName;
     private FlatType flatType;
     private ApplicationStatus status;
@@ -45,6 +45,10 @@ public class BTOApplication {
         this.flatType = flatType;
     }
 
+    public void setApplicantInitial(Applicant applicant) {
+        this.applicant = applicant;
+    }
+
     public ApplicationStatus getStatus() {
         return status;
     }
@@ -55,5 +59,16 @@ public class BTOApplication {
 
     public void setWithdrawal(boolean withdrawal) {
         this.withdrawal = withdrawal;
+    }
+
+    public String toString() {
+        return String.format("""
+                ID: %d
+                Applicant: %s
+                Project Name: %s
+                Flat Type: %s
+                Status: %s
+                Requested Withdrawal: %b""",
+                ID, applicant.getName(), projectName, flatType, status, withdrawal);
     }
 } 

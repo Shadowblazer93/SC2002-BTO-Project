@@ -51,15 +51,7 @@ public class ApplicantMain {
                 }
 
                 case 3 -> {
-                    // BTOProject appliedProject = applicant.getAppliedProject();
-                    BTOApplication application = applicant.getApplication();
-
-                    if (application==null) {
-                        System.out.println("You have not applied to any project.");
-                        break;
-                    }
-                    
-                    System.out.println("Applied project details:\n" + application);
+                    viewAppliedProject(applicant);
                 }
 
                 case 4 -> {
@@ -95,6 +87,16 @@ public class ApplicantMain {
     private void viewProjectList() {
         List<BTOProject> visibleProjects = Filter.filterVisibleProjects(BTOProjectController.getAllProjects());
         projectPrinter.printList(visibleProjects);
+    }
+
+    private void viewAppliedProject(Applicant applicant) {
+        BTOApplication application = applicant.getApplication();
+        if (application==null) {
+            System.out.println("You have not applied to any project.");
+            return;
+        }
+        System.out.println("Details of your application:");
+        System.out.println(application);
     }
 
     private void submitEnquiry(Scanner sc, Applicant applicant) {
