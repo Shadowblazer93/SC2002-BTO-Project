@@ -8,6 +8,7 @@ import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.Applicant;
+import enums.ApplicationStatus;
 import enums.FlatType;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class ApplicantMain {
                 }
 
                 case 4 -> {
-                    
+                    bookFlat(applicant);
                 }
 
                 case 5 -> {
@@ -221,6 +222,36 @@ public class ApplicantMain {
 
         ApplicationController.applyProject(applicant, project, flatType);
         System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
+    }
+
+    private void bookFlat(Applicant applicant) {
+        BTOApplication application = applicant.getApplication();
+
+        if (application==null) {
+            System.out.println("You have not applied to any project.");
+            return;
+        }
+
+        if (application.getStatus()!=ApplicationStatus.SUCCESSFUL) {
+            System.out.println("Your application has not been aprroved yet.");
+            return;
+        }
+
+        String projectName = application.getProjectName();
+        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        if (project==null) {
+            System.out.println("The project you applied to does not exist.");
+            return;
+        }
+
+        FlatType flatType = application.getFlatType();
+        if (!BTOProjectController.flatTypeAvailable(project, flatType)) {
+            System.out.println("No flats available for this type.");
+            return;
+        }
+
+        BTOProjectController.bookFlat(project, flatType);
+        System.out.println("Flat booked successfully!");
     }
 
     private void withdrawProject(Applicant applicant) {
