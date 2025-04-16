@@ -16,6 +16,7 @@ public class ApplicationController {
         applicationCount = Math.max(applicationCount,id);
         BTOApplication application = new BTOApplication(applicationCount, applicant, projectName, flatType, status, withdrawal);
         applicationCount++;
+        addApplication(application);
         return application;
     }
 
@@ -51,7 +52,7 @@ public class ApplicationController {
         // Create application
         BTOApplication application = createApplication(0,applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
         applicant.setApplication(application);
-        addApplication(application);
+        project.addApplication(application); 
         return application;
     }
 

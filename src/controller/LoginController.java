@@ -27,4 +27,9 @@ public class LoginController {
 
         return null;    // None of the users
     }
+
+    public static boolean checkNRIC(String nric) {
+        // Check if NRIC is valid (e.g., length, format)
+        return nric != null && nric.length() == 9 && nric.matches("[ST]\\d{7}[A-Z]");
+    }
 }

@@ -3,6 +3,7 @@ package controller;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
 import java.util.*;
@@ -11,8 +12,8 @@ import java.util.stream.Collectors;
 public class Filter {
 
     // Filter applications by marital status, flat type
-    public static List<BTOApplication> filterApplications(Map<String, BTOApplication> applications, String maritalStatus, FlatType flatType) {
-        return applications.values().stream()
+    public static Map<String, BTOApplication> filterApplications(Map<String, BTOApplication> applications, String maritalStatus, FlatType flatType) {
+        List<BTOApplication> applicationList = applications.values().stream()
             .filter(a -> {
                 boolean match = true;
                 if (maritalStatus != null) {
@@ -24,6 +25,12 @@ public class Filter {
                 return match;
             })
             .collect(Collectors.toList());
+        // Convert back to map
+        Map<String, BTOApplication> filteredMap = new HashMap<>();
+        for (BTOApplication application : applicationList) {
+            filteredMap.put(application.getApplicant().getNRIC(), application);
+        }
+        return filteredMap;
     }
 
     public static List<BTOProject> filterVisibleProjects(Map<String, BTOProject> projects) {
@@ -35,7 +42,7 @@ public class Filter {
 
     public static Map<String, Registration> filterPendingRegistrations(Map<String, Registration> registrations) {
         List<Registration> registrationList =  registrations.values().stream()
-                .filter(registration -> registration.getStatus() == RegistrationStatus.PENDING)
+                .filter(r -> r.getStatus().equals(RegistrationStatus.PENDING))
                 .collect(Collectors.toList());
         // Convert back to map
         Map<String, Registration> filteredMap = new HashMap<>();
@@ -47,7 +54,7 @@ public class Filter {
 
     public static Map<String, Registration> filterApprovedRegistrations(Map<String, Registration> registrations) {
         List<Registration> registrationList =  registrations.values().stream()
-                .filter(registration -> registration.getStatus() == RegistrationStatus.APPROVED)
+                .filter(r -> r.getStatus().equals(RegistrationStatus.APPROVED))
                 .collect(Collectors.toList());
         // Convert back to map
         Map<String, Registration> filteredMap = new HashMap<>();
@@ -57,44 +64,31 @@ public class Filter {
         return filteredMap;
     }
 
-
-    // Filter by Project ID
-    /*public static List<BTOApplication> filterByProjectID(List<BTOApplication> applications, String projectID) {
-        return applications.stream()
-                .filter(app -> app.getProjectID().equalsIgnoreCase(projectID))
-                .collect(Collectors.toList());
+    public static List<BTOApplication> filterPendingApplications(Map<String, BTOApplication> applications) {
+        return applications.values().stream()
+            .filter(a -> !a.getWithdrawal() && a.getStatus().equals(ApplicationStatus.PENDING))  // Pending status and not withdrawals
+            .sorted((a1, a2) -> Integer.compare(a1.getID(), a2.getID()))
+            .collect(Collectors.toList());
     }
 
-    // Filter by Flat Type
-    public static List<BTOApplication> filterByFlatType(List<BTOApplication> applications, String flatType) {
-        return applications.stream()
-                .filter(app -> app.getFlatType().equalsIgnoreCase(flatType))
-                .collect(Collectors.toList());
+    public static List<BTOApplication> filterWithdrawalApplications(Map<String, BTOApplication> applications) {
+        return applications.values().stream()
+            .filter(BTOApplication::getWithdrawal)
+            .sorted((a1, a2) -> Integer.compare(a1.getID(), a2.getID()))
+            .collect(Collectors.toList());
     }
 
-    // Filter by Application Status
-    public static List<BTOApplication> filterByStatus(List<BTOApplication> applications, String status) {
-        return applications.stream()
-                .filter(app -> app.getStatus().name().equalsIgnoreCase(status))
-                .collect(Collectors.toList());
+    public static List<BTOApplication> filterPendingBookingApplications(Map<String, BTOApplication> applications) {
+        return applications.values().stream()
+            .filter(a -> !a.getWithdrawal() && a.getStatus().equals(ApplicationStatus.PENDING_BOOKING))
+            .sorted((a1, a2) -> Integer.compare(a1.getID(), a2.getID()))
+            .collect(Collectors.toList());
     }
 
-    // Filter by Withdrawal Request
-    public static List<BTOApplication> filterByWithdrawalRequest(List<BTOApplication> applications, boolean requested) {
-        return applications.stream()
-                .filter(app -> app.hasRequestedWithdrawal() == requested)
-                .collect(Collectors.toList());
+    public static List<BTOApplication> filterBookedApplications(Map<String, BTOApplication> applications) {
+        return applications.values().stream()
+            .filter(a -> !a.getWithdrawal() && a.getStatus().equals(ApplicationStatus.BOOKED))
+            .sorted((a1, a2) -> Integer.compare(a1.getID(), a2.getID()))
+            .collect(Collectors.toList());
     }
-
-    // Composite filter: project + status + flat type (example)
-    public static List<BTOApplication> filterByMultipleCriteria(List<BTOApplication> applications,
-                                                                String projectID,
-                                                                String status,
-                                                                String flatType) {
-        return applications.stream()
-                .filter(app -> app.getProjectID().equalsIgnoreCase(projectID))
-                .filter(app -> app.getStatus().name().equalsIgnoreCase(status))
-                .filter(app -> app.getFlatType().equalsIgnoreCase(flatType))
-                .collect(Collectors.toList());
-    }*/
 }

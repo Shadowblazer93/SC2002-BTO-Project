@@ -170,6 +170,7 @@ public class ReadCSV {
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();
                     project.addOfficer(allOfficers.get(officerNRIC));
+                    
                 }
 
                 // Parse pending registrations
@@ -190,12 +191,14 @@ public class ReadCSV {
                             continue;
                         }
                         project.addRegistration(registration);
+                        List<Officer> officerList = project.getAssignedOfficers();
+                        for (Officer officer : officerList) {
+                            officer.assignProject(project);
+                        }
                     }
                 } else {
                     System.out.println("No registrations found for project: " + projectName);
                 }
-                
-                
             }
             
         } catch (FileNotFoundException e) {
@@ -239,6 +242,7 @@ public class ReadCSV {
 
             while (Reader.hasNextLine()) {
                 String line = Reader.nextLine();
+                System.out.println(line);
 
                 String[] data = line.split(",");
                 int id = Integer.parseInt(data[0].replace("\"", "").trim());
@@ -249,6 +253,7 @@ public class ReadCSV {
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
+                System.out.println(applicant);
                 BTOApplication application = ApplicationController.createApplication(id, applicant, projectName, flatType, status, withdrawal);
                 applicant.setApplication(application);
             }

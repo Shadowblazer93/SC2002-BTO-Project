@@ -2,7 +2,7 @@ package controller;
 
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
-import entity.user.Manager;
+import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import java.time.LocalDate;
@@ -33,6 +33,9 @@ public class BTOProjectController {
                                             closingDate, availableOfficerSlots);
         allProjects.put(projectName, project);
         manager.addProject(project);
+        if (project.getOpeningDate().isAfter(LocalDate.now()) && project.getClosingDate().isAfter(LocalDate.now())) {
+            manager.setCurrentProject(project); // Set current project if ongoing
+        }
         return project;
     }
 
@@ -107,13 +110,27 @@ public class BTOProjectController {
     }
 
     // Applicant books flat in project
-    public static boolean bookFlat(BTOApplication application, BTOProject project, FlatType flatType) {
-        boolean success = project.decrementFlatCount(flatType);
-        if (success) {
-            application.setStatus(ApplicationStatus.PENDING_BOOKING);
-            return true;
-        } else {
-            return false;
+    public static boolean bookFlat(BTOApplication application, BTOProject project, FlatType flatType, User user) {
+        switch (user.getUserRole()) {
+            case APPLICANT -> {
+                boolean success = project.decrementFlatCount(flatType);
+                if (success) {
+                    application.setStatus(ApplicationStatus.PENDING_BOOKING);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            case OFFICER -> {
+                // Flat count already decremented when applicant booked flat
+                application.setStatus(ApplicationStatus.BOOKED);    // Set status as booked
+                application.getApplicant().updateFlatType(flatType);// Update applicant's flat type
+                return true;
+            }
+            default -> {
+                return false;
+            }
         }
+        
     }
 }

@@ -162,7 +162,11 @@ public class OfficerController {
         }   
     }
 
-    public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
+    public static boolean bookFlat(Officer officer, BTOApplication application) {
+        return true;
+    }
+
+    /*public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {
         // 1. Check if officer has assigned project
         BTOProject assignedProject = officer.getAssignedProject();
         if (assignedProject == null) {
@@ -202,5 +206,5 @@ public class OfficerController {
         System.out.println("Flat successfully booked for " + applicant.getName() + "!");
         System.out.println("Flat type: " + flatType.getNumRooms() + "-Room");
         System.out.println("Project: " + assignedProject.getProjectName());
-    }
+    }*/
 }

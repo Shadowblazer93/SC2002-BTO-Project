@@ -206,17 +206,18 @@ public class SaveCSV {
         File filePath = new File("src/database/ApplicationList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
-            writer.write("Applicant,Project,FlatType(Rooms),Status,Withdrawal\n");
+            writer.write("ID,Applicant,Project,FlatType(Rooms),Status,Withdrawal\n");
 
             for (BTOApplication application : allApplications.values()) {
+                int id = application.getID();
                 String applicant = application.getApplicant().getNRIC();
                 String project = application.getProjectName();
                 FlatType flatType = application.getFlatType();
                 String status = application.getStatus().toString();
                 boolean withdrawal = application.getWithdrawal();
 
-                writer.write(String.format("\"%s\",\"%s\",\"%s\",\"%s\",%b\n",
-                    applicant, project, flatType, status, withdrawal));
+                writer.write(String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\",%b\n",
+                    id, applicant, project, flatType, status, withdrawal));
             }
         } catch (IOException e) {
             System.out.println("Error saving applications");

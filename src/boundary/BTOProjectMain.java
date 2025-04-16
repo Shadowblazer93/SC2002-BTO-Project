@@ -1,7 +1,6 @@
 package boundary;
 
 import controller.BTOProjectController;
-import database.SaveCSV;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
@@ -15,8 +14,9 @@ public class BTOProjectMain {
     PrintProjects printer = new PrintProjects();
 
     public void displayMenu(Manager manager, Scanner sc) {
-        int choice = 0;
-        do { 
+        
+        boolean running = true;
+        while (running) { 
             System.out.print("""
                 ---------------------------
                   Project Management Menu
@@ -26,8 +26,10 @@ public class BTOProjectMain {
                 3. Delete project
                 4. View all projects
                 5. View my projects
-                6. Exit
+                6. View current project details
+                7. Exit
                 """);
+            int choice = 0;
             boolean validInput = false;
             while (!validInput) {
                 try {
@@ -62,15 +64,26 @@ public class BTOProjectMain {
                     break;
                 }
                 case 6 -> {
-                    System.out.print("Exit");
-                    SaveCSV.saveProject();
-                    break;
+                    viewCurrentProject(manager);
+                }
+                case 7 -> {
+                    System.out.println("Exiting project management menu.");
+                    running = false;
                 }
                 default -> {
                     System.out.println("Invalid option");
                 }
             }
-        } while (choice != 6);
+        }
+    }
+
+    private void viewCurrentProject(Manager manager) {
+        if (manager.getCurrentProject() == null) {
+            System.out.println("You are currently not managing any project.");
+            return;
+        }
+        BTOProject currentProject = manager.getCurrentProject();
+        System.out.println(currentProject.toString());
     }
 
     private void createProject(Manager manager, Scanner sc) {
@@ -160,6 +173,7 @@ public class BTOProjectMain {
             System.out.println("No projects to edit.");
             return;
         }
+        printer.printMap(manager.getManagedProjects());
         System.out.print("Enter name of project to edit: ");
         String projectName = sc.nextLine();
 

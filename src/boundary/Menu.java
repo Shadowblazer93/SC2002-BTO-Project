@@ -59,8 +59,18 @@ public class Menu {
     }
 
     private User loginInput(Scanner sc) {
-        System.out.print("Enter NRIC: ");
-        String nric = sc.nextLine().trim().toUpperCase();
+        boolean invalid = true;
+        String nric = null;
+        while (invalid) {
+            System.out.print("Enter NRIC: ");
+            nric = sc.nextLine().trim().toUpperCase();
+            if (LoginController.checkNRIC(nric)) {
+                invalid = false;
+                break;
+            }
+            System.out.println("Invalid NRIC format. Please try again.");
+        }
+        
         System.out.print("Enter password: ");
         String password = sc.nextLine();
 

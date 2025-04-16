@@ -32,10 +32,11 @@ public class ApplicantMain {
                     3. View Applied project
                     4. Book Flat
                     5. Withdraw from Project
-                    6. Submit Enquiry
-                    7. Edit Enquiry
-                    8. Delete Enquiry
-                    9. Logout
+                    6. View my enquiries
+                    7. Submit Enquiry
+                    8. Edit Enquiry
+                    9. Delete Enquiry
+                    10. Logout
                     ------------------------------
                     """, applicant.getName());
             System.out.print("Option: ");
@@ -48,10 +49,11 @@ public class ApplicantMain {
                 case 3 -> viewAppliedProject(applicant);
                 case 4 -> bookFlat(applicant);
                 case 5 -> withdrawProject(applicant);
-                case 6 -> submitEnquiry(sc, applicant);
-                case 7 -> editEnquiry(sc, applicant);
-                case 8 -> deleteEnquiry(sc, applicant);
-                case 9 -> {
+                case 6 -> viewEnquiries(applicant);
+                case 7 -> submitEnquiry(sc, applicant);
+                case 8 -> editEnquiry(sc, applicant);
+                case 9 -> deleteEnquiry(sc, applicant);
+                case 10 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -225,7 +227,7 @@ public class ApplicantMain {
             return;
         }
 
-        boolean success = BTOProjectController.bookFlat(application, project, flatType); // replace with actual booking function
+        boolean success = BTOProjectController.bookFlat(application, project, flatType, applicant);
         if (success) {
             System.out.println("Flat booked successfully!");
         } else {

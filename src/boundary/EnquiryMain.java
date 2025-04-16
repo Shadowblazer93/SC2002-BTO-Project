@@ -95,6 +95,7 @@ public class EnquiryMain {
 
     private void viewAllEnquiries() {
         Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+        System.out.println("All Enquiries:");
         enquiryPrinter.printMap(allEnquiries);
     }
 
@@ -116,8 +117,13 @@ public class EnquiryMain {
         }
         
         if (project != null) {
+            Map<Integer, Enquiry> enquiries = project.getEnquiries();
+            if (enquiries.isEmpty()) {
+                System.out.printf("No enquiries for project '%s'.\n", project.getProjectName());
+                return null;
+            }
             System.out.println("Project Enquiries for " + project.getProjectName());
-            enquiryPrinter.printMap(project.getEnquiries());
+            enquiryPrinter.printMap(enquiries);
         } else {
             System.out.println("You are not managing any project.");
         }
@@ -126,16 +132,24 @@ public class EnquiryMain {
     }
 
     private void replyEnquiry(Scanner sc, User user) {
+        // Show all enquiries
         BTOProject project = viewManagedEnquiries(user);
         if (project == null) {
             return; // Error message already printed in viewManagedEnquiries()
         }
 
         System.out.print("Enter Enquiry ID to reply: ");
-        int enquiryId = sc.nextInt();
-        sc.nextLine();
+        int enquiryId;
+        try {
+            enquiryId = Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid Enquiry ID. Must be a number.");
+            return;
+        }
+        
         System.out.print("Enter reply: ");
         String reply = sc.nextLine();
+
         EnquiryController.replyEnquiry(project, enquiryId, reply);
     }
 }

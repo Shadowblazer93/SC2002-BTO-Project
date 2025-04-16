@@ -1,10 +1,12 @@
 package boundary;
 
 import controller.ApplicationController;
+import controller.BTOProjectController;
 import controller.Filter;
+import controller.user.ApplicantController;
 import entity.application.BTOApplication;
-import entity.user.Manager;
-import entity.user.Officer;
+import entity.project.BTOProject;
+import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import java.util.List;
@@ -18,13 +20,12 @@ public class ApplicationMain {
         boolean running = true;
         while (running) {
             System.out.println("""
-                ------------------------
-                    Application Menu
-                ------------------------
-                1. Update applicant status
-                2. Update applicant profile
-                3. Generate receipt for bookings
-                4. Exit
+            ------------------------
+                Application Menu
+            ------------------------
+            1. Book flat for applicant
+            2. Generate receipt for bookings
+            3. Exit
             """);
             System.out.print("Option: ");
             int choice = sc.nextInt();
@@ -32,15 +33,12 @@ public class ApplicationMain {
 
             switch (choice) {
                 case 1 -> {
-                    
+                    bookFlat(sc, officer);
                 }
                 case 2 -> {
-
+                    generateReceipt(sc, officer);
                 }
                 case 3 -> {
-
-                }
-                case 4 -> {
                     System.out.println("Exiting application menu...");
                     running = false;
                 }
@@ -55,15 +53,15 @@ public class ApplicationMain {
         boolean running = true;
         while (running) {
             System.out.println("""
-                ------------------------
-                    Application Menu
-                ------------------------
-                1. Approve applications
-                2. Reject applications
-                3. Approve applcation withdrawals
-                4. Reject application withdrawals
-                5. Filter applications
-                6. Exit
+            ------------------------
+                Application Menu
+            ------------------------
+            1. Approve applications
+            2. Reject applications
+            3. Approve applcation withdrawals
+            4. Reject application withdrawals
+            5. Filter applications
+            6. Exit
             """);
             System.out.print("Option: ");
             int choice = sc.nextInt();
@@ -96,49 +94,115 @@ public class ApplicationMain {
         }
     }
 
-    /*private void updateApplicantStatus(Scanner sc, Officer officer){
-        System.out.print("Enter the NRIC of the applicant to update: ");
-        String nric = sc.next();
-        // Retrieve applicant and update status
-        Applicant applicant = applicantController.getAllApplicants().get(nric);
-        officer.updateApplicantStatus(applicant);
+    private void bookFlat(Scanner sc, Officer officer) {
+        // 1. Get project applications
+        Map<String, BTOApplication> applications = retrieveApplications(officer);
+        if (applications == null) {
+            return; // Error message already printed in retrieveApplications()
+        }
+        // 2. Filter pending bookings
+        List<BTOApplication> pendingBookings = Filter.filterPendingBookingApplications(applications);
+        if (pendingBookings.isEmpty()) {
+            System.out.println("No applicants applied for booking.");
+            return;
+        }
+        System.out.println("Applications for booking:");
+        printApplications.printList(pendingBookings);
 
-        // Book flat
+        // 3. Select application
+        System.out.print("Enter the NRIC of the applicant: ");
+        String nric = sc.next();
+        BTOApplication application = ApplicationController.getApplicationByNRIC(nric);
+        if (application == null) {
+            System.out.println("Applicant not found.");
+            return;
+        } else if (application.getStatus() != ApplicationStatus.PENDING_BOOKING) {
+            System.out.println("Applicant did not apply for booking.");
+            return;
+        }
+
+        // 4. Confirm booking for applicant
+        boolean success = BTOProjectController.bookFlat(application, null, null, officer);
+        if (success) {
+            System.out.println("Flat successfully booked for " + application.getApplicant().getName() + "!");
+            System.out.println("Flat type: " + application.getFlatType().getNumRooms() + "-Room");
+            System.out.println("Project: " + application.getProjectName());
+        } else {
+            System.out.println("No more units available of type " + application.getFlatType().getNumRooms() + "-Room!");
+        }
     }
+
     private void generateReceipt(Scanner sc, Officer officer) {
+        // Print applications
+        Map<String, BTOApplication> applications = retrieveApplications(officer);
+        if (applications == null) {
+            return; // Error message already printed in retrieveApplications()
+        }
+        List<BTOApplication> bookedApplications = Filter.filterBookedApplications(applications);
+        if (bookedApplications.isEmpty()) {
+            System.out.println("No booked applications.");
+            return;
+        }
+        System.out.println("Booked applications:");
+        printApplications.printList(bookedApplications);
+
         System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
         String nric = sc.next();
-        // Retrieve applicant and generate receipt
-        Applicant applicant = applicantController.getAllApplicants().get(nric);
+        sc.nextLine();
+        
+        Applicant applicant = ApplicantController.getApplicant(nric);
+        if (applicant == null) {
+            System.out.println("Applicant not found.");
+            return;
+        }
         officer.generateReceipt(applicant);
-    }*/
+    }
 
-    private Map<String, BTOApplication> retrieveApplications(Manager manager, boolean withdrawal) {
-        if (manager.getCurrentProject() == null) {
+    private Map<String, BTOApplication> retrieveApplications(User user) {
+        BTOProject project;
+        switch(user.getUserRole()) {
+            case MANAGER -> {
+                Manager manager = (Manager) user;
+                project =  manager.getCurrentProject();
+            }
+            case OFFICER -> {
+                Officer officer = (Officer) user;
+                project =  officer.getAssignedProject();
+            }
+            default -> {
+                System.out.println("User is not a manager or officer.");
+                return null;
+            }
+        }
+
+        if (project == null) {
             System.out.println("You are not managing any project.");
             return null;
         }
 
-        Map<String, BTOApplication> applications = manager.getCurrentProject().getApplications();
+        Map<String, BTOApplication> applications = project.getApplications();
         if (applications.isEmpty()) {
-            System.out.printf("No applications found for your project '%s'.\n", manager.getCurrentProject().getProjectName());
+            System.out.printf("No applications found for your project '%s'.\n", project.getProjectName());
             return null;
-        }
-        // Print list of applications
-        if (withdrawal) {
-            printApplications.printWithdrawals(applications);
-        } else {
-            printApplications.printMap(applications);
         }
         return applications;
     }
 
     private void processApplication(Scanner sc, Manager manager, boolean isApproval) {
-        Map<String, BTOApplication> applications = retrieveApplications(manager, false);
+        Map<String, BTOApplication> applications = retrieveApplications(manager);
         if (applications == null) {
             return; // Error message already printed in retrieveApplications()
         }
+        // Filter pending applications
+        List<BTOApplication> pendingApplications = Filter.filterPendingApplications(applications);
+        if (pendingApplications.isEmpty()) {
+            System.out.println("No applications to " + (isApproval ? "approve" : "reject") + ".");
+            return;
+        }
+        System.out.println("Pending applications:");
+        printApplications.printList(pendingApplications);
 
+        // Select application
         System.out.println("Select applications to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
         while (!nric.equals("0")) {
@@ -162,10 +226,20 @@ public class ApplicationMain {
     }
 
     private void processWithdrawals(Scanner sc, Manager manager, boolean isApproval) {
-        Map<String, BTOApplication> applications = retrieveApplications(manager, true);
+        Map<String, BTOApplication> applications = retrieveApplications(manager);
         if (applications == null) {
             return; // Error message already printed in retrieveApplications()
         }
+        // Filter withdrawal applications
+        List<BTOApplication> withdrawalApplications = Filter.filterWithdrawalApplications(applications);
+        if (withdrawalApplications.isEmpty()) {
+            System.out.println("No withdrawals to " + (isApproval ? "approve" : "reject") + ".");
+            return;
+        }
+        System.out.println("Pending withdrawal applications:");
+        printApplications.printList(withdrawalApplications);
+        
+        // Select withdrawal application
         System.out.println("Select withdrawal to " + (isApproval ? "approve" : "reject") + " (NRIC). Type 0 to stop: ");
         String nric = "";
         while (!nric.equals("0")) {
@@ -244,8 +318,8 @@ public class ApplicationMain {
         }
 
         // Filter applications
-        List<BTOApplication> filteredApplications = Filter.filterApplications(applications, maritalStatus, flatType);
+        Map<String, BTOApplication> filteredApplications = Filter.filterApplications(applications, maritalStatus, flatType);
         System.out.println("Filtered applications:");
-        printApplications.printList(filteredApplications);
+        printApplications.printMap(filteredApplications);
     }
 }

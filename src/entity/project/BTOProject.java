@@ -21,7 +21,7 @@ public class BTOProject {
     private Map<Integer, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
     private Map<String, BTOApplication> applications;       // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
-    private Map<String, Registration> registrations; // Map of pending registrations (NRIC, Registration)
+    private Map<String, Registration> registrations;        // Map of registrations (NRIC, Registration)
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -49,8 +49,6 @@ public class BTOProject {
         Officer officer = registration.getOfficer();
         addOfficer(officer);
         this.availableOfficerSlots--;
-        String nric = officer.getNRIC();
-        this.registrations.remove(nric); // Remove registration from pending registrations
     }
 
     // Add officer to list of registrations
@@ -153,15 +151,15 @@ public class BTOProject {
 
     @Override
     public String toString() {
-    StringBuilder sb = new StringBuilder();
-        sb.append("BTO Project Details:\n")
-        .append("Project Name: ").append(projectName).append("\n")
-        .append("Neighbourhood: ").append(neighbourhood).append("\n")
-        .append("Manager In Charge: ").append(managerInCharge.getName()).append("\n")
-        .append("Opening Date: ").append(openingDate).append("\n")
-        .append("Closing Date: ").append(closingDate).append("\n")
+        StringBuilder sb = new StringBuilder();
+        sb.append("BTO Project Details\n")
+        .append("Project Name           : ").append(projectName).append("\n")
+        .append("Neighbourhood          : ").append(neighbourhood).append("\n")
+        .append("Manager In Charge      : ").append(managerInCharge.getName()).append("\n")
+        .append("Opening Date           : ").append(openingDate).append("\n")
+        .append("Closing Date           : ").append(closingDate).append("\n")
         .append("Available Officer Slots: ").append(availableOfficerSlots).append("\n")
-        .append("Visibility: ").append(visible ? "Visible" : "Not Visible").append("\n")
+        .append("Visibility             : ").append(visible ? "Visible" : "Not Visible").append("\n")
         .append("Unit Counts: \n");
 
         for (Map.Entry<FlatType, Integer> entry : unitCounts.entrySet()) {

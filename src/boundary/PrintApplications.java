@@ -15,23 +15,20 @@ public class PrintApplications implements Print<String, BTOApplication> {
     @Override
     public void printList(List<BTOApplication> applicationList) {
         if (applicationList == null || applicationList.isEmpty()) {
-            System.out.println("No applications");
             return;
         }
 
-        System.out.println("List of applications:");
-        System.out.println("-".repeat(96));
-        System.out.printf("| %-9s | %-20s | %-3s | %-15s | %-20s | %-10s |\n",
-            "NRIC", "Name", "Age", "Marital Status", "Project", "Flat Type");
+        System.out.println("-".repeat(43));
+        System.out.printf("| %-9s | %-9s | %-15s |\n",
+            "NRIC", "Flat Type", "Status");
         for (BTOApplication application : applicationList) {
             Applicant applicant = application.getApplicant();
-            String project = application.getProjectName();
             String flatType = application.getFlatType().getNumRooms() + "-Room";
-            System.out.printf("| %-9s | %-20s | %-3d | %-15s | %-20s | %-10s |\n", 
-                applicant.getNRIC(), applicant.getName(), applicant.getAge(), applicant.getMaritalStatus(), 
-                project, flatType);
+            ApplicationStatus status = application.getStatus();
+            System.out.printf("| %-9s | %-9s | %-15s |\n", 
+                applicant.getNRIC(), flatType, status);
         }
-        System.out.println("-".repeat(96));
+        System.out.println("-".repeat(43));
     }
 
     @Override
@@ -41,25 +38,17 @@ public class PrintApplications implements Print<String, BTOApplication> {
             return;
         }
 
+        System.out.println("-".repeat(95));
+        System.out.printf("| %-9s | %-20s | %-3s | %-15s | %-20s | %-9s |\n",
+            "NRIC", "Name", "Age", "Marital Status", "Project", "Flat Type");
         for (BTOApplication application : applicationList.values()) {
-            if (application.getStatus() == ApplicationStatus.BOOKED || application.getStatus() == ApplicationStatus.SUCCESSFUL) {
-                continue;   // Skip applications that are booked or successful
-            }
-            System.out.printf(" - NRIC: %s | Flat Type: %s\n", application.getApplicant().getNRIC(), application.getFlatType());
+            Applicant applicant = application.getApplicant();
+            String project = application.getProjectName();
+            String flatType = application.getFlatType().getNumRooms() + "-Room";
+            System.out.printf("| %-9s | %-20s | %-3d | %-15s | %-20s | %-9s |\n", 
+                applicant.getNRIC(), applicant.getName(), applicant.getAge(), applicant.getMaritalStatus(), 
+                project, flatType);
         }
-    }
-
-    public void printWithdrawals(Map<String, BTOApplication> applicationList) {
-        if (applicationList == null || applicationList.isEmpty()) {
-            System.out.println("No applications found");
-            return;
-        }
-
-        for (BTOApplication application : applicationList.values()) {
-            if (application.getStatus() == ApplicationStatus.BOOKED || application.getStatus() == ApplicationStatus.SUCCESSFUL || !application.getWithdrawal()) {
-                continue;   // Skip applications that have not requested withdrawal
-            }
-            System.out.printf(" - NRIC: %s | Flat Type: %s\n", application.getApplicant().getNRIC(), application.getFlatType());
-        }
+        System.out.println("-".repeat(95));
     }
 }

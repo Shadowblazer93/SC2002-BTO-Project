@@ -1,21 +1,17 @@
 package boundary;
 
 import controller.BTOProjectController;
-import controller.EnquiryController;
 import controller.RegistrationController;
-import controller.user.ApplicantController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
-import entity.user.Applicant;
 import entity.user.Officer;
-import enums.ApplicationStatus;
-import enums.FlatType;
 import java.util.*;
 
 public class OfficerMain {
     PrintProjects projectPrinter = new PrintProjects();
     EnquiryMain enquiryMain = new EnquiryMain();
+    ApplicationMain applicationMain = new ApplicationMain();
     public static void main(String[] args) {
 
     }
@@ -28,13 +24,12 @@ public class OfficerMain {
                     ------------------------------
                         HDB Officer Main Page
                     ------------------------------
-                    1. View Registration status
-                    2. View and reply to enquiries
-                    3. Update applicant status
-                    4. Generate receipt for bookings
+                    1. View project details
+                    2. Manage applications
+                    3. Manage enquiries
+                    4. View Registration status
                     5. Register for project
-                    6. Book flat for applicant
-                    7. Logout
+                    6. Logout
                     ------------------------------
                     """, officer.getName());
             
@@ -54,13 +49,14 @@ public class OfficerMain {
             }
 
             switch (choice) {
-                case 1 -> viewRegistrationStatus(officer);
-                case 2 -> enquiryMain.displayMenuOfficer(sc, officer);
-                case 3 -> updateApplicantStatus(sc, officer);
-                case 4 -> generateReceipt(sc, officer);
+                case 1 -> viewProjectDetails(officer);
+                // Book flat, Generate receipt,
+                case 2 -> applicationMain.displayMenuOfficer(sc, officer);
+                // View enquiries, reply enquiries
+                case 3 -> enquiryMain.displayMenuOfficer(sc, officer);
+                case 4 -> viewRegistrationStatus(officer);
                 case 5 -> registerProject(sc, officer);
-                case 6 -> bookFlat(sc, officer);
-                case 7 -> {
+                case 6 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -68,6 +64,16 @@ public class OfficerMain {
             }
         }
     }
+
+    private void viewProjectDetails(Officer officer) {
+        BTOProject project = officer.getAssignedProject();
+        if (project == null) {
+            System.out.println("You are not assigned to any project.");
+            return;
+        }
+        System.out.println(project);
+    }
+
     private void viewRegistrationStatus(Officer officer) {
         System.out.println("Viewing registration status!");
         officer.getRegisteredProjects().forEach((projectName, project) -> {
@@ -82,40 +88,8 @@ public class OfficerMain {
             }
         });
     }
-
-    //NOT USED, IF NOT NEEDED CAN DELETE
-    private void manageEnquiries(Scanner sc, Officer officer) {
-        EnquiryMain enquiryMain = new EnquiryMain();
-        EnquiryController enquiryController = new EnquiryController(); // or use class-level if available
     
-        BTOProject project = officer.getAssignedProject();
-        if (project == null) {
-            System.out.println("No project assigned to the officer.");
-            return; 
-        }
-    
-        // Show all enquiries
-        enquiryMain.viewProjectEnquiries(officer);
-    
-        // Prompt for enquiry ID and reply
-        System.out.print("Enter Enquiry ID to reply: ");
-        int enquiryId;
-        try {
-            enquiryId = Integer.parseInt(sc.nextLine());
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid Enquiry ID. Must be a number.");
-            return;
-        }
-    
-        System.out.print("Enter reply: ");
-        String reply = sc.nextLine();
-    
-        // Send reply using project and ID
-        EnquiryController.replyEnquiry(project, enquiryId, reply);
-    }
-    
-
-    private void updateApplicantStatus(Scanner sc, Officer officer) {
+    /*private void updateApplicantStatus(Scanner sc, Officer officer) {
         sc.nextLine();
         
         System.out.print("Enter the NRIC of the applicant: ");
@@ -128,9 +102,9 @@ public class OfficerMain {
         }
         
         OfficerController.updateApplicantStatus(officer, applicant, ApplicationStatus.BOOKED);
-    }
+    }*/
 
-    private void generateReceipt(Scanner sc, Officer officer) {
+    /*private void generateReceipt(Scanner sc, Officer officer) {
         System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
         String nric = sc.next();
         sc.nextLine();
@@ -141,7 +115,7 @@ public class OfficerMain {
             return;
         }
         officer.generateReceipt(applicant);
-    }
+    }*/
 
     private void registerProject(Scanner sc, Officer officer) {
         // View list of projects
@@ -176,12 +150,22 @@ public class OfficerMain {
     }
     
 
-    private void bookFlat(Scanner sc, Officer officer) {
+    /*private void bookFlat(Scanner sc, Officer officer) {
+        // View applications to approve booking
+        BTOProject project = officer.getAssignedProject();
+        if (project == null) {
+            System.out.println("You are not assigned to any project.");
+            return;
+        }
+        Map<String, BTOApplication> applications = project.getApplications();
+        if (applications.isEmpty()) {
+            System.out.println("No applications to approve booking for.");
+            return;
+        }
+
         System.out.print("Enter the NRIC of the applicant: ");
         String nric = sc.next();
-        // Clear buffer
-        sc.nextLine();
-        
+
         Applicant applicant = ApplicantController.getApplicant(nric);
         if (applicant == null) {
             System.out.println("Applicant not found.");
@@ -205,7 +189,7 @@ public class OfficerMain {
         }
         
         OfficerController.bookFlat(officer, applicant, flatType);
-    }
+    }*/
 }
 
 

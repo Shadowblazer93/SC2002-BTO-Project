@@ -78,25 +78,24 @@ public class RegistrationMain {
         }
         Map<String, Registration> pendingRegistrations = Filter.filterPendingRegistrations(projectRegistrations);
         if (pendingRegistrations.isEmpty()) {
-            System.out.printf("No pending registrations for your project '%s'.", manager.getCurrentProject().getProjectName());
+            System.out.printf("No pending registrations for your project '%s'.\n", manager.getCurrentProject().getProjectName());
             return null;
         }
         printRegistrations.printMap(pendingRegistrations);
         return pendingRegistrations;
     }
 
-    private Map<String, Registration> viewApprovedRegistrations(Manager manager) {
+    private void viewApprovedRegistrations(Manager manager) {
         Map<String, Registration> projectRegistrations = retrieveProjectRegistrations(manager);
-        if (projectRegistrations.isEmpty()) {
-            return null;
+        if (projectRegistrations == null) {
+            return;
         }
         Map<String, Registration> approvedRegistrations = Filter.filterApprovedRegistrations(projectRegistrations);
-        if (approvedRegistrations.isEmpty()) {
-            System.out.printf("No approved registrations for your project '%s'.", manager.getCurrentProject().getProjectName());
-            return null;
+        if (approvedRegistrations == null) {
+            System.out.printf("No approved registrations for your project '%s'.\n", manager.getCurrentProject().getProjectName());
+            return;
         }
         printRegistrations.printMap(approvedRegistrations);
-        return approvedRegistrations;
     }
 
     

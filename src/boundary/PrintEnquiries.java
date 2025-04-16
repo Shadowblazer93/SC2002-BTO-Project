@@ -31,7 +31,6 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
     @Override
     public void printMap(Map<Integer, Enquiry> enquiryList) {
         if (enquiryList == null || enquiryList.isEmpty()) {
-            System.out.println("No enquiries found");
             return;
         }
 

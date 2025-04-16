@@ -38,13 +38,13 @@ public class PrintProjects implements Print<String, BTOProject> {
             return;
         }
         System.out.println("BTO Project List:");
-        System.out.println("-".repeat(42));
-        System.out.printf("| %-20s | %-6s | %-6s |\n", "Project Name", "2-Room", "3-Room");
-        System.out.println("-".repeat(42));
+        System.out.println("-".repeat(72));
+        System.out.printf("| %-50s | %-6s | %-6s |\n", "Project Name", "2-Room", "3-Room");
+        System.out.println("-".repeat(72));
         for (BTOProject project : projectList) {
             Map<FlatType, Integer> unitCounts = project.getUnitCounts();
-            System.out.printf("| %-20s | %-6d | %-6d |\n", project.getProjectName(), unitCounts.get(FlatType.TWO_ROOM), unitCounts.get(FlatType.THREE_ROOM));
+            System.out.printf("| %-50s | %-6d | %-6d |\n", project.getProjectName(), unitCounts.get(FlatType.TWO_ROOM), unitCounts.get(FlatType.THREE_ROOM));
         }
-        System.out.println("-".repeat(42));
+        System.out.println("-".repeat(72));
     }
 }

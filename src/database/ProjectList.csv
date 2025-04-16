@@ -1,4 +1,6 @@
 ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,PendingRegistrations
-"project2","T8765432F","neighbourhood2",30,70,"2025-04-04","2025-07-07",1,true,"1","","","1"
-"project 3","S5678901G","neighbourhood3",30,50,"2025-05-06","2025-06-06",4,false,"","","T2109876H",""
+"project2","T8765432F","neighbourhood2",30,70,"2025-04-04","2025-07-07",1,true,"1|2","","",""
+"sophia project","S2345678H","neigh",40,25,"2024-04-05","2025-05-05",4,false,"","","",""
+"sophia project current","S2345678H","??",46,29,"2025-04-01","2025-04-30",4,true,"3","T7654321B|S1234567A|T2345678D","T2109876H","1"
+"project 3","S5678901G","neighbourhood3",30,50,"2025-05-06","2025-06-06",4,false,"","","",""
 "edited name","T8765432F","neighbourhood1",4,6,"2024-05-05","2024-06-06",6,false,"","","",""
