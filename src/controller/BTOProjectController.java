@@ -1,7 +1,9 @@
 package controller;
 
+import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.Manager;
+import enums.ApplicationStatus;
 import enums.FlatType;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -104,40 +106,13 @@ public class BTOProjectController {
         return true;
     }
 
-    // Increment flat count by flat type for a given project
-    public static boolean incrementFlatCount(BTOProject projectName, String flatType) {
-        if (projectName == null) {
-            System.out.println("Project not found.");
-            return false;
-        }
-        try {
-            FlatType type = FlatType.valueOf(flatType.replace("-", "_").toUpperCase());
-            int currentCount = projectName.getUnitCounts().getOrDefault(type, 0);
-            projectName.getUnitCounts().put(type, currentCount + 1);
+    // Applicant books flat in project
+    public static boolean bookFlat(BTOApplication application, BTOProject project, FlatType flatType) {
+        boolean success = project.decrementFlatCount(flatType);
+        if (success) {
+            application.setStatus(ApplicationStatus.PENDING_BOOKING);
             return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid flat type.");
-            return false;
-        }
-    }
-
-    // Decrement flat count by flat type for a given project
-    public static boolean decrementFlatCount(BTOProject projectName, String flatType) {
-        if (projectName == null) {
-            System.out.println("Project not found.");
-            return false;
-        }
-        try {
-            FlatType type = FlatType.valueOf(flatType.replace("-", "_").toUpperCase());
-            int currentCount = projectName.getUnitCounts().getOrDefault(type, 0);
-            if (currentCount <= 0) {
-                System.out.println("No more units left of this flat type.");
-                return false;
-            }
-            projectName.getUnitCounts().put(type, currentCount - 1);
-            return true;
-        } catch (IllegalArgumentException e) {
-            System.out.println("Invalid flat type.");
+        } else {
             return false;
         }
     }

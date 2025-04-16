@@ -48,7 +48,7 @@ public class RegistrationController {
 
     public static Registration registerProject(Officer officer, BTOProject project)  {
         Registration registration = createRegistration(0, officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
-        officer.registerProject(project);       // Add project to officer's registered projects
+        officer.addRegisteredProject(project);  // Add project to officer's registered projects
         project.addRegistration(registration);  // Add registration to project
         return registration;
     }

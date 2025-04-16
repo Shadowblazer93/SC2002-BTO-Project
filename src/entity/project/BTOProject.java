@@ -69,6 +69,16 @@ public class BTOProject {
         enquiries.put(enquiry.getID(), enquiry); // Add enquiry to the map
     }
 
+    // Decrement flat count
+    public boolean decrementFlatCount(FlatType flatType) {
+        int count = unitCounts.get(flatType);
+        if (count > 0) {
+            unitCounts.put(flatType, count - 1);
+            return true;
+        }
+        return false; // No units available
+    }
+
     // Getters and setters
 
     public String getProjectName() {

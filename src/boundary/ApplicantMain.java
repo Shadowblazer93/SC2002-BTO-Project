@@ -225,8 +225,12 @@ public class ApplicantMain {
             return;
         }
 
-        BTOProjectController.bookFlat(project, flatType); // replace with actual booking function
-        System.out.println("Flat booked successfully!");
+        boolean success = BTOProjectController.bookFlat(application, project, flatType); // replace with actual booking function
+        if (success) {
+            System.out.println("Flat booked successfully!");
+        } else {
+            System.out.printf("No more units available for %d-Room flats in %s.", flatType.getNumRooms(), projectName);
+        }
     }
 
     private void withdrawProject(Applicant applicant) {

@@ -111,7 +111,7 @@ public class OfficerMain {
         String reply = sc.nextLine();
     
         // Send reply using project and ID
-        enquiryController.replyEnquiry(project, enquiryId, reply);
+        EnquiryController.replyEnquiry(project, enquiryId, reply);
     }
     
 
