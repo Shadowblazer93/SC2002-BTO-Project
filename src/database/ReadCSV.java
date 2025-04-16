@@ -74,6 +74,31 @@ public class ReadCSV {
         }
     }
 
+    public static void loadEnquiry() {
+        File file = new File("src/database/EnquiryList.csv");
+        try (Scanner Reader = new Scanner(file)) {
+            if (Reader.hasNextLine()) {
+                Reader.nextLine();   // Skip header
+            }
+
+            while (Reader.hasNextLine()) {
+                String line = Reader.nextLine();
+
+                String[] data = line.split(",");
+                int id = Integer.parseInt(data[0].replace("\"", "").trim());
+                String applicantNRIC = data[1].replace("\"", "").trim();
+                String projectName = data[2].replace("\"", "").trim();
+                String message = data[3].replace("\"", "").trim();
+                String response = data[4].replace("\"", "").trim();
+                EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
+
+                EnquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e.getMessage());
+        }
+    }
+
     public static void loadApplicant() {
         File file = new File("src/database/ApplicantList.csv");
         try (Scanner Reader = new Scanner(file)) {
@@ -92,7 +117,10 @@ public class ReadCSV {
                 String password = data[4].replace("\"", "").trim();
 
                 // Create Applicant
-                ApplicantController.createApplicant(nric, name, age, maritalStatus, password);
+                Applicant applicant = ApplicantController.createApplicant(nric, name, age, maritalStatus, password);
+
+                List<Enquiry> enquiries = EnquiryController.getEnquiriesByNRIC(nric);
+                for (Enquiry e : enquiries) {applicant.addEnquiry(e);}
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -198,32 +226,6 @@ public class ReadCSV {
                 
             }
             
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
-        }
-    }
-
-    public static void loadEnquiry() {
-
-        File file = new File("src/database/EnquiryList.csv");
-        try (Scanner Reader = new Scanner(file)) {
-            if (Reader.hasNextLine()) {
-                Reader.nextLine();   // Skip header
-            }
-
-            while (Reader.hasNextLine()) {
-                String line = Reader.nextLine();
-
-                String[] data = line.split(",");
-                int id = Integer.parseInt(data[0].replace("\"", "").trim());
-                String applicantNRIC = data[1].replace("\"", "").trim();
-                String projectName = data[2].replace("\"", "").trim();
-                String message = data[3].replace("\"", "").trim();
-                String response = data[4].replace("\"", "").trim();
-                EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
-
-                EnquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
-            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
         }

@@ -4,7 +4,10 @@ import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.EnquiryStatus;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EnquiryController {
@@ -37,6 +40,16 @@ public class EnquiryController {
 
     public static Enquiry getEnquiryByID(int id) {
         return allEnquiries.get(id);
+    }
+
+    public static List<Enquiry> getEnquiriesByNRIC(String nric) {
+        List<Enquiry> enquiries = new ArrayList<>();
+        for (Enquiry enquiry : allEnquiries.values()) {
+            if (enquiry.getApplicantNRIC().equalsIgnoreCase(nric)) {
+                enquiries.add(enquiry);
+            }
+        }
+        return enquiries;
     }
 
     public static void submitEnquiry(Applicant applicant, BTOProject project, String message) {
