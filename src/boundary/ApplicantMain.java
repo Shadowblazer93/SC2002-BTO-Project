@@ -43,43 +43,18 @@ public class ApplicantMain {
             sc.nextLine();
 
             switch (choice) {
-                case 1 -> {
-                    viewProjectList();
-                }
-
-                case 2 -> {
-                    applyProject(sc, applicant);
-                }
-
-                case 3 -> {
-                    viewAppliedProject(applicant);
-                }
-
-                case 4 -> {
-                    bookFlat(applicant);
-                }
-
-                case 5 -> {
-                    withdrawProject(applicant);
-                }
-
-                case 6 -> {
-                    submitEnquiry(sc, applicant);
-                }
-
-                case 7 -> {
-                    editEnquiry(sc, applicant);
-                }
-                
-                case 8 -> {
-                    deleteEnquiry(sc, applicant);
-                }
-                
+                case 1 -> viewProjectList();
+                case 2 -> applyProject(sc, applicant);
+                case 3 -> viewAppliedProject(applicant);
+                case 4 -> bookFlat(applicant);
+                case 5 -> withdrawProject(applicant);
+                case 6 -> submitEnquiry(sc, applicant);
+                case 7 -> editEnquiry(sc, applicant);
+                case 8 -> deleteEnquiry(sc, applicant);
                 case 9 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
-
                 default -> System.out.println("Unknown choice!");
             }
         }
@@ -104,7 +79,7 @@ public class ApplicantMain {
         // select project to enquire about
         viewProjectList();
         System.out.print("Project for enquiry: ");
-        String projectName = sc.nextLine();
+        String projectName = getValidStringInput(sc);
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project does not exist.");
@@ -113,7 +88,7 @@ public class ApplicantMain {
 
         // Enquiry message
         System.out.print("Enter enquiry message: ");
-        String msg = sc.nextLine();
+        String msg = getValidStringInput(sc);
         EnquiryController.submitEnquiry(applicant, project, msg);
         System.out.println("Enquiry submitted successfully!");
     }
@@ -134,7 +109,7 @@ public class ApplicantMain {
         }
         // Select enquiry
         System.out.print("Enter submitted enquiry ID: ");
-        int enqId = sc.nextInt();
+        int enqId = getValidIntegerInput(sc);
         sc.nextLine();
 
         // Get enquiry
@@ -153,7 +128,7 @@ public class ApplicantMain {
         }
         // Select enquiry
         System.out.print("Enter submitted enquiry ID: ");
-        int enqId = sc.nextInt();
+        int enqId = getValidIntegerInput(sc);
         sc.nextLine();
         // Get enquiry
         Enquiry enquiry = EnquiryController.getEnquiryByID(enqId);
@@ -163,7 +138,7 @@ public class ApplicantMain {
         }
         // Edit enquiry message
         System.out.print("Enter new enquiry message: ");
-        String newMessage = sc.nextLine();
+        String newMessage = getValidStringInput(sc);
         EnquiryController.editEnquiry(enquiry, newMessage);
         System.out.println("Enquiry message updated successfully!");
     }
@@ -178,7 +153,7 @@ public class ApplicantMain {
         viewProjectList();
         
         System.out.print("Enter name of project:");
-        String projectName = sc.next();
+        String projectName = getValidStringInput(sc);
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project does not exist.");
@@ -196,7 +171,7 @@ public class ApplicantMain {
             1. 2-room
             2. 3-room
             """);
-        int flatTypeInput = sc.nextInt();
+        int flatTypeInput = getValidIntegerInput(sc);
         sc.nextLine();
         FlatType flatType;
         switch (flatTypeInput) {
@@ -250,7 +225,7 @@ public class ApplicantMain {
             return;
         }
 
-        BTOProjectController.bookFlat(project, flatType);
+        BTOProjectController.bookFlat(project, flatType); // replace with actual booking function
         System.out.println("Flat booked successfully!");
     }
 
@@ -262,5 +237,24 @@ public class ApplicantMain {
         else {
             ApplicationController.requestWithdrawal(applicant);
         }
+    }
+
+    private int getValidIntegerInput(Scanner sc) {
+        while (true) {
+            try {return sc.nextInt();}
+            catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    private String getValidStringInput(Scanner sc) {
+        String input = sc.nextLine().trim();
+        while (input.isEmpty()) {
+            System.out.println("Invalid input. Please enter a non-empty string.");
+            input = sc.nextLine();
+        }
+        return input;
     }
 }
