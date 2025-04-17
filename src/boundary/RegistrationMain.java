@@ -6,6 +6,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Manager;
 import java.util.*;
+import printer.PrintRegistrations;
 
 
 public class RegistrationMain {

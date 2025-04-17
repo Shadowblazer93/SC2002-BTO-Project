@@ -7,9 +7,10 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
 import java.util.*;
+import printer.PrintBTOProjects;
 
 public class OfficerMain {
-    PrintProjects projectPrinter = new PrintProjects();
+    PrintBTOProjects projectPrinter = new PrintBTOProjects();
     EnquiryMain enquiryMain = new EnquiryMain();
     ApplicationMain applicationMain = new ApplicationMain();
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package boundary;
+package printer;
 
 import entity.registration.Registration;
 import entity.user.Officer;

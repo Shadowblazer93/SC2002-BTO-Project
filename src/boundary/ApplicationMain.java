@@ -12,9 +12,10 @@ import enums.FlatType;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import printer.PrintBTOApplications;
 
 public class ApplicationMain {
-    PrintApplications printApplications = new PrintApplications();
+    PrintBTOApplications printApplications = new PrintBTOApplications();
 
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;

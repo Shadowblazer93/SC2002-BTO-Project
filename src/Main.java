@@ -1,6 +1,5 @@
 
 import boundary.Menu;
-import boundary.PrintRegistrations;
 import controller.ApplicationController;
 import controller.BTOProjectController;
 import controller.EnquiryController;
@@ -19,6 +18,7 @@ import entity.user.Manager;
 import entity.user.Officer;
 import java.util.List;
 import java.util.Map;
+import printer.PrintRegistrations;
 
 
 

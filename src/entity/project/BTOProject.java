@@ -145,6 +145,10 @@ public class BTOProject {
         this.closingDate = closingDate;
     }
 
+    public void setAvailableOfficerSlots(int availableOfficerSlots) {
+        this.availableOfficerSlots = availableOfficerSlots;
+    }
+
     public void setVisible(boolean visible) {
         this.visible = visible;
     }

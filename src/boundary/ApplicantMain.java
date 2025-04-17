@@ -13,9 +13,11 @@ import enums.FlatType;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import printer.PrintBTOProjects;
+import printer.PrintEnquiries;
 
 public class ApplicantMain {
-    PrintProjects projectPrinter = new PrintProjects();
+    PrintBTOProjects projectPrinter = new PrintBTOProjects();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     public ApplicantMain(Applicant applicant, Scanner sc) {

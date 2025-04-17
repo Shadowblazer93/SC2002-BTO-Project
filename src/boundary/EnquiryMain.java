@@ -7,6 +7,7 @@ import entity.user.*;
 import enums.UserRole;
 import java.util.Map;
 import java.util.Scanner;
+import printer.PrintEnquiries;
 
 public class EnquiryMain {
     PrintEnquiries enquiryPrinter = new PrintEnquiries();

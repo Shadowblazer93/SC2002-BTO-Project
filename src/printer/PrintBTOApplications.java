@@ -1,12 +1,12 @@
-package boundary;
+package printer;
 
 import entity.application.BTOApplication;
-import entity.user.Applicant;
+import entity.user.*;
 import enums.ApplicationStatus;
 import java.util.List;
 import java.util.Map;
 
-public class PrintApplications implements Print<String, BTOApplication> {
+public class PrintBTOApplications implements Print<String, BTOApplication> {
     @Override
     public void printMapList(Map<String, List<BTOApplication>> allApplications) {
         throw new UnsupportedOperationException("Not supported.");

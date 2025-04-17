@@ -9,12 +9,21 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import printer.PrintBTOProjects;
 
+/**
+ * Boundary class for managing BTO projects
+ * This class handles the user interface for project management
+ */
 public class BTOProjectMain {
-    PrintProjects printer = new PrintProjects();
+    PrintBTOProjects printer = new PrintBTOProjects();
 
+    /**
+     * Display the project management menu for the manager
+     * @param manager Manager using the menu
+     * @param sc Scanner object for user input
+     */
     public void displayMenu(Manager manager, Scanner sc) {
-        
         boolean running = true;
         while (running) { 
             System.out.print("""
@@ -77,6 +86,10 @@ public class BTOProjectMain {
         }
     }
 
+    /**
+     * Display details of the current project managed by the manager
+     * @param manager Manager viewing the project
+     */
     private void viewCurrentProject(Manager manager) {
         if (manager.getCurrentProject() == null) {
             System.out.println("You are currently not managing any project.");
@@ -86,6 +99,11 @@ public class BTOProjectMain {
         System.out.println(currentProject.toString());
     }
 
+    /**
+     * Handle input details for creation of a new project
+     * @param manager Manager creating the project
+     * @param sc Scanner object for user input
+     */
     private void createProject(Manager manager, Scanner sc) {
         // Project name
         System.out.print("Project name: ");
@@ -158,7 +176,7 @@ public class BTOProjectMain {
                 sc.nextLine(); 
             } 
         }
-
+        // Create project
         BTOProject createdProject = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, oDate, cDate, slots);
         if (createdProject == null) {
             System.out.println("Could not create project.");
@@ -168,6 +186,11 @@ public class BTOProjectMain {
         }
     }
 
+    /**
+     * Edit an existing project managed by the manager
+     * @param manager Manager editing the project
+     * @param sc Scanner object for user input
+     */
     private void editProject(Manager manager, Scanner sc) {
         if (manager.getManagedProjects().isEmpty()) {
             System.out.println("No projects to edit.");
@@ -193,8 +216,9 @@ public class BTOProjectMain {
             3. Number of units
             4. Application opening date
             5. Application closing date
-            6. Toggle Visibility
-            7. Exit edit project menu
+            6. Available HDB Officer Slots
+            7. Toggle Visibility
+            8. Exit edit project menu
                 """);
             System.out.print("(Enter number) Attribute to edit: ");
             choice = sc.nextInt();
@@ -235,11 +259,16 @@ public class BTOProjectMain {
                     edited = BTOProjectController.editClosingDate(cDate, projectEdit);
                 }
                 case 6 -> {
+                    System.out.print("New available HDB office slots: ");
+                    int slots = sc.nextInt();
+                    edited = BTOProjectController.editOfficerSlots(slots, projectEdit);
+                }
+                case 7 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
                     edited = BTOProjectController.editVisibility(visible, projectEdit);
                 }
-                case 7 -> {
+                case 8 -> {
                     System.out.println("Exiting edit project menu.");
                 }
                 default -> {
@@ -255,6 +284,11 @@ public class BTOProjectMain {
         }
     }
 
+    /**
+     * Delete a project managed by the manager
+     * @param manager Manager deleting the project
+     * @param sc Scanner object for user input
+     */
     private void deleteProject(Manager manager, Scanner sc) {
         if (manager.getManagedProjects().isEmpty()) {
             System.out.println("No projects to delete.");
