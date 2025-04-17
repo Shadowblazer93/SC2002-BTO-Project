@@ -5,6 +5,8 @@ import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.*;
 import enums.UserRole;
+import enums.defColor;
+
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintEnquiries;
@@ -27,14 +29,16 @@ public class EnquiryMain {
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            System.out.println(defColor.PURPLE+"""
             ------------------------------------
                         Enquiry Menu
-            ------------------------------------
+            ------------------------------------"""+
+                    
+            defColor.BLUE+"""
             1. View enquiries (managed project)
             2. Reply enquiries (managed project)
             3. Exit
-            """);
+            """+defColor.RESET);
             System.out.print("Option: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 3.");

@@ -10,6 +10,8 @@ import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.ApplicationStatus;
 import enums.FlatType;
+import enums.defColor;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -23,12 +25,14 @@ public class ApplicantMain {
     public ApplicantMain(Applicant applicant, Scanner sc) {
         boolean running = true;
         while (running) {
-            System.out.printf("""
+            System.out.printf(defColor.PURPLE+"""
                     
                     Hi %s
                     ------------------------------
                           Applicant Main Page
                     ------------------------------
+                    """+
+                    defColor.BLUE+"""
                     1. View project list
                     2. Apply to project
                     3. View Applied project
@@ -40,7 +44,7 @@ public class ApplicantMain {
                     9. Delete Enquiry
                     10. Logout
                     ------------------------------
-                    """, applicant.getName());
+                    """+defColor.RESET, applicant.getName());
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

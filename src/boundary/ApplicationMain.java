@@ -9,6 +9,8 @@ import entity.project.BTOProject;
 import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
+import enums.defColor;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,14 +22,16 @@ public class ApplicationMain {
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            System.out.println(defColor.PURPLE+"""
             ------------------------
                 Application Menu
-            ------------------------
+            ------------------------"""+
+                    
+            defColor.BLUE+"""
             1. Book flat for applicant
             2. Generate receipt for bookings
             3. Exit
-            """);
+            """+defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

@@ -6,6 +6,7 @@ import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
 import java.util.Scanner;
+import enums.*;
 
 public class Menu {
 
@@ -14,14 +15,16 @@ public class Menu {
             boolean running = true;
             while (running) {
                 int choice;
-                System.out.print("""
+                System.out.print(defColor.PURPLE+"""
                     --------------------
                          Login Menu
-                    --------------------
+                    -------------------- 
+                    """+defColor.BLUE+ 
+                    """
                     1. Login
                     2. Change password
                     3. Exit
-                    """);
+                    """+defColor.RESET);
                 while (true) {
                     System.out.print("Option (1-3): ");
                     if (sc.hasNextInt()) {

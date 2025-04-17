@@ -6,6 +6,8 @@ import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
+import enums.defColor;
+
 import java.util.*;
 import printer.PrintBTOProjects;
 
@@ -19,12 +21,15 @@ public class OfficerMain {
     public OfficerMain(Officer officer, Scanner sc) {
         boolean running = true;
         while (running) {
-            System.out.printf("""
+            System.out.printf(defColor.PURPLE+"""
                 
                     Hi %s
                     ------------------------------
                         HDB Officer Main Page
                     ------------------------------
+                    """+
+                            
+                    defColor.BLUE+"""
                     1. View project details
                     2. Manage applications
                     3. Manage enquiries
@@ -32,7 +37,7 @@ public class OfficerMain {
                     5. Register for project
                     6. Logout
                     ------------------------------
-                    """, officer.getName());
+                    """+defColor.RESET, officer.getName());
             
             int choice = 0;
             boolean validInput = false;
