@@ -15,7 +15,7 @@ public class Menu {
             boolean running = true;
             while (running) {
                 int choice;
-                System.out.print(defColor.RESET+"""
+                System.out.print(defColor.PURPLE+"""
                     --------------------
                          Login Menu
                     -------------------- 
@@ -24,9 +24,9 @@ public class Menu {
                     1. Login
                     2. Change password
                     3. Exit
-                    """);
+                    """+defColor.RESET);
                 while (true) {
-                    System.out.print(defColor.CYAN+"Option (1-3): ");
+                    System.out.print("Option (1-3): ");
                     if (sc.hasNextInt()) {
                         choice = sc.nextInt();
                         sc.nextLine(); // consume newline

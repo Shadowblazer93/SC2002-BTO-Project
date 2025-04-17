@@ -1,6 +1,8 @@
 package boundary;
 
 import entity.user.Manager;
+import enums.defColor;
+
 import java.util.Scanner;
 
 public class ManagerMain {
@@ -12,18 +14,19 @@ public class ManagerMain {
     public ManagerMain(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {
-            System.out.printf("""
-                
+            System.out.printf(defColor.PURPLE+"""
                 Hi %s
                 -------------------------
                   HDB Manager Main Page
                 -------------------------
+                """+
+                defColor.BLUE+"""
                 1. Manage projects
                 2. Manage enquiries
                 3. Manage applications
                 4. Manage registrations
                 5. Logout
-                """, manager.getName());
+                """+defColor.RESET, manager.getName());
             System.out.print("Option: ");
             
             if (!sc.hasNextInt()) {
