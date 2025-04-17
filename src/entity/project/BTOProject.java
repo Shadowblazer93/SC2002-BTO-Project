@@ -21,7 +21,7 @@ public class BTOProject {
     private Map<Integer, Enquiry> enquiries;                // Map of enquiries (ID, Enquiry)
     private Map<String, BTOApplication> applications;       // Applications for project (NRIC, Application)
     private List<Officer> assignedOfficers;                 // List of officers assigned to project
-    private Map<String, Registration> registrations;        // Map of registrations (NRIC, Registration)
+    private Map<Integer, Registration> registrations;        // Map of registrations (ID, Registration)
 
     public BTOProject(String projectName, Manager manager, String neighbourhood, 
                         Map<FlatType, Integer> unitCounts, LocalDate openingDate, LocalDate closingDate,
@@ -53,8 +53,7 @@ public class BTOProject {
 
     // Add officer to list of registrations
     public void addRegistration(Registration registration) {
-        Officer officer = registration.getOfficer();
-        registrations.put(officer.getNRIC(), registration);  
+        registrations.put(registration.getID(), registration);  
     }
 
     // Add application to project
@@ -117,7 +116,7 @@ public class BTOProject {
         return assignedOfficers;
     }
 
-    public Map<String, Registration> getRegistrations() {
+    public Map<Integer, Registration> getRegistrations() {
         return registrations;
     }
 

@@ -1,6 +1,7 @@
 package printer;
 
 import entity.enquiry.Enquiry;
+import enums.defColor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,18 +15,7 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
 
     @Override
     public void printList(List<Enquiry> enquiryList) {
-        if (enquiryList == null || enquiryList.isEmpty()) {
-            System.out.println("No enquiries found");
-            return;
-        }
-
-        // Print sorted list of enquiries by project and ID
-        enquiryList.sort(Comparator
-            .comparing((Enquiry e) -> e.getProjectName())
-            .thenComparing(Enquiry::getID));
-        for (Enquiry enquiry : enquiryList) {
-            System.out.printf(" - Project: %s | %d: %s\n", enquiry.getProjectName(), enquiry.getID(), enquiry.getMessage());
-        }
+        throw new UnsupportedOperationException("Not supported.");
     }
 
     @Override
@@ -42,37 +32,41 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
                 .thenComparing(Enquiry::getID));
         }
 
-        String currentProject = "";
-        System.out.println("-".repeat(167));
-        System.out.printf("| %-30s | %-4s | %-60s | %-60s |", 
+        System.out.println(defColor.YELLOW + "-".repeat(116));
+        System.out.printf("| %-20s | %-3s | %-40s | %-40s |\n", 
             "Project", "ID", "Enquiry", "Reply");
         for (Enquiry enquiry : sortedEnquiries) {
-            if (!enquiry.getProjectName().equals(currentProject)) {
-                currentProject = enquiry.getProjectName();
-                System.out.println("-".repeat(167));
+            System.out.println("-".repeat(116));
+            List<String> messageLines = wrapText(enquiry.getMessage(), 40);
+            List<String> replyLines = wrapText(enquiry.getResponse(), 40);
+            int maxLines = Math.max(messageLines.size(), replyLines.size());
+
+            for (int i = 0; i < maxLines; i++) {
+                String projectName = i == 0 ? enquiry.getProjectName() : "";
+                String id = i == 0 ? String.valueOf(enquiry.getID()) : "";
+                String message = i < messageLines.size() ? messageLines.get(i) : "";
+                String reply = i < replyLines.size() ? replyLines.get(i) : "";
+                System.out.printf("| %-20s | %-3s | %-40s | %-40s |\n", 
+                    projectName, id, message, reply);
             }
-            String message = wrapText(enquiry.getMessage(), 60);
-            String reply = wrapText(enquiry.getResponse(), 60);
-            System.out.printf("| %-30s | %-4d | %-60s | %-60s |\n", 
-                enquiry.getProjectName(), enquiry.getID(), message, reply);
         }
-        System.out.println("-".repeat(167));
+        System.out.println("-".repeat(116) + defColor.RESET);
     }
 
-    private String wrapText(String text, int width) {
-        StringBuilder wrappedText = new StringBuilder();
+    private List<String> wrapText(String text, int width) {
+        List<String> lines = new ArrayList<>();
         String[] words = text.split(" ");
-        int lineLength = 0;
-
+        StringBuilder currentLine = new StringBuilder();
         for (String word : words) {
-            if (lineLength + word.length() > width) {
-                wrappedText.append("\n");
-                lineLength = 0;
+            if (currentLine.length() + word.length() + 1 > width) {
+                lines.add(currentLine.toString().trim());
+                currentLine.setLength(0);
             }
-            wrappedText.append(word).append(" ");
-            lineLength += word.length() + 1;
+            currentLine.append(word).append(" ");
         }
-
-        return wrappedText.toString().trim();
+        if (currentLine.length() > 0) {
+            lines.add(currentLine.toString().trim());
+        }
+        return lines;
     }
 }

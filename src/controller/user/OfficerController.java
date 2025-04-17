@@ -28,13 +28,20 @@ public class OfficerController {
     }
 
     public static String registerProject(Officer officer, BTOProject project) {
-        // Rule 1: Cannot be applicant for same project
+        // Rule 1: Cannot be applicant for project
+        if (officer.getApplication() != null &&
+            officer.getApplication().getProjectName() != null &&
+            officer.getApplication().getProjectName().equals(project.getProjectName())) {
+            return "You are already an applicant for this project. Cannot register as officer.";
+        }
+
+        // Rule 2: Cannot be registered for same project
         if (officer.getAssignedProject() != null &&
             officer.getAssignedProject().getProjectName().equals(project.getProjectName())) {
             return "You have already applied for this project. Cannot register as officer.";
         }
     
-        // Rule 2: Cannot be registered as officer for overlapping project
+        // Rule 3: Cannot be registered as officer for overlapping project
         for (BTOProject registered : officer.getRegisteredProjects().values()) {
             boolean overlaps = !(project.getClosingDate().isBefore(registered.getOpeningDate()) ||
                                  project.getOpeningDate().isAfter(registered.getClosingDate()));

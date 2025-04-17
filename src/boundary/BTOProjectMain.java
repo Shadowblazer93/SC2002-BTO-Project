@@ -4,6 +4,7 @@ import controller.BTOProjectController;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
+import enums.defColor;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -26,10 +27,12 @@ public class BTOProjectMain {
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) { 
-            System.out.print("""
+            System.out.print(defColor.PURPLE + """
                 ---------------------------
                   Project Management Menu
                 ---------------------------
+                """ + defColor.BLUE +
+                """
                 1. Create project
                 2. Edit project
                 3. Delete project
@@ -37,7 +40,7 @@ public class BTOProjectMain {
                 5. View my projects
                 6. View current project details
                 7. Exit
-                """);
+                """ + defColor.RESET);
             int choice = 0;
             boolean validInput = false;
             while (!validInput) {

@@ -2,7 +2,7 @@ package controller;
 
 import entity.project.BTOProject;
 import entity.registration.Registration;
-import entity.user.Officer;
+import entity.user.*;
 import enums.RegistrationStatus;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RegistrationController {
-    // NRIC + Registration
+    // Project + Registration
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
     private static int registrationCount = 1;   // Track registration ID
 
@@ -53,17 +53,34 @@ public class RegistrationController {
         return registration;
     }
 
-    public static String approveRegistration(BTOProject project, Registration registration) {
+    private static boolean checkStatus(Registration registration) {
+        switch (registration.getStatus()) {
+            case APPROVED -> {
+                return false;
+            }
+            case REJECTED -> {
+                return false;
+            }
+            default -> {
+                return true;
+            }
+        }
+    }
+
+    public static String approveRegistration(Manager manager, Registration registration) {
+        if (!checkStatus(registration)) {
+            return "Registration has already been processed";
+        }
+        Map<String, BTOProject> managedProjects = manager.getManagedProjects();
+        BTOProject project = managedProjects.get(registration.getProjectName());
+        if (project == null) {
+            return "You are not managing this project.";
+        }
         if (project.getAssignedOfficers().size() >= project.getAvailableOfficerSlots()) {
             return "No officer slots left for this project.";
         }
 
         Officer officer = registration.getOfficer();
-        if (project.getRegistrations().isEmpty()) {
-            return "No registrations found for this project.";
-        } else if (!project.getRegistrations().containsKey(officer.getNRIC())) {
-            return "This registration does not exist for this project.";
-        }
 
         officer.assignProject(project);
         registration.approveRegistration(); // Set as approved
@@ -71,12 +88,14 @@ public class RegistrationController {
         return "Success";
     }
 
-    public static String rejectRegistration(BTOProject project, Registration registration) {
-        Officer officer = registration.getOfficer();
-        if (project.getRegistrations().isEmpty()) {
-            return "No registrations found for this project.";
-        } else if (!project.getRegistrations().containsKey(officer.getNRIC())) {
-            return "This registration does not exist for this project.";
+    public static String rejectRegistration(Manager manager, Registration registration) {
+        if (!checkStatus(registration)) {
+            return "Registration has already been processed";
+        }
+        Map<String, BTOProject> managedProjects = manager.getManagedProjects();
+        BTOProject project = managedProjects.get(registration.getProjectName());
+        if (project == null) {
+            return "You are not managing this project.";
         }
 
         registration.rejectRegistration();          // Set as rejected

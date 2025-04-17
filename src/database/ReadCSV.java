@@ -169,8 +169,8 @@ public class ReadCSV {
                 Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();
+                    if (officerNRIC.isEmpty()) continue;
                     project.addOfficer(allOfficers.get(officerNRIC));
-                    
                 }
 
                 // Parse pending registrations
@@ -216,7 +216,7 @@ public class ReadCSV {
             while (Reader.hasNextLine()) {
                 String line = Reader.nextLine();
 
-                String[] data = line.split(",");
+                String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
                 int id = Integer.parseInt(data[0].replace("\"", "").trim());
                 String applicantNRIC = data[1].replace("\"", "").trim();
                 String projectName = data[2].replace("\"", "").trim();

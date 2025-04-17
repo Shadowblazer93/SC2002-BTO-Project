@@ -11,7 +11,6 @@ import entity.user.Applicant;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.defColor;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -104,6 +103,7 @@ public class ApplicantMain {
     private Map<Integer, Enquiry> viewEnquiries(Applicant applicant) {
         Map<Integer, Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
+            System.out.println("You have not submitted any enquiries.");
             return null;
         }
         enquiryPrinter.printMap(enquiries);

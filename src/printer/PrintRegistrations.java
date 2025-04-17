@@ -2,6 +2,7 @@ package printer;
 
 import entity.registration.Registration;
 import entity.user.Officer;
+import enums.defColor;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,38 +11,48 @@ public class PrintRegistrations implements Print<String, Registration> {
     @Override
     public void printMapList(Map<String, List<Registration>> allRegistrations) {
         if (allRegistrations == null || allRegistrations.isEmpty()) {
-            System.out.println("No registrations found");
             return;
         }
 
-        System.out.println("Registration List");
+
+        System.out.println(defColor.YELLOW + "-".repeat(53));
+        System.out.printf("| %-20s | %-3s | %-9s | %-8s |\n",
+            "Project", "ID", "NRIC", "Status");
         for (Entry<String, List<Registration>> entry : allRegistrations.entrySet()) {
+            System.out.println(defColor.YELLOW + "-".repeat(53));
             String project = entry.getKey();
             List<Registration> registrationList = entry.getValue();
-            System.out.printf("Project: %s\n", project);
-            printList(registrationList);
+            
+            for (Registration registration : registrationList) {
+                Officer officer = registration.getOfficer();
+                System.out.printf("| %-20s | %-3d | %-9s | %-8s |\n",
+                    project, registration.getID(), officer.getNRIC(), registration.getStatus());
+            }
         }
+        System.out.println(defColor.YELLOW + "-".repeat(53) + defColor.RESET);
     }
 
     @Override
     public void printList(List<Registration> registrationList) {
-        for (Registration registration : registrationList) {
-            Officer officer = registration.getOfficer();
-            System.out.printf(" - %s: %s\n", officer.getNRIC(), registration.getStatus());
+        if (registrationList == null || registrationList.isEmpty()) {
+            return;
         }
+
+        System.out.println(defColor.YELLOW + "-".repeat(53));
+        System.out.printf("| %-20s | %-3s | %-9s | %-8s |\n",
+            "Project", "ID", "NRIC", "Status");
+        for (Registration registration : registrationList) {
+            System.out.println(defColor.YELLOW + "-".repeat(53));
+            Officer officer = registration.getOfficer();
+            System.out.printf("| %-20s | %-3d | %-9s | %-8s |\n",
+                registration.getProjectName(), registration.getID(), officer.getNRIC(), registration.getStatus());
+            
+        }
+        System.out.println(defColor.YELLOW + "-".repeat(53) + defColor.RESET);
     }
 
     @Override
     public void printMap(Map<String, Registration> registrationList) {
-        if (registrationList == null || registrationList.isEmpty()) {
-            System.out.println("No registrations found");
-            return;
-        }
-
-        System.out.println("List of registrations:");
-        for (Registration registration : registrationList.values()) {
-            Officer officer = registration.getOfficer();
-            System.out.printf(" - %s: %s\n", officer.getNRIC(), registration.getStatus());
-        }
+        throw new UnsupportedOperationException("Not supported.");
     }
 }

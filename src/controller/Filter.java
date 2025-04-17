@@ -40,28 +40,16 @@ public class Filter {
                 .collect(Collectors.toList());
     }
 
-    public static Map<String, Registration> filterPendingRegistrations(Map<String, Registration> registrations) {
-        List<Registration> registrationList =  registrations.values().stream()
+    public static List<Registration> filterPendingRegistrations(List<Registration> registrations) {
+        return registrations.stream()
                 .filter(r -> r.getStatus().equals(RegistrationStatus.PENDING))
                 .collect(Collectors.toList());
-        // Convert back to map
-        Map<String, Registration> filteredMap = new HashMap<>();
-        for (Registration registration : registrationList) {
-            filteredMap.put(registration.getOfficer().getNRIC(), registration);
-        }
-        return filteredMap;
     }
 
-    public static Map<String, Registration> filterApprovedRegistrations(Map<String, Registration> registrations) {
-        List<Registration> registrationList =  registrations.values().stream()
+    public static List<Registration> filterApprovedRegistrations(List<Registration> registrations) {
+        return registrations.stream()
                 .filter(r -> r.getStatus().equals(RegistrationStatus.APPROVED))
                 .collect(Collectors.toList());
-        // Convert back to map
-        Map<String, Registration> filteredMap = new HashMap<>();
-        for (Registration registration : registrationList) {
-            filteredMap.put(registration.getOfficer().getNRIC(), registration);
-        }
-        return filteredMap;
     }
 
     public static List<BTOApplication> filterPendingApplications(Map<String, BTOApplication> applications) {

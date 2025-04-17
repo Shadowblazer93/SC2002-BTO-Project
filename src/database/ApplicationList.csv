@@ -1,4 +1,1 @@
 ID,Applicant,Project,FlatType(Rooms),Status,Withdrawal
-3,"T7654321B","sophia project current","THREE_ROOM","BOOKED",false
-4,"S1234567A","sophia project current","TWO_ROOM","BOOKED",false
-5,"T2345678D","sophia project current","THREE_ROOM","UNSUCCESSFUL",false

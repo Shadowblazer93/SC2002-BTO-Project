@@ -88,9 +88,9 @@ public class SaveCSV {
                 }
                 
                 StringBuilder pendingRegistrations = new StringBuilder();
-                Map<String, Registration> pendingRegistrationList = project.getRegistrations();
+                Map<Integer, Registration> pendingRegistrationList = project.getRegistrations();
                 if (!pendingRegistrationList.isEmpty()) {
-                    for (Map.Entry<String, Registration> entry : pendingRegistrationList.entrySet()) {
+                    for (Map.Entry<Integer, Registration> entry : pendingRegistrationList.entrySet()) {
                         Registration registration = entry.getValue();
                         pendingRegistrations.append(registration.getID()).append("|");
                     }

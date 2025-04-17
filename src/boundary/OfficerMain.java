@@ -7,7 +7,6 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
 import enums.defColor;
-
 import java.util.*;
 import printer.PrintBTOProjects;
 
@@ -81,7 +80,11 @@ public class OfficerMain {
     }
 
     private void viewRegistrationStatus(Officer officer) {
-        System.out.println("Viewing registration status!");
+        if (officer.getRegisteredProjects().isEmpty()) {
+            System.out.println("You have not registered for any projects.");
+            return;
+        }
+        System.out.println(defColor.YELLOW + "Viewing registration status!");
         officer.getRegisteredProjects().forEach((projectName, project) -> {
             System.out.println("Project Name: " + projectName);
             
@@ -93,6 +96,7 @@ public class OfficerMain {
                 System.out.println("Registration Status: Not Found");
             }
         });
+        System.out.println(defColor.RESET);
     }
     
     /*private void updateApplicantStatus(Scanner sc, Officer officer) {
@@ -138,6 +142,11 @@ public class OfficerMain {
             System.out.println("Project not found.");
             return;
         }
+
+        if (project.getAvailableOfficerSlots() <= 0) {
+            System.out.println("No available slots for this project.");
+            return;
+        }
     
         // Check if eligible to register
         String message = OfficerController.registerProject(officer, project);
@@ -147,9 +156,7 @@ public class OfficerMain {
         }
     
         // Create registration
-        Registration registration = RegistrationController.registerProject(officer, project);
-        project.addRegistration(registration);
-        officer.addRegisteredProject(project);
+        RegistrationController.registerProject(officer, project);
     
         System.out.println("Registration submitted to project: " + project.getProjectName());
         System.out.println("Awaiting manager approval.");
