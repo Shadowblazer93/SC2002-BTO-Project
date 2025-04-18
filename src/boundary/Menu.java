@@ -110,8 +110,23 @@ public class Menu {
             System.out.println("Invalid credentials, please try again!");
             return;
         }
-        System.out.print("Enter new password: ");
-        String newPassword = sc.next();
+        System.out.println("""
+                New password must be:
+                 - At least 8 characters
+                 - Contain at least 1 lowercase and 1 uppercase letter
+                 - Contain at least 1 digit
+                 - Contain at least 1 special character""");
+        String newPassword;
+        while (true) {
+            System.out.print("Enter new password: ");
+            newPassword = sc.nextLine();
+            String msg = LoginController.strongPassword(newPassword);
+            if (msg.equals("success")) {
+                break;
+            } else {
+                System.out.println(msg);
+            }
+        }
         user.setPassword(newPassword);
         System.out.println("Password successfully changed.");
     }
