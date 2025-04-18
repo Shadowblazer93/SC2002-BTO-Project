@@ -14,10 +14,9 @@ public class OfficerMain {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     EnquiryMain enquiryMain = new EnquiryMain();
     ApplicationMain applicationMain = new ApplicationMain();
-    public static void main(String[] args) {
+    ApplicantMain applicantMain = new ApplicantMain();
 
-    }
-    public OfficerMain(Officer officer, Scanner sc) {
+    public void displayMenu(Officer officer, Scanner sc) {
         boolean running = true;
         while (running) {
             System.out.printf(defColor.PURPLE+"""
@@ -34,7 +33,8 @@ public class OfficerMain {
                     3. Manage enquiries
                     4. View Registration status
                     5. Register for project
-                    6. Logout
+                    6. Apply as applicant
+                    7. Logout
                     ------------------------------
                     """+defColor.RESET, officer.getName());
             
@@ -61,7 +61,8 @@ public class OfficerMain {
                 case 3 -> enquiryMain.displayMenuOfficer(sc, officer);
                 case 4 -> viewRegistrationStatus(officer);
                 case 5 -> registerProject(sc, officer);
-                case 6 -> {
+                case 6 -> applicantMain.displayMenu(officer, sc);
+                case 7 -> {
                     System.out.println("Logging out...");
                     running = false;
                 }
@@ -99,63 +100,26 @@ public class OfficerMain {
         System.out.println(defColor.RESET);
     }
     
-    /*private void updateApplicantStatus(Scanner sc, Officer officer) {
-        sc.nextLine();
-        
-        System.out.print("Enter the NRIC of the applicant: ");
-        String NRIC = sc.nextLine();
-        
-        Applicant applicant = ApplicantController.getApplicant(NRIC);
-        if (applicant == null) {
-            System.out.println("Applicant not found with NRIC: " + NRIC);
-            return;
-        }
-        
-        OfficerController.updateApplicantStatus(officer, applicant, ApplicationStatus.BOOKED);
-    }*/
-
-    /*private void generateReceipt(Scanner sc, Officer officer) {
-        System.out.print("Enter the NRIC of the applicant to generate receipt for: ");
-        String nric = sc.next();
-        sc.nextLine();
-        
-        Applicant applicant = ApplicantController.getApplicant(nric);
-        if (applicant == null) {
-            System.out.println("Applicant not found.");
-            return;
-        }
-        officer.generateReceipt(applicant);
-    }*/
-
     private void registerProject(Scanner sc, Officer officer) {
-        // View list of projects
+        // 1. View list of projects
         System.out.println("Available projects you can register for:");
         projectPrinter.printMap(BTOProjectController.getAllProjects());
-    
+        // 2. Get selected project
         sc.nextLine();
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
-    
-        // Get selected project
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
         }
-
-        if (project.getAvailableOfficerSlots() <= 0) {
-            System.out.println("No available slots for this project.");
-            return;
-        }
-    
-        // Check if eligible to register
+        // 3. Check if eligible to register
         String message = OfficerController.registerProject(officer, project);
         if (!message.equals("success")) {
             System.out.println(message);
             return;
         }
-    
-        // Create registration
+        // 4. Create registration
         RegistrationController.registerProject(officer, project);
     
         System.out.println("Registration submitted to project: " + project.getProjectName());

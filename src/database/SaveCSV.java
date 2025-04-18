@@ -29,7 +29,7 @@ public class SaveCSV {
         File filePath = new File("src/database/ProjectList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
-            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,PendingRegistrations\n");
+            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations\n");
 
             for (BTOProject project: allProjects.values()) {
                 String projectName = project.getProjectName();
@@ -88,11 +88,11 @@ public class SaveCSV {
                 }
                 
                 StringBuilder pendingRegistrations = new StringBuilder();
-                Map<Integer, Registration> pendingRegistrationList = project.getRegistrations();
+                Map<String, Registration> pendingRegistrationList = project.getRegistrations();
                 if (!pendingRegistrationList.isEmpty()) {
-                    for (Map.Entry<Integer, Registration> entry : pendingRegistrationList.entrySet()) {
+                    for (Map.Entry<String, Registration> entry : pendingRegistrationList.entrySet()) {
                         Registration registration = entry.getValue();
-                        pendingRegistrations.append(registration.getID()).append("|");
+                        pendingRegistrations.append(registration.getOfficer().getNRIC()).append("|");
                     }
                     if (pendingRegistrations.length() > 0) {
                         pendingRegistrations.setLength(pendingRegistrations.length() - 1);

@@ -21,7 +21,7 @@ public class ApplicantMain {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
-    public ApplicantMain(Applicant applicant, Scanner sc) {
+    public void displayMenu(Applicant applicant, Scanner sc) {
         boolean running = true;
         while (running) {
             System.out.printf(defColor.PURPLE+"""
@@ -49,7 +49,7 @@ public class ApplicantMain {
             sc.nextLine();
 
             switch (choice) {
-                case 1 -> viewProjectList();
+                case 1 -> viewProjectList(applicant);
                 case 2 -> applyProject(sc, applicant);
                 case 3 -> viewAppliedProject(applicant);
                 case 4 -> bookFlat(applicant);
@@ -67,9 +67,14 @@ public class ApplicantMain {
         }
     }
 
-    private void viewProjectList() {
-        List<BTOProject> visibleProjects = Filter.filterVisibleProjects(BTOProjectController.getAllProjects());
+    private boolean viewProjectList(Applicant applicant) {
+        List<BTOProject> visibleProjects = Filter.filterUserGroupProjects(BTOProjectController.getAllProjects(), applicant);
+        if (visibleProjects == null || visibleProjects.isEmpty()) {
+            System.out.println("No projects available.");
+            return false;
+        }
         projectPrinter.printList(visibleProjects);
+        return true;
     }
 
     private void viewAppliedProject(Applicant applicant) {
@@ -78,13 +83,19 @@ public class ApplicantMain {
             System.out.println("You have not applied to any project.");
             return;
         }
+        BTOProject project = BTOProjectController.getAllProjects().get(application.getProjectName());
+        if (!project.isVisible()) {
+            System.out.println("Project details are no longer visible.");
+        }
         System.out.println("Details of your application:");
         System.out.println(application);
     }
 
     private void submitEnquiry(Scanner sc, Applicant applicant) {
         // select project to enquire about
-        viewProjectList();
+        if (!viewProjectList(applicant)) {
+            return;
+        }
         System.out.print("Project for enquiry: ");
         String projectName = getValidStringInput(sc);
         BTOProject project = BTOProjectController.getProjectByName(projectName);
@@ -158,9 +169,11 @@ public class ApplicantMain {
         }
 
         // Print list of projects
-        viewProjectList();
+        if (!viewProjectList(applicant)) {
+            return;
+        }
         
-        System.out.print("Enter name of project:");
+        System.out.print("Enter name of project: ");
         String projectName = getValidStringInput(sc);
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         if (project == null) {

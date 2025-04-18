@@ -10,7 +10,6 @@ import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.defColor;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -22,12 +21,11 @@ public class ApplicationMain {
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
-            System.out.println(defColor.PURPLE+"""
+            System.out.println(defColor.PURPLE + """
             ------------------------
                 Application Menu
-            ------------------------"""+
-                    
-            defColor.BLUE+"""
+            ------------------------
+            """ + defColor.BLUE+"""
             1. Book flat for applicant
             2. Generate receipt for bookings
             3. Exit
@@ -57,17 +55,19 @@ public class ApplicationMain {
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
         while (running) {
-            System.out.println("""
+            System.out.println(defColor.PURPLE + """
             ------------------------
                 Application Menu
             ------------------------
+            """ + defColor.BLUE + 
+            """
             1. Approve applications
             2. Reject applications
             3. Approve applcation withdrawals
             4. Reject application withdrawals
             5. Filter applications
             6. Exit
-            """);
+            """ + defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

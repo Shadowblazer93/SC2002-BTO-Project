@@ -47,8 +47,8 @@ public class PrintBTOProjects implements Print<String, BTOProject> {
         System.out.println(defColor.YELLOW + "BTO Project List:");
         System.out.println("-".repeat(72));
         System.out.printf("| %-50s | %-6s | %-6s |\n", "Project Name", "2-Room", "3-Room");
-        System.out.println("-".repeat(72));
         for (BTOProject project : projectList) {
+            System.out.println("-".repeat(72));
             Map<FlatType, Integer> unitCounts = project.getUnitCounts();
             System.out.printf("| %-50s | %-6d | %-6d |\n", project.getProjectName(), unitCounts.get(FlatType.TWO_ROOM), unitCounts.get(FlatType.THREE_ROOM));
         }

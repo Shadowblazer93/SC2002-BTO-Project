@@ -3,6 +3,7 @@ package printer;
 import entity.application.BTOApplication;
 import entity.user.*;
 import enums.ApplicationStatus;
+import enums.defColor;
 import java.util.List;
 import java.util.Map;
 
@@ -18,10 +19,11 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
             return;
         }
 
-        System.out.println("-".repeat(43));
+        System.out.println(defColor.YELLOW + "-".repeat(43));
         System.out.printf("| %-9s | %-9s | %-15s |\n",
             "NRIC", "Flat Type", "Status");
         for (BTOApplication application : applicationList) {
+            System.out.println(defColor.YELLOW + "-".repeat(95));
             Applicant applicant = application.getApplicant();
             String flatType = application.getFlatType().getNumRooms() + "-Room";
             ApplicationStatus status = application.getStatus();
@@ -29,6 +31,7 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
                 applicant.getNRIC(), flatType, status);
         }
         System.out.println("-".repeat(43));
+        System.out.print(defColor.RESET);
     }
 
     @Override
@@ -38,10 +41,11 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
             return;
         }
 
-        System.out.println("-".repeat(95));
+        System.out.println(defColor.YELLOW + "-".repeat(95));
         System.out.printf("| %-9s | %-20s | %-3s | %-15s | %-20s | %-9s |\n",
             "NRIC", "Name", "Age", "Marital Status", "Project", "Flat Type");
         for (BTOApplication application : applicationList.values()) {
+            System.out.println(defColor.YELLOW + "-".repeat(95));
             Applicant applicant = application.getApplicant();
             String project = application.getProjectName();
             String flatType = application.getFlatType().getNumRooms() + "-Room";
@@ -50,5 +54,6 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
                 project, flatType);
         }
         System.out.println("-".repeat(95));
+        System.out.print(defColor.RESET);
     }
 }

@@ -1,7 +1,8 @@
-ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,PendingRegistrations
+ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations
 "project 2","T9876543K","neighbourhood 2",30,20,"2025-02-01","2025-02-28",1,false,"","","",""
 "project 1","T8765432F","neighbourhood 1",20,30,"2025-01-01","2025-01-31",2,false,"","","",""
-"project 4","S5678901G","neighbourhood 4",40,50,"2025-04-01","2025-04-30",6,false,"","","","2|7"
-"project 3","T9876543K","neighbourhood 3",40,10,"2025-04-01","2025-04-30",2,false,"","","",""
-"project 6","S2345678H","neighbourhood 6",40,60,"2025-04-01","2025-04-30",3,false,"","","S6543210I|S1234567D|T2109876H","3|4|5|6"
-"project 5","S5678901G","neighbourhood 5",20,10,"2025-05-01","2025-05-31",4,false,"","","",""
+"project 4","S5678901G","neighbourhood 4",40,50,"2025-04-01","2025-04-30",6,true,"","S9876543C","",""
+"project 3","T9876543K","neighbourhood 3",40,10,"2025-04-01","2025-04-30",2,true,"4","","",""
+"project 6","S2345678H","neighbourhood 6",29,60,"2025-04-01","2025-04-30",2,true,"2","T7654321B|S1234567A|T2345678D","T2109876H","T2109876H"
+"project 5","S5678901G","neighbourhood 5",20,10,"2025-05-01","2025-05-31",4,true,"1","","","T2109876H"
+"project 7","T9876543K","neighbourhood 7",0,2,"2025-05-01","2025-05-31",4,true,"","","","T2109876H"

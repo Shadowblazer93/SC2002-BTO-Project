@@ -2,7 +2,6 @@ package boundary;
 
 import entity.user.Manager;
 import enums.defColor;
-
 import java.util.Scanner;
 
 public class ManagerMain {
@@ -11,7 +10,7 @@ public class ManagerMain {
     EnquiryMain enquiryMain = new EnquiryMain();
     ApplicationMain applicationMain = new ApplicationMain();
 
-    public ManagerMain(Manager manager, Scanner sc) {
+    public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {
             System.out.printf(defColor.PURPLE+"""

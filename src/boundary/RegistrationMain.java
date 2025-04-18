@@ -79,7 +79,7 @@ public class RegistrationMain {
 
         List<Registration> allRegistrations = new ArrayList<>();
         for (BTOProject project : projects.values()) {
-            Map<Integer, Registration> projectRegistrations = project.getRegistrations();
+            Map<String, Registration> projectRegistrations = project.getRegistrations();
             if (projectRegistrations != null) {
                 allRegistrations.addAll(projectRegistrations.values());
             }
@@ -138,8 +138,14 @@ public class RegistrationMain {
         System.out.println("Select registrations to " + (isApproval ? "approve" : "reject") + " (ID). Type 0 to stop: ");
         int id = -1;
         while (id != 0) {
-            id = sc.nextInt();
-            // Retrieve registration by NRIC
+            try {
+                id = sc.nextInt();
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine(); 
+                continue;
+            }
+            // Retrieve registration by ID
             Registration registration;
             if (pendingRegistrationsMap.containsKey(id)) {
                 registration = pendingRegistrationsMap.get(id);

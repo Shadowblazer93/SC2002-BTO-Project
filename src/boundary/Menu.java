@@ -5,10 +5,13 @@ import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
-import java.util.Scanner;
 import enums.*;
+import java.util.Scanner;
 
 public class Menu {
+    ApplicantMain applicantMain = new ApplicantMain();
+    OfficerMain officerMain = new OfficerMain();
+    ManagerMain managerMain = new ManagerMain();
 
     public void displayMenu() {
         try (Scanner sc = new Scanner(System.in)) {
@@ -62,13 +65,13 @@ public class Menu {
     }
 
     private User loginInput(Scanner sc) {
-        boolean invalid = true;
+        boolean valid = false;
         String nric = null;
-        while (invalid) {
+        while (!valid) {
             System.out.print("Enter NRIC: ");
             nric = sc.nextLine().trim().toUpperCase();
             if (LoginController.checkNRIC(nric)) {
-                invalid = false;
+                valid = true;
                 break;
             }
             System.out.println("Invalid NRIC format. Please try again.");
@@ -87,13 +90,13 @@ public class Menu {
             System.out.println("Login successful as " + user.getUserRole());
             switch (user.getUserRole()) {
                 case APPLICANT -> {
-                    ApplicantMain applicantMain = new ApplicantMain((Applicant) user, sc);
+                    applicantMain.displayMenu((Applicant) user, sc);
                 }
                 case OFFICER -> {
-                    OfficerMain officerMain = new OfficerMain((Officer) user, sc);
+                    officerMain.displayMenu((Officer) user, sc);
                 }
                 case MANAGER -> {
-                    ManagerMain managerMain = new ManagerMain((Manager) user, sc);
+                    managerMain.displayMenu((Manager) user, sc);
                 }
             }
         } else {

@@ -3,6 +3,7 @@ package controller;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.registration.Registration;
+import entity.user.Applicant;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
@@ -38,6 +39,22 @@ public class Filter {
                 .filter(BTOProject::isVisible)
                 .sorted(Comparator.comparing(BTOProject::getProjectName))
                 .collect(Collectors.toList());
+    }
+
+    public static List<BTOProject> filterUserGroupProjects(Map<String, BTOProject> projects, Applicant applicant) {
+        List<FlatType> flatTypes = applicant.getEligibleFlatTypes();
+        if (flatTypes == null || flatTypes.isEmpty()) {
+            return new ArrayList<>(); // No flat types available
+        }
+        return projects.values().stream()
+            .filter(p -> 
+                BTOProjectController.isProjectOpen(p) &&
+                flatTypes.stream().anyMatch((flatType) -> 
+                    p.getUnitCounts().containsKey(flatType) && p.getUnitCounts().get(flatType) > 0
+                )
+            )
+            .sorted(Comparator.comparing(BTOProject::getProjectName))
+            .collect(Collectors.toList());
     }
 
     public static List<Registration> filterPendingRegistrations(List<Registration> registrations) {

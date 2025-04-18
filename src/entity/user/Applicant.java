@@ -6,12 +6,15 @@ import entity.project.BTOProject;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.UserRole;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Applicant extends User { 
     private BTOApplication application;
-    private FlatType flatType;
+    private FlatType flatType; 
+    private List<FlatType> eligibleFlatTypes = new ArrayList<>();    // Store flat types that the applicant is eligible for
     private Map<Integer, Enquiry> enquiries; // Store applicant enquiries
     // private List<Enquiry> enquiries;
     // private int maxEnqId;
@@ -21,22 +24,24 @@ public class Applicant extends User {
         this.application = null;
         this.enquiries = new HashMap<>();
 
-        //if (this.getAge()>=35 && maritalStatus=="single") {flatType = FlatType.TWO_ROOM;}
-        //if (this.getAge()>=25 && maritalStatus=="married") {flatType = FlatType.THREE_ROOM;}
+        if (this.getAge()>=35 && maritalStatus.toLowerCase().equals("single")) {
+            eligibleFlatTypes.add(FlatType.TWO_ROOM);
+        } else if (this.getAge()>=25 && maritalStatus.toLowerCase().equals("married")) {
+            eligibleFlatTypes.add(FlatType.TWO_ROOM);
+            eligibleFlatTypes.add(FlatType.THREE_ROOM);
+        }
     }
 
-    public FlatType getflatType(){
+    public List<FlatType> getEligibleFlatTypes(){
+        return eligibleFlatTypes;
+    }
+
+    public FlatType getFlatType() {
         return flatType;
     }
 
-    public void updateFlatType(FlatType flatType){
+    public void updateFlatType(FlatType flatType) {
         this.flatType = flatType;
-    }
-
-    public String getFlatTypeString() {
-        if (flatType == FlatType.TWO_ROOM) { return "2-room";}
-        else if (flatType == FlatType.THREE_ROOM) {return "3-room";}
-        else {return "Unknown flat type";}
     }
 
     public void setApplication(BTOApplication application) {

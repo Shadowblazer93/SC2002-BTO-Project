@@ -14,6 +14,7 @@ import enums.ApplicationStatus;
 import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
+import enums.defColor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
@@ -126,7 +127,7 @@ public class ReadCSV {
                 String enquiries = data[9].replace("\"", "").trim();
                 String applications = data[10].replace("\"", "").trim();
                 String assignedOfficers = data[11].replace("\"", "").trim();
-                String pendingRegistrations = data[12].replace("\"", "").trim();
+                String registrations = data[12].replace("\"", "").trim();
 
                 // Get manager
                 Manager manager = ManagerController.getManager(managerNRIC);
@@ -171,33 +172,38 @@ public class ReadCSV {
                     officerNRIC = officerNRIC.trim();
                     if (officerNRIC.isEmpty()) continue;
                     project.addOfficer(allOfficers.get(officerNRIC));
+                    
+                    // Add to officer's assigned project
+                    Officer officer = allOfficers.get(officerNRIC);
+                    if (LocalDate.now().isAfter(project.getOpeningDate()) && LocalDate.now().isBefore(project.getClosingDate())) {
+                        officer.assignProject(project);
+                    }
+                    System.out.printf(defColor.RED + "%s: %s\n" + defColor.RESET, officer.getName(), projectName);
                 }
 
-                // Parse pending registrations
-                String[] pendingRegistrationsArray = pendingRegistrations.split("\\|");
+                // Parse registrations
+                String[] registrationsArray = registrations.split("\\|");
                 List<Registration> registrationList = RegistrationController.getRegistrationsByProject(projectName);
                 if (registrationList != null) {
                     // Convert list to map
-                    Map<Integer, Registration> registrationMap = new HashMap<>();
+                    Map<String, Registration> registrationMap = new HashMap<>();   // NRIC, Registration
                     for (Registration registration : registrationList) {
-                        registrationMap.put(registration.getID(), registration);
+                        registrationMap.put(registration.getOfficer().getNRIC(), registration);
                     }
-                    for (String registrationId : pendingRegistrationsArray) {
-                        if (registrationId.isEmpty()) continue;
-                        int id = Integer.parseInt(registrationId.trim());
-                        Registration registration = registrationMap.get(id);
+                    // Go thorugh nric in registrations
+                    for (String nric : registrationsArray) {
+                        System.out.println(projectName + " : " + nric);
+                        if (nric.isEmpty()) continue;
+                        Registration registration = registrationMap.get(nric);
                         if (registration == null) {
-                            System.out.println("Registration not found for ID: " + id);
+                            System.out.println("Registration not found for NRIC: " + nric);
                             continue;
                         }
                         project.addRegistration(registration);
-                        List<Officer> officerList = project.getAssignedOfficers();
-                        for (Officer officer : officerList) {
-                            officer.assignProject(project);
-                        }
+                        // Add to officer's list of registrations
+                        Officer officer = allOfficers.get(nric);
+                        officer.addRegisteredProject(project);
                     }
-                } else {
-                    System.out.println("No registrations found for project: " + projectName);
                 }
             }
             
@@ -242,7 +248,6 @@ public class ReadCSV {
 
             while (Reader.hasNextLine()) {
                 String line = Reader.nextLine();
-                System.out.println(line);
 
                 String[] data = line.split(",");
                 int id = Integer.parseInt(data[0].replace("\"", "").trim());
@@ -253,7 +258,6 @@ public class ReadCSV {
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
-                System.out.println(applicant);
                 BTOApplication application = ApplicationController.createApplication(id, applicant, projectName, flatType, status, withdrawal);
                 applicant.setApplication(application);
             }

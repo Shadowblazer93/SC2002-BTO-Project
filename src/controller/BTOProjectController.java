@@ -112,6 +112,23 @@ public class BTOProjectController {
         return project.getUnitCounts().get(flatType) > 0;
     }
 
+    /**
+     * Check if the specified period overlaps with any existing projects managed by the manager
+     * @param manager Manager of projects
+     * @param openingDate Opening date of the new project
+     * @param closingDate Closing date of the new project
+     * @return True if there is an overlap, false otherwise
+     */
+    public static boolean checkOverlapPeriod(Manager manager, String projectName, LocalDate openingDate, LocalDate closingDate) {
+        for (BTOProject project : manager.getManagedProjects().values()) {
+            if (project.getProjectName().equals(projectName)) continue;
+            if (project.getOpeningDate().isBefore(closingDate) && project.getClosingDate().isAfter(openingDate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Project editing methods
 
     /**

@@ -28,6 +28,7 @@ public class OfficerController {
     }
 
     public static String registerProject(Officer officer, BTOProject project) {
+        String projectName = project.getProjectName();
         // Rule 1: Cannot be applicant for project
         if (officer.getApplication() != null &&
             officer.getApplication().getProjectName() != null &&
@@ -36,9 +37,9 @@ public class OfficerController {
         }
 
         // Rule 2: Cannot be registered for same project
-        if (officer.getAssignedProject() != null &&
-            officer.getAssignedProject().getProjectName().equals(project.getProjectName())) {
-            return "You have already applied for this project. Cannot register as officer.";
+        if (officer.getRegisteredProjects() != null &&
+            officer.getRegisteredProjects().get(projectName) != null) {
+            return "You have already registered for this project. Cannot register as officer.";
         }
     
         // Rule 3: Cannot be registered as officer for overlapping project
@@ -133,7 +134,7 @@ public class OfficerController {
         String name = applicant.getName();
         int age = applicant.getAge();
         String maritalStatus = applicant.getMaritalStatus();
-        FlatType flatType = applicant.getflatType();
+        FlatType flatType = applicant.getFlatType();
 
         BTOApplication application = ApplicationController.getApplicationByNRIC(NRIC);
         
@@ -167,10 +168,6 @@ public class OfficerController {
             System.out.println("===========================");
             }
         }   
-    }
-
-    public static boolean bookFlat(Officer officer, BTOApplication application) {
-        return true;
     }
 
     /*public static void bookFlat(Officer officer, Applicant applicant, FlatType flatType) {

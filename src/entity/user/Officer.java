@@ -14,15 +14,12 @@ public class Officer extends Applicant{
     public Officer(String nric, String name, String password, int age, String maritalStatus) {
         super(nric, name, age, maritalStatus, password);    // Applicant constructor
         this.setUserRole(UserRole.OFFICER);
+        assignedProject = null;
         registeredProjects = new HashMap<>();
     }
 
     public BTOProject getAssignedProject() {
         return assignedProject;
-    }
-    
-    public BTOProject viewHandledProject(){
-        return this.assignedProject;
     }
 
     public void assignProject(BTOProject project) {

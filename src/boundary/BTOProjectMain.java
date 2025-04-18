@@ -121,13 +121,13 @@ public class BTOProjectMain {
         // Types of Flat + Number of units
         Map<FlatType, Integer> unitCounts = new HashMap<>();
         for (FlatType flatType : FlatType.values()) {
-            int units = 0;
-            while (units <= 0) {
+            int units = -1;
+            while (units < 0) {
                 try {
                     System.out.printf("Number of units for %d-Room flats: ", flatType.getNumRooms());
                     units = sc.nextInt();
-                    if (units <= 0) {
-                        System.out.println("Number of units must be greater than 0.");
+                    if (units < 0) {
+                        System.out.println("Number of units cannot be less than 0.");
                     }
                 } catch (Exception e) {
                     System.out.println("Invalid input. Please enter a number.");
@@ -137,30 +137,40 @@ public class BTOProjectMain {
             sc.nextLine();
             unitCounts.put(flatType, units);
         }
-        // Application opening date
+        // Application period
+        boolean correctPeriod = false;
         LocalDate oDate = null;
-        while (oDate == null) {
-            System.out.print("Application opening date (YYYY-MM-DD): ");
-            String oDateInput = sc.nextLine();
-            try {
-                oDate = LocalDate.parse(oDateInput);
-            } catch (DateTimeParseException e) {
-                System.out.println("Invalid date.");
-            }
-        }
-        // Application closing date
         LocalDate cDate = null;
-        while (cDate == null) {
-            System.out.print("Application closing date (YYYY-MM-DD): ");
-            String cDateInput = sc.nextLine();
-            try {
-                cDate = LocalDate.parse(cDateInput);
-                if (cDate.isBefore(oDate)) {
-                    System.out.println("Closing date must be after opening date.");
-                    cDate = null;
+        while (!correctPeriod) {
+            // Application opening date
+            while (oDate == null) {
+                System.out.print("Application opening date (YYYY-MM-DD): ");
+                String oDateInput = sc.nextLine();
+                try {
+                    oDate = LocalDate.parse(oDateInput);
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date.");
                 }
-            } catch (DateTimeParseException e) {
-                System.out.println("Invalid date.");
+            }
+            // Application closing date
+            while (cDate == null) {
+                System.out.print("Application closing date (YYYY-MM-DD): ");
+                String cDateInput = sc.nextLine();
+                try {
+                    cDate = LocalDate.parse(cDateInput);
+                    if (cDate.isBefore(oDate)) {
+                        System.out.println("Closing date must be after opening date.");
+                        cDate = null;
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid date.");
+                }
+            }
+            correctPeriod = !BTOProjectController.checkOverlapPeriod(manager, null, oDate, cDate);
+            if (!correctPeriod) {
+                System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
+                oDate = null;
+                cDate = null;
             }
         }
         // Available HDB Office Slots
@@ -210,8 +220,8 @@ public class BTOProjectMain {
             return;
         }
 
-        int choice = 0;
-        while (choice != 7) {
+        boolean running = true;
+        while (running) {
             System.out.println("""
             What would you like to edit?
             1. Project Name
@@ -224,7 +234,7 @@ public class BTOProjectMain {
             8. Exit edit project menu
                 """);
             System.out.print("(Enter number) Attribute to edit: ");
-            choice = sc.nextInt();
+            int choice = sc.nextInt();
             sc.nextLine();
             boolean edited = false;
             switch (choice) {
@@ -245,20 +255,57 @@ public class BTOProjectMain {
                     if (flatType == null) {
                         System.out.println("Invalid flat type.");
                     }
-                    System.out.print("New number of units: ");
-                    int newNumUnits = sc.nextInt();
+                    int newNumUnits = -1;
+                    while (newNumUnits < 0) {
+                        try {
+                            System.out.print("New number of units: ");
+                            newNumUnits = sc.nextInt();
+                            if (newNumUnits < 0) {
+                                System.out.println("Number of units cannot be less than 0.");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Invalid input. Please enter a number.");
+                            sc.nextLine(); 
+                        }
+                    }
                     edited = BTOProjectController.editNumUnits(flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
-                    System.out.print("New application opening date (YYYY-MM-DD): ");
-                    String oDateInput = sc.nextLine();
-                    LocalDate oDate = LocalDate.parse(oDateInput);
+                    boolean valid = false;
+                    LocalDate oDate = null;
+                    while (!valid) {
+                        System.out.print("New application opening date (YYYY-MM-DD): ");
+                        String oDateInput = sc.nextLine();
+                        try {
+                            oDate = LocalDate.parse(oDateInput);
+                            valid = !BTOProjectController.checkOverlapPeriod(manager, projectEdit.getProjectName(), oDate, projectEdit.getClosingDate());
+                            if (!valid) {
+                                System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
+                                oDate = null;
+                            }
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid date.");
+                        }
+                    }
                     edited = BTOProjectController.editOpeningDate(oDate, projectEdit);
                 }
                 case 5 -> {
-                    System.out.print("New application closing date (YYYY-MM-DD): ");
-                    String cDateInput = sc.nextLine();
-                    LocalDate cDate = LocalDate.parse(cDateInput);
+                    boolean valid = false;
+                    LocalDate cDate = null;
+                    while (!valid) {
+                        System.out.print("New application closing date (YYYY-MM-DD): ");
+                        String cDateInput = sc.nextLine();
+                        try {
+                            cDate = LocalDate.parse(cDateInput);
+                            valid = !BTOProjectController.checkOverlapPeriod(manager, projectEdit.getProjectName(), projectEdit.getOpeningDate(), cDate);
+                            if (!valid) {
+                                System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
+                                cDate = null;
+                            }
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid date.");
+                        }
+                    }
                     edited = BTOProjectController.editClosingDate(cDate, projectEdit);
                 }
                 case 6 -> {
@@ -273,6 +320,7 @@ public class BTOProjectMain {
                 }
                 case 8 -> {
                     System.out.println("Exiting edit project menu.");
+                    running = false;
                 }
                 default -> {
                     System.out.println("Invalid option.");

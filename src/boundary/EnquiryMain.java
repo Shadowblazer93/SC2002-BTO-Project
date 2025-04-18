@@ -6,7 +6,6 @@ import entity.project.BTOProject;
 import entity.user.*;
 import enums.UserRole;
 import enums.defColor;
-
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintEnquiries;
@@ -32,9 +31,8 @@ public class EnquiryMain {
             System.out.println(defColor.PURPLE+"""
             ------------------------------------
                         Enquiry Menu
-            ------------------------------------"""+
-                    
-            defColor.BLUE+"""
+            ------------------------------------
+            """ + defColor.BLUE + """
             1. View enquiries (managed project)
             2. Reply enquiries (managed project)
             3. Exit
