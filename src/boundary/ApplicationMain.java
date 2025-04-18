@@ -22,14 +22,15 @@ public class ApplicationMain {
         boolean running = true;
         while (running) {
             System.out.println(defColor.PURPLE + """
-            ------------------------
+            ========================
                 Application Menu
             ------------------------
             """ + defColor.BLUE+"""
             1. Book flat for applicant
             2. Generate receipt for bookings
             3. Exit
-            """+defColor.RESET);
+            """ + defColor.PURPLE + 
+            "========================\n" + defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();
@@ -56,9 +57,9 @@ public class ApplicationMain {
         boolean running = true;
         while (running) {
             System.out.println(defColor.PURPLE + """
-            ------------------------
-                Application Menu
-            ------------------------
+            ==================================
+                     Application Menu
+            ----------------------------------
             """ + defColor.BLUE + 
             """
             1. Approve applications
@@ -67,7 +68,8 @@ public class ApplicationMain {
             4. Reject application withdrawals
             5. Filter applications
             6. Exit
-            """ + defColor.RESET);
+            """ + defColor.PURPLE + 
+            "==================================\n" + defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

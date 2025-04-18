@@ -17,18 +17,18 @@ public class RegistrationMain {
         boolean running = true;
         while (running) {
             System.out.println(defColor.PURPLE + """
-                --------------------------
-                  Registration Main Page
-                --------------------------
-                """ + defColor.BLUE +
-                """
+                ==============================
+                    Registration Main Page
+                ------------------------------
+                """ + defColor.BLUE + """
                 1. View all registrations
                 2. Approve registrations
                 3. Reject registrations
                 4. View pending registrations
                 5. View approved registrations
                 6. Exit
-                """ + defColor.RESET);
+                """ + defColor.PURPLE +
+                "==============================\n" + defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

@@ -28,9 +28,9 @@ public class BTOProjectMain {
         boolean running = true;
         while (running) { 
             System.out.print(defColor.PURPLE + """
-                ---------------------------
-                  Project Management Menu
-                ---------------------------
+                ===============================
+                    Project Management Menu
+                -------------------------------
                 """ + defColor.BLUE +
                 """
                 1. Create project
@@ -40,7 +40,8 @@ public class BTOProjectMain {
                 5. View my projects
                 6. View current project details
                 7. Exit
-                """ + defColor.RESET);
+                """ + defColor.PURPLE + 
+                "===============================" + defColor.RESET);
             int choice = 0;
             boolean validInput = false;
             while (!validInput) {

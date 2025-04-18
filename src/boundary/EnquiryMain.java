@@ -28,15 +28,16 @@ public class EnquiryMain {
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
-            System.out.println(defColor.PURPLE+"""
-            ------------------------------------
+            System.out.println(defColor.PURPLE + """
+            ====================================
                         Enquiry Menu
             ------------------------------------
             """ + defColor.BLUE + """
             1. View enquiries (managed project)
             2. Reply enquiries (managed project)
             3. Exit
-            """+defColor.RESET);
+            """ + defColor.PURPLE + 
+            "====================================\n" + defColor.RESET);
             System.out.print("Option: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 3.");
@@ -63,15 +64,18 @@ public class EnquiryMain {
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
         while (running) {
-            System.out.println("""
-            ------------------------------------
+            System.out.println(defColor.PURPLE + """
+            ====================================
                         Enquiry Menu
             ------------------------------------
+            """ + defColor.BLUE +       
+            """
             1. View enquiries (all projects)
             2. View enquiries (managed project)
             3. Reply enquiries (managed project)
             4. Exit
-            """);
+            """ + defColor.PURPLE + 
+            "====================================\n" + defColor.RESET);
             System.out.print("Option: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 4.");

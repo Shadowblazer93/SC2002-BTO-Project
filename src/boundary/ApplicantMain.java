@@ -27,11 +27,10 @@ public class ApplicantMain {
             System.out.printf(defColor.PURPLE+"""
                     
                     Hi %s
-                    ------------------------------
+                    ==============================
                           Applicant Main Page
                     ------------------------------
-                    """+
-                    defColor.BLUE+"""
+                    """ + defColor.BLUE + """
                     1. View project list
                     2. Apply to project
                     3. View Applied project
@@ -42,8 +41,8 @@ public class ApplicantMain {
                     8. Edit Enquiry
                     9. Delete Enquiry
                     10. Logout
-                    ------------------------------
-                    """+defColor.RESET, applicant.getName());
+                    """ + defColor.PURPLE + 
+                    "==============================\n" + defColor.RESET, applicant.getName());
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

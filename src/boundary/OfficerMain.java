@@ -22,12 +22,10 @@ public class OfficerMain {
             System.out.printf(defColor.PURPLE+"""
                 
                     Hi %s
-                    ------------------------------
+                    ==============================
                         HDB Officer Main Page
                     ------------------------------
-                    """+
-                            
-                    defColor.BLUE+"""
+                    """ + defColor.BLUE + """
                     1. View project details
                     2. Manage applications
                     3. Manage enquiries
@@ -35,8 +33,8 @@ public class OfficerMain {
                     5. Register for project
                     6. Apply as applicant
                     7. Logout
-                    ------------------------------
-                    """+defColor.RESET, officer.getName());
+                    """ + defColor.PURPLE + 
+                    "==============================\n" + defColor.RESET, officer.getName());
             
             int choice = 0;
             boolean validInput = false;

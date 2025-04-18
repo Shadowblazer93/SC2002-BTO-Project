@@ -13,19 +13,20 @@ public class ManagerMain {
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {
-            System.out.printf(defColor.PURPLE+"""
+            System.out.printf(defColor.PURPLE + """
+
                 Hi %s
-                -------------------------
+                =========================
                   HDB Manager Main Page
                 -------------------------
-                """+
-                defColor.BLUE+"""
+                """ + defColor.BLUE + """
                 1. Manage projects
                 2. Manage enquiries
                 3. Manage applications
                 4. Manage registrations
                 5. Logout
-                """+defColor.RESET, manager.getName());
+                """ + defColor.PURPLE + 
+                "=========================\n" + defColor.RESET, manager.getName());
             System.out.print("Option: ");
             
             if (!sc.hasNextInt()) {
