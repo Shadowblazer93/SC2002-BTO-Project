@@ -8,20 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implmentation of {@link Print} interface for printing {@link BTOApplication} data
+ * Implmentation of {@link PrintList} interface for printing {@link BTOApplication} data
  * Provides methods to print BTO Applications data in list and map formats
  */
-public class PrintBTOApplications implements Print<String, BTOApplication> {
-
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param allApplications Map of keys to list of BTOApplication
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printMapList(Map<String, List<BTOApplication>> allApplications) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
+public class PrintBTOApplications implements PrintList<BTOApplication>, PrintMap<String, BTOApplication> {
 
     /**
      * Print list of BTOApplications with details such as NRIC, Flat Type and application status
@@ -75,4 +65,5 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
         System.out.println("-".repeat(95));
         System.out.print(defColor.RESET);
     }
+    
 }

@@ -1,10 +1,10 @@
 package boundary;
 
-import controller.BTOProjectController;
 import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
 import enums.defColor;
+import interfaces.IProjectService;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -18,6 +18,12 @@ import printer.PrintBTOProjects;
  */
 public class BTOProjectMain {
     PrintBTOProjects printer = new PrintBTOProjects();
+
+    private final IProjectService projectService;
+
+    public BTOProjectMain(IProjectService projectService) {
+        this.projectService = projectService;
+    }
 
     /**
      * Display the project management menu for the manager
@@ -69,7 +75,7 @@ public class BTOProjectMain {
                     break;
                 }
                 case 4 -> {
-                    printer.printMap(BTOProjectController.getAllProjects());
+                    printer.printMap(projectService.getAllProjects());
                     break;
                 }
                 case 5 -> {
@@ -112,7 +118,7 @@ public class BTOProjectMain {
         // Project name
         System.out.print("Project name: ");
         String projectName = sc.nextLine();
-        if (BTOProjectController.projectExist(projectName)) {
+        if (projectService.projectExist(projectName)) {
             System.out.println("Project already exists.");
             return;
         }
@@ -183,7 +189,7 @@ public class BTOProjectMain {
                     System.out.println("Invalid date.");
                 }
             }
-            correctPeriod = !BTOProjectController.checkOverlapPeriod(manager, null, oDate, cDate);
+            correctPeriod = !projectService.checkOverlapPeriod(manager, null, oDate, cDate);
             if (!correctPeriod) {
                 System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
                 oDate = null;
@@ -207,7 +213,7 @@ public class BTOProjectMain {
             } 
         }
         // Create project
-        BTOProject createdProject = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, unitPrices, oDate, cDate, slots);
+        BTOProject createdProject = projectService.createProject(manager, projectName, neighbourhood, unitCounts, unitPrices, oDate, cDate, slots);
         if (createdProject == null) {
             System.out.println("Could not create project.");
         } else {
@@ -259,12 +265,12 @@ public class BTOProjectMain {
                 case 1 -> {
                     System.out.print("New project name: ");
                     String newProjectName = sc.nextLine();
-                    edited = BTOProjectController.editProjectName(manager, projectName, newProjectName, projectEdit);
+                    edited = projectService.editProjectName(manager, projectName, newProjectName, projectEdit);
                 }
                 case 2 -> {
                     System.out.print("New neighbourhood: ");
                     String newNeighbourhood = sc.nextLine();
-                    edited = BTOProjectController.editNeighbourhood(newNeighbourhood, projectEdit);
+                    edited = projectService.editNeighbourhood(newNeighbourhood, projectEdit);
                 }
                 case 3 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -286,7 +292,7 @@ public class BTOProjectMain {
                             sc.nextLine(); 
                         }
                     }
-                    edited = BTOProjectController.editNumUnits(flatType, newNumUnits, projectEdit);
+                    edited = projectService.editNumUnits(flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
                     System.out.print("Flat type to edit (2 or 3): ");
@@ -308,7 +314,7 @@ public class BTOProjectMain {
                             sc.nextLine(); 
                         }
                     }
-                    edited = BTOProjectController.editPrice(flatType, newPrice, projectEdit);
+                    edited = projectService.editPrice(flatType, newPrice, projectEdit);
                 }
                 case 5 -> {
                     boolean valid = false;
@@ -318,7 +324,7 @@ public class BTOProjectMain {
                         String oDateInput = sc.nextLine();
                         try {
                             oDate = LocalDate.parse(oDateInput);
-                            valid = !BTOProjectController.checkOverlapPeriod(manager, projectEdit.getProjectName(), oDate, projectEdit.getClosingDate());
+                            valid = !projectService.checkOverlapPeriod(manager, projectEdit.getProjectName(), oDate, projectEdit.getClosingDate());
                             if (!valid) {
                                 System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
                                 oDate = null;
@@ -327,7 +333,7 @@ public class BTOProjectMain {
                             System.out.println("Invalid date.");
                         }
                     }
-                    edited = BTOProjectController.editOpeningDate(oDate, projectEdit);
+                    edited = projectService.editOpeningDate(oDate, projectEdit);
                 }
                 case 6 -> {
                     boolean valid = false;
@@ -337,7 +343,7 @@ public class BTOProjectMain {
                         String cDateInput = sc.nextLine();
                         try {
                             cDate = LocalDate.parse(cDateInput);
-                            valid = !BTOProjectController.checkOverlapPeriod(manager, projectEdit.getProjectName(), projectEdit.getOpeningDate(), cDate);
+                            valid = !projectService.checkOverlapPeriod(manager, projectEdit.getProjectName(), projectEdit.getOpeningDate(), cDate);
                             if (!valid) {
                                 System.out.println("Project overlaps with existing project you manage. Please enter a different date.");
                                 cDate = null;
@@ -346,17 +352,17 @@ public class BTOProjectMain {
                             System.out.println("Invalid date.");
                         }
                     }
-                    edited = BTOProjectController.editClosingDate(cDate, projectEdit);
+                    edited = projectService.editClosingDate(cDate, projectEdit);
                 }
                 case 7 -> {
                     System.out.print("New available HDB office slots: ");
                     int slots = sc.nextInt();
-                    edited = BTOProjectController.editOfficerSlots(slots, projectEdit);
+                    edited = projectService.editOfficerSlots(slots, projectEdit);
                 }
                 case 8 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
-                    edited = BTOProjectController.editVisibility(visible, projectEdit);
+                    edited = projectService.editVisibility(visible, projectEdit);
                 }
                 case 9 -> {
                     System.out.println("Exiting edit project menu.");
@@ -387,7 +393,7 @@ public class BTOProjectMain {
         }
         System.out.print("Delete project: ");
         String projectName = sc.nextLine();
-        boolean deleted = BTOProjectController.deleteProject(manager, projectName);
+        boolean deleted = projectService.deleteProject(manager, projectName);
         if (deleted) {
             System.out.printf("Project %s successfully deleted!\n", projectName);
         } else {

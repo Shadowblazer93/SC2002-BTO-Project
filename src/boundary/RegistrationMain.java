@@ -1,13 +1,13 @@
 package boundary;
 
-import controller.Filter;
-import controller.RegistrationController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Manager;
 import enums.defColor;
+import interfaces.IRegistrationService;
 import java.util.*;
 import printer.PrintRegistrations;
+import util.Filter;
 
 /**
  * Boundary class for Managers to manager registrations
@@ -15,6 +15,12 @@ import printer.PrintRegistrations;
  */
 public class RegistrationMain {
     PrintRegistrations printRegistrations = new PrintRegistrations();
+
+    private final IRegistrationService registrationService;
+
+    public RegistrationMain(IRegistrationService registrationService) {
+        this.registrationService = registrationService;
+    }
 
     /**
      * Display the registration management menu for the manager
@@ -72,7 +78,7 @@ public class RegistrationMain {
      * Display list of all registrations from all projects in the BTOMS
      */
     private void viewAllRegistrations() {
-        Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
+        Map<String, List<Registration>> allRegistrations = registrationService.getAllRegistrations();
         if (allRegistrations == null) {
             System.out.println("No registrations found in system.");
             return;
@@ -183,8 +189,8 @@ public class RegistrationMain {
             }
             // Reject registration
             String result = isApproval
-                ? RegistrationController.approveRegistration(manager, registration)
-                : RegistrationController.rejectRegistration(manager, registration);
+                ? registrationService.approveRegistration(manager, registration)
+                : registrationService.rejectRegistration(manager, registration);
             System.out.println(result);
         }
     }

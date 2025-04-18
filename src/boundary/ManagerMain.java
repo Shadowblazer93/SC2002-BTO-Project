@@ -2,6 +2,10 @@ package boundary;
 
 import entity.user.Manager;
 import enums.defColor;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
+import interfaces.IRegistrationService;
 import java.util.Scanner;
 
 /**
@@ -10,10 +14,30 @@ import java.util.Scanner;
  * BTO Projects, enquiries, applications and officer registrations
  */
 public class ManagerMain {
-    BTOProjectMain btoProjectMain = new BTOProjectMain();
-    RegistrationMain registrationMain = new RegistrationMain();
-    EnquiryMain enquiryMain = new EnquiryMain();
-    ApplicationMain applicationMain = new ApplicationMain();
+
+    BTOProjectMain btoProjectMain;
+    RegistrationMain registrationMain;
+    EnquiryMain enquiryMain;
+    ApplicationMain applicationMain;
+
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+    private final IRegistrationService registrationService;
+
+    public ManagerMain(IApplicationService applicationService, IEnquiryService enquiryService, 
+                        IProjectService projectService, IRegistrationService registrationService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+        this.registrationService = registrationService;
+
+        this.applicationMain = new ApplicationMain(applicationService, projectService);
+        this.enquiryMain = new EnquiryMain(enquiryService);
+        this.btoProjectMain = new BTOProjectMain(projectService);
+        this.registrationMain = new RegistrationMain(registrationService);
+        
+    }
 
     /**
      * Displays the main menu for a logged-in manager and handles navigation to various functionalities

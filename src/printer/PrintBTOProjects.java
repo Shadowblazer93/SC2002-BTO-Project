@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implmentation of {@link Print} interface for printing {@link BTOProject} data
+ * Implmentation of {@link PrintList} interface for printing {@link BTOProject} data
  * Provides methods to print BTOProject data in list and map formats
  */
-public class PrintBTOProjects implements Print<String, BTOProject> {
+public class PrintBTOProjects implements PrintMap<String, BTOProject> {
     
     /**
      * Print map of BTOProjects with information including name, available officer slots,
@@ -42,26 +42,6 @@ public class PrintBTOProjects implements Print<String, BTOProject> {
                 project.getProjectName(), project.getAvailableOfficerSlots(), project.getOpeningDate(), project.getClosingDate());
         }
         System.out.println("-".repeat(68) + defColor.RESET);
-    }
-
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param projectList Map of keys to list of BTOProject instances
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printMapList(Map<String, List<BTOProject>> projectList) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
-
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param projectList List of BTOProject instances
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printList(List<BTOProject> projectList) {
-        throw new UnsupportedOperationException("Not supported.");
     }
 
     /**

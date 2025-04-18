@@ -60,6 +60,15 @@ public class BTOProject {
     }
 
     /**
+     * Check if the project is open for applications
+     * @return true if project is open, false otherwise
+     */
+    public boolean isOpen() {
+        LocalDate today = LocalDate.now();
+        return openingDate.isBefore(today) && closingDate.isAfter(today);
+    }
+
+    /**
      * Adds officer to the assigned officer list
      * @param officer Officer to be added
      */

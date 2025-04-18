@@ -5,14 +5,36 @@ import entity.project.BTOProject;
 import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
+import interfaces.IApplicationService;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApplicationController {
+public class ApplicationController implements IApplicationService {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();   // NRIC + Application
     private static int applicationCount = 1;
 
-    public static BTOApplication createApplication(int id, Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
+    @Override
+    public void addApplication(BTOApplication application) {
+        applicationDatabase.put(application.getApplicant().getNRIC(), application);
+    }
+
+    @Override
+    public void removeApplication(BTOApplication application) {
+        applicationDatabase.remove(application.getApplicant().getNRIC());
+    }
+
+    @Override
+    public Map<String, BTOApplication> getAllApplications() {
+        return applicationDatabase;
+    }
+
+    @Override
+    public BTOApplication getApplicationByNRIC(String nric) {
+        return applicationDatabase.get(nric);
+    }
+
+    @Override
+    public BTOApplication createApplication(int id, Applicant applicant, String projectName, FlatType flatType, ApplicationStatus status, boolean withdrawal) {
         applicationCount = Math.max(applicationCount,id);
         BTOApplication application = new BTOApplication(applicationCount, applicant, projectName, flatType, status, withdrawal);
         applicationCount++;
@@ -20,24 +42,9 @@ public class ApplicationController {
         return application;
     }
 
-    public static void addApplication(BTOApplication application) {
-        applicationDatabase.put(application.getApplicant().getNRIC(), application);
-    }
-
-    public static void removeApplication(BTOApplication application) {
-        applicationDatabase.remove(application.getApplicant().getNRIC());
-    }
-
-    public static Map<String, BTOApplication> getAllApplications() {
-        return applicationDatabase;
-    }
-
-    public static BTOApplication getApplicationByNRIC(String nric) {
-        return applicationDatabase.get(nric);
-    }
-
     // Check eligibility for application
-    public static boolean isEligible(Applicant applicant, FlatType flatType) {
+    @Override
+    public boolean isEligible(Applicant applicant, FlatType flatType) {
         int age = applicant.getAge();
         String status = applicant.getMaritalStatus().toLowerCase();
         if (status.equals("single")) {
@@ -48,7 +55,8 @@ public class ApplicationController {
         return false;
     }
 
-    public static BTOApplication applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
+    @Override
+    public BTOApplication applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
         // Create application
         BTOApplication application = createApplication(0,applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
         applicant.setApplication(application);
@@ -56,25 +64,42 @@ public class ApplicationController {
         return application;
     }
 
-    public static void requestWithdrawal(Applicant applicant) {
+    @Override
+    public void requestWithdrawal(Applicant applicant) {
         BTOApplication application = applicant.getApplication();
         application.setWithdrawal(true);
     }
 
-    public static void approveApplication(BTOApplication application) {
+    @Override
+    public void approveApplication(BTOApplication application) {
         application.setStatus(ApplicationStatus.SUCCESSFUL);
     }
 
-    public static void rejectApplication(BTOApplication application) {
+    @Override
+    public void rejectApplication(BTOApplication application) {
         application.setStatus(ApplicationStatus.UNSUCCESSFUL);
     }
 
-    public static void approveWithdrawal(BTOApplication application) {
+    @Override
+    public void approveWithdrawal(BTOApplication application) {
         application.setStatus(ApplicationStatus.WITHDRAWN);
         application.getApplicant().removeApplication(); // Remove application from applicant
     }
 
-    public static void rejectWithdrawal(BTOApplication application) {
+    @Override
+    public void rejectWithdrawal(BTOApplication application) {
         application.setWithdrawal(false);   // Remove withdrawal request
+    }
+
+    @Override
+    public boolean hasAccessToApplication(Officer officer, BTOApplication application) {
+        if (application == null || officer == null) {
+            return false;
+        }
+        
+        BTOProject assignedProject = officer.getAssignedProject();
+        return assignedProject != null && 
+               application.getProjectName() != null && 
+               application.getProjectName().equals(assignedProject.getProjectName());
     }
 }

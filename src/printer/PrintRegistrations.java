@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Implmentation of {@link Print} interface for printing {@link Registration} data
+ * Implmentation of {@link PrintList} interface for printing {@link Registration} data
  * Provides methods to print registrations in list and map formats
  */
-public class PrintRegistrations implements Print<String, Registration> {
+public class PrintRegistrations implements PrintList<Registration>, PrintMapList<String, Registration> {
     
     /**
      * Print formatted table of registrations.
@@ -65,13 +65,4 @@ public class PrintRegistrations implements Print<String, Registration> {
         System.out.println(defColor.YELLOW + "-".repeat(53) + defColor.RESET);
     }
 
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param registrationList Map of keys to list of Registration instances
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printMap(Map<String, Registration> registrationList) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
 }

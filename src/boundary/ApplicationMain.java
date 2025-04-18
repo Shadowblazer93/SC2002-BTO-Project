@@ -1,8 +1,5 @@
 package boundary;
 
-import controller.ApplicationController;
-import controller.BTOProjectController;
-import controller.Filter;
 import controller.user.ApplicantController;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
@@ -10,13 +7,25 @@ import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.defColor;
+import interfaces.IApplicationService;
+import interfaces.IProjectService;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintBTOApplications;
+import util.Filter;
+import util.Receipt;
 
 public class ApplicationMain {
     PrintBTOApplications printApplications = new PrintBTOApplications();
+
+    private final IApplicationService applicationService;
+    private final IProjectService projectService;
+
+    public ApplicationMain(IApplicationService applicationService, IProjectService projectService) {
+        this.applicationService = applicationService;
+        this.projectService = projectService;
+    }
 
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
@@ -119,7 +128,7 @@ public class ApplicationMain {
         // 3. Select application
         System.out.print("Enter the NRIC of the applicant: ");
         String nric = sc.next();
-        BTOApplication application = ApplicationController.getApplicationByNRIC(nric);
+        BTOApplication application = applicationService.getApplicationByNRIC(nric);
         if (application == null) {
             System.out.println("Applicant not found.");
             return;
@@ -129,7 +138,7 @@ public class ApplicationMain {
         }
 
         // 4. Confirm booking for applicant
-        boolean success = BTOProjectController.bookFlat(application, null, null, officer);
+        boolean success = projectService.bookFlat(application, null, null, officer);
         if (success) {
             System.out.println("Flat successfully booked for " + application.getApplicant().getName() + "!");
             System.out.println("Flat type: " + application.getFlatType().getNumRooms() + "-Room");
@@ -162,7 +171,17 @@ public class ApplicationMain {
             System.out.println("Applicant not found.");
             return;
         }
-        officer.generateReceipt(applicant);
+
+        BTOApplication application = applicationService.getApplicationByNRIC(nric);
+        if (application == null) {
+            System.out.println("No application found for applicant with NRIC: " + applicant.getNRIC());
+            return;
+        }
+        if (!applicationService.hasAccessToApplication(officer, application)) {
+            System.out.println("Officer does not have access to this application!");
+        } else {
+            Receipt.applicantReceipt(applicant, application, projectService.getAllProjects());
+        }
     }
 
     private Map<String, BTOApplication> retrieveApplications(User user) {
@@ -224,9 +243,9 @@ public class ApplicationMain {
             }
             // Approve/Reject application
             if (isApproval) {
-                ApplicationController.approveApplication(application);
+                applicationService.approveApplication(application);
             } else {
-                ApplicationController.rejectApplication(application);
+                applicationService.rejectApplication(application);
             }
             System.out.println("Application " + (isApproval ? "approved" : "rejected") + " successfully.");
         }
@@ -271,9 +290,9 @@ public class ApplicationMain {
 
             // Approve/Reject application
             if (isApproval) {
-                ApplicationController.approveWithdrawal(application);
+                applicationService.approveWithdrawal(application);
             } else {
-                ApplicationController.rejectWithdrawal(application);
+                applicationService.rejectWithdrawal(application);
             }
             System.out.println("Withdrawal " + (isApproval ? "approved" : "rejected") + " successfully.");
         }

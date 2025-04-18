@@ -1,17 +1,23 @@
 package boundary;
 
-import controller.EnquiryController;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.*;
 import enums.UserRole;
 import enums.defColor;
+import interfaces.IEnquiryService;
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintEnquiries;
 
 public class EnquiryMain {
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
+
+    private final IEnquiryService enquiryService;
+
+    public EnquiryMain(IEnquiryService enquiryService) {
+        this.enquiryService = enquiryService;
+    }
 
     public void viewProjectEnquiries(Officer officer) {
         BTOProject project = officer.getAssignedProject();
@@ -101,7 +107,7 @@ public class EnquiryMain {
     
 
     private void viewAllEnquiries() {
-        Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+        Map<Integer, Enquiry> allEnquiries = enquiryService.getAllEnquiries();
         System.out.println("All Enquiries:");
         enquiryPrinter.printMap(allEnquiries);
     }
@@ -157,6 +163,6 @@ public class EnquiryMain {
         System.out.print("Enter reply: ");
         String reply = sc.nextLine();
 
-        EnquiryController.replyEnquiry(project, enquiryId, reply);
+        enquiryService.replyEnquiry(project, enquiryId, reply);
     }
 }

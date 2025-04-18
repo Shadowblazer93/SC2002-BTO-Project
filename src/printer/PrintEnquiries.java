@@ -8,29 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implmentation of {@link Print} interface for printing {@link Enquiry} data
- * Provides methods to print enquiries in list and map formats
+ * Implmentation of {@link PrintList} interface for printing {@link Enquiry} data
+ * Provides methods to print enquiries in map format
  */
-public class PrintEnquiries implements Print<Integer, Enquiry> {
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param enquiryList Map of keys to list of Enquiry instances
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printMapList(Map<Integer, List<Enquiry>> enquiryList) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
-
-    /**
-     * Not supported. This method is not implemented in this class
-     * @param enquiryList List of Enquiry instances
-     * @throws UnsupportedOperationException Always thrown as this method is not supported
-     */
-    @Override
-    public void printList(List<Enquiry> enquiryList) {
-        throw new UnsupportedOperationException("Not supported.");
-    }
+public class PrintEnquiries implements PrintMap<Integer, Enquiry> {
 
     /**
      * Prints formatted table of enquiries, sorted by project name and enquiry ID.
@@ -95,4 +76,5 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
         }
         return lines;
     }
+
 }

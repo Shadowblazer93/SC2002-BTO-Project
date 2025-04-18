@@ -1,9 +1,5 @@
 package database;
 
-import controller.ApplicationController;
-import controller.BTOProjectController;
-import controller.EnquiryController;
-import controller.RegistrationController;
 import controller.user.*;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
@@ -15,6 +11,10 @@ import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
 import enums.defColor;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
+import interfaces.IRegistrationService;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
@@ -30,13 +30,25 @@ import java.util.Scanner;
  * The methods assume that the CSV files are properly formated with correct headers and columns
  */
 public class ReadCSV {
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+    private final IRegistrationService registrationService;
+
+    public ReadCSV(IApplicationService applicationService, IEnquiryService enquiryService, 
+                    IProjectService projectService, IRegistrationService registrationService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+        this.registrationService = registrationService;
+    }
 
     /**
      * Loads Manager data from the {@code ManagerList.csv} CSV file and creates Manager objects.
      * Each manager's data is parsed from the file and passed to the ManagerController
      * @throws FileNotFoundException if the "ManagerList.csv" file cannot be found.
      */
-    public static void loadManager() {
+    public void loadManager() {
         File file = new File("src/database/ManagerList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -66,7 +78,7 @@ public class ReadCSV {
      * Each officer's data is parsed from the file and passed to the OfficerController
      * @throws FileNotFoundException if the "OfficerList.csv" file cannot be found.
      */
-    public static void loadOfficer() {
+    public void loadOfficer() {
         File file = new File("src/database/OfficerList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -96,7 +108,7 @@ public class ReadCSV {
      * Each applicant's data is parsed from the file and passed to the ApplicantController
      * @throws FileNotFoundException if the "ApplicantList.csv" file cannot be found.
      */
-    public static void loadApplicant() {
+    public void loadApplicant() {
         File file = new File("src/database/ApplicantList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -126,7 +138,7 @@ public class ReadCSV {
      * Each project's data is parsed from the file and passed to the BTOProjectController
      * @throws FileNotFoundException if the "ProjectList.csv" file cannot be found.
      */
-    public static void loadProject() {
+    public void loadProject() {
         File file = new File("src/database/ProjectList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -165,7 +177,7 @@ public class ReadCSV {
                     System.out.println("Manager not found for NRIC: " + managerNRIC);
                     continue; // or throw an exception
                 }
-                BTOProject project = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, unitPrices, openingDate, closingDate, officerSlots);
+                BTOProject project = projectService.createProject(manager, projectName, neighbourhood, unitCounts, unitPrices, openingDate, closingDate, officerSlots);
                 if (visible) {  // Default visibility is false
                     project.setVisible(visible);
                 }
@@ -176,7 +188,7 @@ public class ReadCSV {
 
                 // Parse enquiries
                 String[] enquiryArray = enquiries.split("\\|");
-                Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+                Map<Integer, Enquiry> allEnquiries = enquiryService.getAllEnquiries();
                 for (String enquiryID : enquiryArray) {
                     if (enquiryID.isEmpty()) continue; 
                     int id = Integer.parseInt(enquiryID.trim());
@@ -191,7 +203,7 @@ public class ReadCSV {
                 String[] applicationArray = applications.split("\\|");
                 for (String nric : applicationArray) {
                     if (nric.isEmpty()) continue;
-                    BTOApplication application = ApplicationController.getApplicationByNRIC(nric);
+                    BTOApplication application = applicationService.getApplicationByNRIC(nric);
                     project.addApplication(application);
                 }
 
@@ -213,7 +225,7 @@ public class ReadCSV {
 
                 // Parse registrations
                 String[] registrationsArray = registrations.split("\\|");
-                List<Registration> registrationList = RegistrationController.getRegistrationsByProject(projectName);
+                List<Registration> registrationList = registrationService.getRegistrationsByProject(projectName);
                 if (registrationList != null) {
                     // Convert list to map
                     Map<String, Registration> registrationMap = new HashMap<>();   // NRIC, Registration
@@ -247,7 +259,7 @@ public class ReadCSV {
      * Each enquiry's data is parsed from the file and passed to the EnquiryController
      * @throws FileNotFoundException if the "EnquiryList.csv" file cannot be found.
      */
-    public static void loadEnquiry() {
+    public void loadEnquiry() {
         File file = new File("src/database/EnquiryList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -265,7 +277,7 @@ public class ReadCSV {
                 String response = data[4].replace("\"", "").trim();
                 EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
 
-                Enquiry enquiry = EnquiryController.createEnquiry(id, applicantNRIC, projectName, message, response, status);
+                Enquiry enquiry = enquiryService.createEnquiry(id, applicantNRIC, projectName, message, response, status);
                 Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
                 if (applicant!=null) {applicant.addEnquiry(enquiry);}
             }
@@ -279,7 +291,7 @@ public class ReadCSV {
      * Each application's data is parsed from the file and passed to the ApplicationController
      * @throws FileNotFoundException if the "ApplicationList.csv" file cannot be found.
      */
-    public static void loadBTOApplication() {
+    public void loadBTOApplication() {
         File file = new File("src/database/ApplicationList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -298,7 +310,7 @@ public class ReadCSV {
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
-                BTOApplication application = ApplicationController.createApplication(id, applicant, projectName, flatType, status, withdrawal);
+                BTOApplication application = applicationService.createApplication(id, applicant, projectName, flatType, status, withdrawal);
                 applicant.setApplication(application);
             }
         } catch (FileNotFoundException e) {
@@ -311,7 +323,7 @@ public class ReadCSV {
      * Each registration's data is parsed from the file and passed to the RegistrationController.
      * @throws FileNotFoundException if the "RegistrationList.csv" file cannot be found.
      */
-    public static void loadRegistration() {
+    public void loadRegistration() {
         File file = new File("src/database/RegistrationList.csv");
         try (Scanner Reader = new Scanner(file)) {
             if (Reader.hasNextLine()) {
@@ -329,7 +341,7 @@ public class ReadCSV {
                 RegistrationStatus status = parseRegistrationStatus(data[4].replace("\"", "").trim());
 
                 Officer officer = OfficerController.getOfficer(officerNRIC);
-                RegistrationController.createRegistration(id, officer, projectName, registrationDate, status);
+                registrationService.createRegistration(id, officer, projectName, registrationDate, status);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -341,7 +353,7 @@ public class ReadCSV {
      * @param flatType String representation of flat type (e.g. "TWO_ROOM"or "THREE_ROOM")
      * @return Corresponding FlatType enum value
      */
-    private static FlatType parseFlatType(String flatType) {
+    private FlatType parseFlatType(String flatType) {
         switch (flatType.toUpperCase()) {
             case "TWO_ROOM" -> {
                 return FlatType.TWO_ROOM;
@@ -358,7 +370,7 @@ public class ReadCSV {
      * @param status String representation of application status (e.g. "PENDING", "SUCCESSFULaaa")
      * @return ApplicationStatus enum value
      */
-    private static ApplicationStatus parseApplicationStatus(String status) {
+    private ApplicationStatus parseApplicationStatus(String status) {
         switch (status.toUpperCase()) {
             case "PENDING" -> {
                 return ApplicationStatus.PENDING;
@@ -384,7 +396,7 @@ public class ReadCSV {
      * @param status String representation of the registration status (e.g. "PENDING", "APPROVEd")
      * @return RegistrationStatus enum value
      */
-    private static RegistrationStatus parseRegistrationStatus(String status) {
+    private RegistrationStatus parseRegistrationStatus(String status) {
         switch (status.toUpperCase()) {
             case "PENDING" -> {
                 return RegistrationStatus.PENDING;
@@ -404,7 +416,7 @@ public class ReadCSV {
      * @param status String representation of the enquiry status (e.g. "OPEN", "CLOSED")
      * @return EnquiryStatus enum value
      */
-    private static EnquiryStatus parseEnquiryStatus(String status) {
+    private EnquiryStatus parseEnquiryStatus(String status) {
         switch (status.toUpperCase()) {
             case "OPEN" -> {
                 return EnquiryStatus.OPEN;

@@ -1,6 +1,5 @@
 package entity.user;
 
-import controller.user.OfficerController;
 import entity.project.BTOProject;
 import enums.*;
 import java.util.HashMap;
@@ -26,25 +25,25 @@ public class Officer extends Applicant{
         this.assignedProject = project;
     }
 
-    public void updateApplicantStatus(Applicant applicant, ApplicationStatus status){
+    /*public void updateApplicantStatus(Applicant applicant, ApplicationStatus status){
         OfficerController.updateApplicantStatus(this, applicant, ApplicationStatus.BOOKED);
-    }
+    }*/
     
-    public void updateApplicantProfile(Applicant applicant){
+    /*public void updateApplicantProfile(Applicant applicant){
         OfficerController.updateApplicantProfile(this, applicant);
-    }
+    }*/
     
-    public void retrieveApplicantApplication(Applicant applicant){
+    /*public void retrieveApplicantApplication(Applicant applicant){
         OfficerController.retrieveApplicantApplication(this, applicant);
-    }
+    }*/
     
-    public void updateRemainingFlats(Applicant applicant){
+    /*public void updateRemainingFlats(Applicant applicant){
         OfficerController.updateRemainingFlats(this, applicant);
-    }
+    }*/
     
-    public void generateReceipt(Applicant applicant){
+    /*public void generateReceipt(Applicant applicant){
         OfficerController.generateReceipt(this, applicant);
-    }
+    }*/
     public void addRegisteredProject(BTOProject project) {
         registeredProjects.put(project.getProjectName(), project);
     }

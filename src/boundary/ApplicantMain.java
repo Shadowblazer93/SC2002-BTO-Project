@@ -1,9 +1,5 @@
 package boundary;
 
-import controller.ApplicationController;
-import controller.BTOProjectController;
-import controller.EnquiryController;
-import controller.Filter;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
@@ -11,15 +7,30 @@ import entity.user.Applicant;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.defColor;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintBTOProjects;
 import printer.PrintEnquiries;
+import util.Filter;
 
 public class ApplicantMain {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
+
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+
+    public ApplicantMain(IApplicationService applicationService, IEnquiryService enquiryService, 
+                IProjectService projectService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+    }
 
     public void displayMenu(Applicant applicant, Scanner sc) {
         boolean running = true;
@@ -67,7 +78,7 @@ public class ApplicantMain {
     }
 
     private boolean viewProjectList(Applicant applicant) {
-        List<BTOProject> visibleProjects = Filter.filterUserGroupProjects(BTOProjectController.getAllProjects(), applicant);
+        List<BTOProject> visibleProjects = Filter.filterUserGroupProjects(projectService.getAllProjects(), applicant);
         if (visibleProjects == null || visibleProjects.isEmpty()) {
             System.out.println("No projects available.");
             return false;
@@ -82,7 +93,7 @@ public class ApplicantMain {
             System.out.println("You have not applied to any project.");
             return;
         }
-        BTOProject project = BTOProjectController.getAllProjects().get(application.getProjectName());
+        BTOProject project = projectService.getAllProjects().get(application.getProjectName());
         if (!project.getVisibility()) {
             System.out.println("Project details are no longer visible.");
         }
@@ -97,7 +108,7 @@ public class ApplicantMain {
         }
         System.out.print("Project for enquiry: ");
         String projectName = getValidStringInput(sc);
-        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        BTOProject project = projectService.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project does not exist.");
             return;
@@ -106,7 +117,7 @@ public class ApplicantMain {
         // Enquiry message
         System.out.print("Enter enquiry message: ");
         String msg = getValidStringInput(sc);
-        EnquiryController.submitEnquiry(applicant, project, msg);
+        enquiryService.submitEnquiry(applicant, project, msg);
         System.out.println("Enquiry submitted successfully!");
     }
 
@@ -131,12 +142,12 @@ public class ApplicantMain {
         sc.nextLine();
 
         // Get enquiry
-        Enquiry enquiry = EnquiryController.getEnquiryByID(enqId);
+        Enquiry enquiry = enquiryService.getEnquiryByID(enqId);
         if (enquiry == null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         }
-        EnquiryController.deleteEnquiry(applicant, enquiry);
+        enquiryService.deleteEnquiry(applicant, enquiry);
     }
 
     private void editEnquiry(Scanner sc, Applicant applicant) {
@@ -149,7 +160,7 @@ public class ApplicantMain {
         int enqId = getValidIntegerInput(sc);
         sc.nextLine();
         // Get enquiry
-        Enquiry enquiry = EnquiryController.getEnquiryByID(enqId);
+        Enquiry enquiry = enquiryService.getEnquiryByID(enqId);
         if (enquiry == null) {
             System.out.println("Could not find an enquiry with that ID!");
             return;
@@ -157,7 +168,7 @@ public class ApplicantMain {
         // Edit enquiry message
         System.out.print("Enter new enquiry message: ");
         String newMessage = getValidStringInput(sc);
-        EnquiryController.editEnquiry(enquiry, newMessage);
+        enquiryService.editEnquiry(enquiry, newMessage);
         System.out.println("Enquiry message updated successfully!");
     }
 
@@ -174,14 +185,14 @@ public class ApplicantMain {
         
         System.out.print("Enter name of project: ");
         String projectName = getValidStringInput(sc);
-        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        BTOProject project = projectService.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project does not exist.");
             return;
         }
 
         // Check if project is open
-        if (!BTOProjectController.isProjectOpen(project) || !project.getVisibility()) {
+        if (!projectService.isProjectOpen(project) || !project.getVisibility()) {
             System.out.println("Project is not open for applications.");
             return;
         }
@@ -204,18 +215,18 @@ public class ApplicantMain {
         }
 
         // Check if there are flats available
-        if (!BTOProjectController.flatTypeAvailable(project, flatType)) {
+        if (!projectService.flatTypeAvailable(project, flatType)) {
             System.out.println("No flats available for this type.");
             return;
         }
 
         // Check eligibility
-        if(!ApplicationController.isEligible(applicant, flatType)) {
+        if(!applicationService.isEligible(applicant, flatType)) {
             System.out.println("You are not eligible to apply for this flat type.");
             return;
         }
 
-        ApplicationController.applyProject(applicant, project, flatType);
+        applicationService.applyProject(applicant, project, flatType);
         System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
     }
 
@@ -233,19 +244,19 @@ public class ApplicantMain {
         }
 
         String projectName = application.getProjectName();
-        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        BTOProject project = projectService.getProjectByName(projectName);
         if (project==null) {
             System.out.println("The project you applied to does not exist.");
             return;
         }
 
         FlatType flatType = application.getFlatType();
-        if (!BTOProjectController.flatTypeAvailable(project, flatType)) {
+        if (!projectService.flatTypeAvailable(project, flatType)) {
             System.out.println("No flats available for this type.");
             return;
         }
 
-        boolean success = BTOProjectController.bookFlat(application, project, flatType, applicant);
+        boolean success = projectService.bookFlat(application, project, flatType, applicant);
         if (success) {
             System.out.println("Flat booked successfully!");
         } else {
@@ -259,7 +270,7 @@ public class ApplicantMain {
             System.out.println("You have not applied to any project.");
         }
         else {
-            ApplicationController.requestWithdrawal(applicant);
+            applicationService.requestWithdrawal(applicant);
         }
     }
 

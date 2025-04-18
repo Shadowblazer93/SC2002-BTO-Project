@@ -1,20 +1,40 @@
 package boundary;
 
-import controller.BTOProjectController;
-import controller.RegistrationController;
 import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
 import enums.defColor;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
+import interfaces.IRegistrationService;
 import java.util.*;
 import printer.PrintBTOProjects;
 
 public class OfficerMain {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
-    EnquiryMain enquiryMain = new EnquiryMain();
-    ApplicationMain applicationMain = new ApplicationMain();
-    ApplicantMain applicantMain = new ApplicantMain();
+    EnquiryMain enquiryMain;
+    ApplicationMain applicationMain;
+    ApplicantMain applicantMain;
+
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+    private final IRegistrationService registrationService;
+
+    public OfficerMain(IApplicationService applicationService, IEnquiryService enquiryService, 
+                        IProjectService projectService, IRegistrationService registrationService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+        this.registrationService = registrationService;
+
+        this.applicationMain = new ApplicationMain(applicationService, projectService);
+        this.enquiryMain = new EnquiryMain(enquiryService);
+        this.applicantMain = new ApplicantMain(applicationService, enquiryService, projectService);
+        
+    }
 
     public void displayMenu(Officer officer, Scanner sc) {
         boolean running = true;
@@ -101,12 +121,12 @@ public class OfficerMain {
     private void registerProject(Scanner sc, Officer officer) {
         // 1. View list of projects
         System.out.println("Available projects you can register for:");
-        projectPrinter.printMap(BTOProjectController.getAllProjects());
+        projectPrinter.printMap(projectService.getAllProjects());
         // 2. Get selected project
         sc.nextLine();
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
-        BTOProject project = BTOProjectController.getProjectByName(projectName);
+        BTOProject project = projectService.getProjectByName(projectName);
         if (project == null) {
             System.out.println("Project not found.");
             return;
@@ -118,7 +138,7 @@ public class OfficerMain {
             return;
         }
         // 4. Create registration
-        RegistrationController.registerProject(officer, project);
+        registrationService.registerProject(officer, project);
     
         System.out.println("Registration submitted to project: " + project.getProjectName());
         System.out.println("Awaiting manager approval.");

@@ -1,9 +1,5 @@
 package database;
 
-import controller.ApplicationController;
-import controller.BTOProjectController;
-import controller.EnquiryController;
-import controller.RegistrationController;
 import controller.user.ApplicantController;
 import controller.user.ManagerController;
 import controller.user.OfficerController;
@@ -16,6 +12,10 @@ import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
 import enums.RegistrationStatus;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
+import interfaces.IRegistrationService;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -30,14 +30,27 @@ import java.util.Map;
  */
 public class SaveCSV {
 
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+    private final IRegistrationService registrationService;
+
+    public SaveCSV(IApplicationService applicationService, IEnquiryService enquiryService, 
+                    IProjectService projectService, IRegistrationService registrationService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+        this.registrationService = registrationService;
+    }
+
     /**
      * Save details of all BTOProjects as the {@code ProjectList.csv} CSV file.
      * Columns include project name, manager NRIC, project neighbourhood, units and prices for each flat type,
      * opening and closing dates, available officer slots, visibility, enqauiries and applications. assigned officers
      * and registrations
      */
-    public static void saveProject() {
-        Map<String, BTOProject> allProjects = BTOProjectController.getAllProjects();
+    public void saveProject() {
+        Map<String, BTOProject> allProjects = projectService.getAllProjects();
         File filePath = new File("src/database/ProjectList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -131,7 +144,7 @@ public class SaveCSV {
      * Save details of all Managers as the {@code ManagerList.csv} CSV file.
      * Columns include name, NRIC, age, marital status and password
      */
-    public static void saveManagers() {
+    public void saveManagers() {
         Map<String, Manager> allManagers = ManagerController.getAllManagers();
         File filePath = new File("src/database/ManagerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -157,7 +170,7 @@ public class SaveCSV {
      * Save details of all Applicants as the {@code ApplicantList.csv} CSV file.
      * Columns include name, NRIC, age, marital status and password
      */
-    public static void saveApplicants() {
+    public void saveApplicants() {
         Map<String, Applicant> allApplicants = ApplicantController.getAllApplicants();
         File filePath = new File("src/database/ApplicantList.csv");
 
@@ -182,7 +195,7 @@ public class SaveCSV {
      * Save details of all Officers as the {@code OfficerList.csv} CSV file.
      * Columns include name, NRIC, age, marital status and password
      */
-    public static void saveOfficers() {
+    public void saveOfficers() {
         Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
         File filePath = new File("src/database/OfficerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -208,9 +221,8 @@ public class SaveCSV {
      * Save details of all Enquiries as the {@code EnquiryList.csv} CSV file.
      * Columns include enquiry ID, applicant NRIC, project name, message, response and the enquiry status
      */
-    public static void saveEnquiries() {
-        // EnquiryController enquiryController = new EnquiryController();
-        Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
+    public void saveEnquiries() {
+        Map<Integer, Enquiry> allEnquiries = enquiryService.getAllEnquiries();
         File filePath = new File("src/database/EnquiryList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -237,8 +249,8 @@ public class SaveCSV {
      * Columns include application ID, applicant NRIC, project name, flat type, application status and
      * withdrawal status
      */
-    public static void saveBTOApplications() {
-        Map<String, BTOApplication> allApplications = ApplicationController.getAllApplications();
+    public void saveBTOApplications() {
+        Map<String, BTOApplication> allApplications = applicationService.getAllApplications();
         File filePath = new File("src/database/ApplicationList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -264,8 +276,8 @@ public class SaveCSV {
      * Save details of all Registrations as the {@code RegistrationList.csv} CSV file.
      * Columns include registration ID, officer NRIC, project name, registration date and registration status
      */
-    public static void saveRegistrations() {
-        Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
+    public void saveRegistrations() {
+        Map<String, List<Registration>> allRegistrations = registrationService.getAllRegistrations();
         File filePath = new File("src/database/RegistrationList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header

@@ -1,4 +1,4 @@
-package controller;
+package util;
 
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
@@ -70,7 +70,7 @@ public class Filter {
         }
         return projects.values().stream()
             .filter(p -> 
-                BTOProjectController.isProjectOpen(p) &&
+                p.isOpen() &&
                 flatTypes.stream().anyMatch((flatType) -> 
                     p.getUnitCounts().containsKey(flatType) && p.getUnitCounts().get(flatType) > 0
                 )

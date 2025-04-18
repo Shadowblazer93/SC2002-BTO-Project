@@ -5,6 +5,7 @@ import entity.project.BTOProject;
 import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
+import interfaces.IProjectService;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Controller class for managing BTO projects
  * This class handles the creation, deletion, and management of BTO projects
  */
-public class BTOProjectController {
+public class BTOProjectController implements IProjectService {
 
     /**
      * Map to store all BTO projects
@@ -25,7 +26,8 @@ public class BTOProjectController {
      * Get the map of all projects
      * @return Map of all projects
      */
-    public static Map<String, BTOProject> getAllProjects() {
+    @Override
+    public Map<String, BTOProject> getAllProjects() {
         return allProjects;
     }
 
@@ -34,7 +36,8 @@ public class BTOProjectController {
      * @param projectName Name of BTOProject
      * @return BTOProject with specified name, or null if not found
      */
-    public static BTOProject getProjectByName(String projectName) {
+    @Override
+    public BTOProject getProjectByName(String projectName) {
         return allProjects.get(projectName);
     }
 
@@ -49,7 +52,8 @@ public class BTOProjectController {
      * @param availableOfficerSlots Number of available officer slots for the project
      * @return BTOProject object if created successfully, null if project already exists
      */
-    public static BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
+    @Override
+    public BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
                                     Map<FlatType, Integer> unitCounts, Map<FlatType, Double> unitPrices, 
                                     LocalDate openingDate, LocalDate closingDate, int availableOfficerSlots) {
         if (allProjects.containsKey(projectName)) {
@@ -72,7 +76,8 @@ public class BTOProjectController {
      * @param projectName Name of the project to be deleted
      * @return True if project deleted successfully, false otherwise
      */
-    public static boolean deleteProject(Manager manager, String projectName) {
+    @Override
+    public boolean deleteProject(Manager manager, String projectName) {
         BTOProject projectDelete = manager.getManagedProjects().get(projectName);
         if (projectDelete == null) {
             return false;
@@ -88,7 +93,8 @@ public class BTOProjectController {
      * @param projectName Name of the project to check
      * @return True if project exists, false otherwise
      */
-    public static boolean projectExist(String projectName) {
+    @Override
+    public boolean projectExist(String projectName) {
         return allProjects.containsKey(projectName);
     }
 
@@ -97,7 +103,8 @@ public class BTOProjectController {
      * @param project BTOProject to check
      * @return True if project is open, false otherwise
      */
-    public static boolean isProjectOpen(BTOProject project) {
+    @Override
+    public boolean isProjectOpen(BTOProject project) {
         LocalDate today = LocalDate.now();
         return project.getOpeningDate().isBefore(today) && project.getClosingDate().isAfter(today);
     }
@@ -108,7 +115,8 @@ public class BTOProjectController {
      * @param flatType Type of flat to check
      * @return True if units are available, false otherwise
      */
-    public static boolean flatTypeAvailable(BTOProject project, FlatType flatType) {
+    @Override
+    public boolean flatTypeAvailable(BTOProject project, FlatType flatType) {
         return project.getUnitCounts().get(flatType) > 0;
     }
 
@@ -119,7 +127,8 @@ public class BTOProjectController {
      * @param closingDate Closing date of the new project
      * @return True if there is an overlap, false otherwise
      */
-    public static boolean checkOverlapPeriod(Manager manager, String projectName, LocalDate openingDate, LocalDate closingDate) {
+    @Override
+    public boolean checkOverlapPeriod(Manager manager, String projectName, LocalDate openingDate, LocalDate closingDate) {
         for (BTOProject project : manager.getManagedProjects().values()) {
             if (project.getProjectName().equals(projectName)) continue;
             if (project.getOpeningDate().isBefore(closingDate) && project.getClosingDate().isAfter(openingDate)) {
@@ -139,7 +148,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if project name edited successfully, false otherwise
      */
-    public static boolean editProjectName(Manager manager, String currentName, String newName, BTOProject projectEdit) {
+    @Override
+    public boolean editProjectName(Manager manager, String currentName, String newName, BTOProject projectEdit) {
         allProjects.remove(currentName);    // Remove project in hashmap
         manager.deleteProject(projectEdit); // Remove project for manager
         projectEdit.setProjectName(newName);
@@ -154,7 +164,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if neighbourhood edited successfully, false otherwise
      */
-    public static boolean editNeighbourhood(String neighbourhood, BTOProject projectEdit) {
+    @Override
+    public boolean editNeighbourhood(String neighbourhood, BTOProject projectEdit) {
         projectEdit.setNeighbourhood(neighbourhood);
         return true;
     }
@@ -166,7 +177,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if unit counts edited successfully, false otherwise
      */
-    public static boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
+    @Override
+    public boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
         projectEdit.setNumUnits(flatType, numUnits);
         return true;
     }
@@ -178,7 +190,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if unit prices edited successfully, false otherwise
      */
-    public static boolean editPrice(FlatType flatType, Double price, BTOProject projectEdit) {
+    @Override
+    public boolean editPrice(FlatType flatType, Double price, BTOProject projectEdit) {
         projectEdit.setPrice(flatType, price);
         return true;
     }
@@ -189,7 +202,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if officer slots edited successfully, false otherwise
      */
-    public static boolean editOfficerSlots(int officerSlots, BTOProject projectEdit) {
+    @Override
+    public boolean editOfficerSlots(int officerSlots, BTOProject projectEdit) {
         int assignedOfficers = projectEdit.getAssignedOfficers().size();
         projectEdit.setAvailableOfficerSlots(assignedOfficers - officerSlots);
         return true;
@@ -201,7 +215,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if opening date edited successfully, false if it is after closing date
      */
-    public static boolean editOpeningDate(LocalDate openingDate, BTOProject projectEdit) {
+    @Override
+    public boolean editOpeningDate(LocalDate openingDate, BTOProject projectEdit) {
         LocalDate closingDate = projectEdit.getClosingDate();
         if (openingDate.isAfter(closingDate)) {
             return false;
@@ -216,7 +231,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if closing date edited successfully, false if it is before opening date
      */
-    public static boolean editClosingDate(LocalDate closingDate, BTOProject projectEdit) {
+    @Override
+    public boolean editClosingDate(LocalDate closingDate, BTOProject projectEdit) {
         LocalDate openingDate = projectEdit.getOpeningDate();
         if (closingDate.isBefore(openingDate)) {
             return false;
@@ -231,7 +247,8 @@ public class BTOProjectController {
      * @param projectEdit BTOProject object to be edited
      * @return True if visibility edited successfully, false otherwise
      */
-    public static boolean editVisibility(boolean visible, BTOProject projectEdit) {
+    @Override
+    public boolean editVisibility(boolean visible, BTOProject projectEdit) {
         projectEdit.setVisible(visible);
         return true;
     }
@@ -248,7 +265,8 @@ public class BTOProjectController {
      * @param user User making the booking
      * @return True if booking successful, false otherwise
      */
-    public static boolean bookFlat(BTOApplication application, BTOProject project, FlatType flatType, User user) {
+    @Override
+    public boolean bookFlat(BTOApplication application, BTOProject project, FlatType flatType, User user) {
         switch (user.getUserRole()) {
             case APPLICANT -> {
                 boolean success = project.decrementFlatCount(flatType);

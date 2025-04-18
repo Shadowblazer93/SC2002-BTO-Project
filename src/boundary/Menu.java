@@ -6,6 +6,10 @@ import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
 import enums.*;
+import interfaces.IApplicationService;
+import interfaces.IEnquiryService;
+import interfaces.IProjectService;
+import interfaces.IRegistrationService;
 import java.util.Scanner;
 
 /**
@@ -14,9 +18,27 @@ import java.util.Scanner;
  * Upon login, users are redirecated to their respective role-specific menu
  */
 public class Menu {
-    ApplicantMain applicantMain = new ApplicantMain();
-    OfficerMain officerMain = new OfficerMain();
-    ManagerMain managerMain = new ManagerMain();
+
+    private final ApplicantMain applicantMain;
+    private final OfficerMain officerMain;
+    private final ManagerMain managerMain;
+
+    private final IApplicationService applicationService;
+    private final IEnquiryService enquiryService;
+    private final IProjectService projectService;
+    private final IRegistrationService registrationService;
+
+    public Menu(IApplicationService applicationService, IEnquiryService enquiryService, 
+                IProjectService projectService, IRegistrationService registrationService) {
+        this.applicationService = applicationService;
+        this.enquiryService = enquiryService;
+        this.projectService = projectService;
+        this.registrationService = registrationService;
+
+        this.applicantMain = new ApplicantMain(applicationService, enquiryService, projectService);
+        this.officerMain = new OfficerMain(applicationService, enquiryService, projectService, registrationService);
+        this.managerMain = new ManagerMain(applicationService, enquiryService, projectService, registrationService);
+    }
 
     /**
      * Display main meny to user and handles user input
