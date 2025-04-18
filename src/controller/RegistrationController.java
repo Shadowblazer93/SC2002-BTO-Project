@@ -10,15 +10,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller class for managing officer registrations to BTO Projects
+ * This class handles the creation, deletion and management of Registrations
+ */
 public class RegistrationController {
-    // Project + Registration
+    
+    /**
+     * Store all registrations grouped by project name
+     */
     private static Map<String, List<Registration>> allRegistrations = new HashMap<>();   // Project and List of registrations
-    private static int registrationCount = 1;   // Track registration ID
+    
+    /**
+     * Track the next registration ID to be assigned
+     */
+    private static int registrationCount = 1;
 
+    /**
+     * Returns the current registration count
+     * @return Registration count 
+     */
     public static int getRegistrationCount (){
         return registrationCount;
     }
 
+    /**
+     * Creates a new registration and adds it to the system
+     * @param id Registration ID (0 to auto-generate)
+     * @param officer Officer registering for project
+     * @param projectName Name of BTO Project
+     * @param registrationDate Date of registration
+     * @param status Status of registration
+     * @return Newly created Registration object
+     */
     public static Registration createRegistration(int id, Officer officer, String projectName, LocalDate registrationDate, RegistrationStatus status) {
         registrationCount = Math.max(registrationCount,id);
         Registration registration = new Registration(registrationCount, officer, projectName, registrationDate, status);
@@ -27,7 +51,11 @@ public class RegistrationController {
         return registration;
     }
 
-    // Add registration to list of registrations for a project
+    /**
+     * Add registration to list associated with a project
+     * @param project Name of the project
+     * @param registration Registration to add
+     */
     public static void addRegistration(String project, Registration registration) {
         if (allRegistrations.containsKey(project)) {
             allRegistrations.get(project).add(registration);
@@ -38,14 +66,29 @@ public class RegistrationController {
         }
     }
 
+    /**
+     * Get all project registrations in sysatem
+     * @return Map of project names to their list of Registrations
+     */
     public static Map<String, List<Registration>> getAllRegistrations() {
         return allRegistrations;
     }
 
+    /**
+     * Get registrations for a specific project
+     * @param projectName Name of project
+     * @return List of Registration for the project
+     */
     public static List<Registration> getRegistrationsByProject(String projectName) {
         return allRegistrations.get(projectName);
     }
 
+    /**
+     * Register officer to a project. Creates a new registration with PENDING status
+     * @param officer Officer to be registered
+     * @param project Project to register for
+     * @return Created {@link Registration} object
+     */
     public static Registration registerProject(Officer officer, BTOProject project)  {
         Registration registration = createRegistration(0, officer, project.getProjectName(), LocalDate.now(), RegistrationStatus.PENDING);
         officer.addRegisteredProject(project);  // Add project to officer's registered projects
@@ -53,20 +96,12 @@ public class RegistrationController {
         return registration;
     }
 
-    private static boolean checkStatus(Registration registration) {
-        switch (registration.getStatus()) {
-            case APPROVED -> {
-                return false;
-            }
-            case REJECTED -> {
-                return false;
-            }
-            default -> {
-                return true;
-            }
-        }
-    }
-
+    /**
+     * Approve registration if it is valid and there are officer slots available in project
+     * @param manager Manager approving registration
+     * @param registration Registration to approve
+     * @return Message indicating result of the operation
+     */
     public static String approveRegistration(Manager manager, Registration registration) {
         if (!checkStatus(registration)) {
             return "Registration has already been processed";
@@ -88,6 +123,12 @@ public class RegistrationController {
         return "Success";
     }
 
+    /**
+     * Reject a registration if it is still pending
+     * @param manager Manager rejecting registration
+     * @param registration Registration to be rejected
+     * @return Message indicating result of the operation
+     */
     public static String rejectRegistration(Manager manager, Registration registration) {
         if (!checkStatus(registration)) {
             return "Registration has already been processed";
@@ -100,5 +141,21 @@ public class RegistrationController {
 
         registration.rejectRegistration();          // Set as rejected
         return "Success";
+    }
+
+    /**
+     * Check if a registration is still pending and can be processed
+     * @param registration Registration to check
+     * @return true if registration is pending, false otherwise
+     */
+    private static boolean checkStatus(Registration registration) {
+        switch (registration.getStatus()) {
+            case APPROVED, REJECTED -> {
+                return false;
+            }
+            default -> {
+                return true;
+            }
+        }
     }
 }

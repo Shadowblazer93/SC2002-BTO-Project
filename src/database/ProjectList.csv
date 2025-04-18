@@ -1,8 +1,8 @@
-ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations
-"project 2","T9876543K","neighbourhood 2",30,20,"2025-02-01","2025-02-28",1,false,"","","",""
-"project 1","T8765432F","neighbourhood 1",20,30,"2025-01-01","2025-01-31",2,false,"","","",""
-"project 4","S5678901G","neighbourhood 4",40,50,"2025-04-01","2025-04-30",6,true,"","S9876543C","",""
-"project 3","T9876543K","neighbourhood 3",40,10,"2025-04-01","2025-04-30",2,true,"4","","",""
-"project 6","S2345678H","neighbourhood 6",29,60,"2025-04-01","2025-04-30",2,true,"2","T7654321B|S1234567A|T2345678D","T2109876H","T2109876H"
-"project 5","S5678901G","neighbourhood 5",20,10,"2025-05-01","2025-05-31",4,true,"1","","","T2109876H"
-"project 7","T9876543K","neighbourhood 7",0,2,"2025-05-01","2025-05-31",4,true,"","","","T2109876H"
+ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,2RoomPrice,3RoomCount,3RoomPrice,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations
+"Project 3","T1234567M","Yishun",30,30000.00,50,50000.00,"2025-05-01","2025-05-31",4,true,"","","",""
+"Project 4","T2345678M","Jurong",0,0.00,20,50000.00,"2025-04-01","2025-04-29",6,false,"","","",""
+"Project 5","S2345678M","Yishun",50,50000.00,60,60000.00,"2025-06-01","2025-06-30",6,true,"","","",""
+"Project 6","S1234567M","Orchard",10,60000.00,50,100000.00,"2025-04-15","2025-05-15",3,false,"","","",""
+"Project 1","S3456789M","Yishun",10,350000.00,20,700000.00,"2025-04-01","2025-04-30",2,true,"","","",""
+"Project 2","T1234567M","Jurong",30,30000.00,40,40000.00,"2025-04-01","2025-04-30",1,true,"","","",""
+"Project 7","T3456789M","Jurong",50,50000.00,0,0.00,"2025-04-01","2025-04-30",7,true,"","","",""

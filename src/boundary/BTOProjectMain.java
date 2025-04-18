@@ -41,7 +41,7 @@ public class BTOProjectMain {
                 6. View current project details
                 7. Exit
                 """ + defColor.PURPLE + 
-                "===============================" + defColor.RESET);
+                "===============================\n" + defColor.RESET);
             int choice = 0;
             boolean validInput = false;
             while (!validInput) {
@@ -119,8 +119,9 @@ public class BTOProjectMain {
         // Project neighbourhood
         System.out.print("Project neighbourhood: ");
         String neighbourhood = sc.nextLine();
-        // Types of Flat + Number of units
+        // Types of Flat + Number of units + Price of unit
         Map<FlatType, Integer> unitCounts = new HashMap<>();
+        Map<FlatType, Double> unitPrices = new HashMap<>();
         for (FlatType flatType : FlatType.values()) {
             int units = -1;
             while (units < 0) {
@@ -137,6 +138,21 @@ public class BTOProjectMain {
             }
             sc.nextLine();
             unitCounts.put(flatType, units);
+            Double price = -1.0;
+            while (price < 0) {
+                try {
+                    System.out.printf("Price of %d-Room flats: ", flatType.getNumRooms());
+                    price = sc.nextDouble();
+                    if (price < 0) {
+                        System.out.println("Price cannot be less than 0.");
+                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                } 
+            }
+            sc.nextLine();
+            unitPrices.put(flatType, price);
         }
         // Application period
         boolean correctPeriod = false;
@@ -191,7 +207,7 @@ public class BTOProjectMain {
             } 
         }
         // Create project
-        BTOProject createdProject = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, oDate, cDate, slots);
+        BTOProject createdProject = BTOProjectController.createProject(manager, projectName, neighbourhood, unitCounts, unitPrices, oDate, cDate, slots);
         if (createdProject == null) {
             System.out.println("Could not create project.");
         } else {
@@ -223,17 +239,18 @@ public class BTOProjectMain {
 
         boolean running = true;
         while (running) {
-            System.out.println("""
+            System.out.println(defColor.BLUE + """
             What would you like to edit?
             1. Project Name
             2. Project neighbourhood
             3. Number of units
-            4. Application opening date
-            5. Application closing date
-            6. Available HDB Officer Slots
-            7. Toggle Visibility
-            8. Exit edit project menu
-                """);
+            4. Unit Prices
+            5. Application opening date
+            6. Application closing date
+            7. Available HDB Officer Slots
+            8. Toggle Visibility
+            9. Exit edit project menu
+                """ + defColor.RESET);
             System.out.print("(Enter number) Attribute to edit: ");
             int choice = sc.nextInt();
             sc.nextLine();
@@ -272,6 +289,28 @@ public class BTOProjectMain {
                     edited = BTOProjectController.editNumUnits(flatType, newNumUnits, projectEdit);
                 }
                 case 4 -> {
+                    System.out.print("Flat type to edit (2 or 3): ");
+                    int flatTypeInput = sc.nextInt();
+                    FlatType flatType = FlatType.getFlatType(flatTypeInput);
+                    if (flatType == null) {
+                        System.out.println("Invalid flat type.");
+                    }
+                    Double newPrice = -1.1;
+                    while (newPrice < 0) {
+                        try {
+                            System.out.print("New price: ");
+                            newPrice = sc.nextDouble();
+                            if (newPrice < 0) {
+                                System.out.println("Price cannot be less than 0.");
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Invalid input. Please enter a number.");
+                            sc.nextLine(); 
+                        }
+                    }
+                    edited = BTOProjectController.editPrice(flatType, newPrice, projectEdit);
+                }
+                case 5 -> {
                     boolean valid = false;
                     LocalDate oDate = null;
                     while (!valid) {
@@ -290,7 +329,7 @@ public class BTOProjectMain {
                     }
                     edited = BTOProjectController.editOpeningDate(oDate, projectEdit);
                 }
-                case 5 -> {
+                case 6 -> {
                     boolean valid = false;
                     LocalDate cDate = null;
                     while (!valid) {
@@ -309,17 +348,17 @@ public class BTOProjectMain {
                     }
                     edited = BTOProjectController.editClosingDate(cDate, projectEdit);
                 }
-                case 6 -> {
+                case 7 -> {
                     System.out.print("New available HDB office slots: ");
                     int slots = sc.nextInt();
                     edited = BTOProjectController.editOfficerSlots(slots, projectEdit);
                 }
-                case 7 -> {
+                case 8 -> {
                     System.out.print("Toggle visibility (true/false): ");
                     boolean visible = sc.nextBoolean();
                     edited = BTOProjectController.editVisibility(visible, projectEdit);
                 }
-                case 8 -> {
+                case 9 -> {
                     System.out.println("Exiting edit project menu.");
                     running = false;
                 }

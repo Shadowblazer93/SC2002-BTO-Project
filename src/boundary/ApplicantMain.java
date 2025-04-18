@@ -72,7 +72,7 @@ public class ApplicantMain {
             System.out.println("No projects available.");
             return false;
         }
-        projectPrinter.printList(visibleProjects);
+        projectPrinter.printList(visibleProjects, applicant);
         return true;
     }
 
@@ -83,7 +83,7 @@ public class ApplicantMain {
             return;
         }
         BTOProject project = BTOProjectController.getAllProjects().get(application.getProjectName());
-        if (!project.isVisible()) {
+        if (!project.getVisibility()) {
             System.out.println("Project details are no longer visible.");
         }
         System.out.println("Details of your application:");

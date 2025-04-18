@@ -9,10 +9,18 @@ import enums.defColor;
 import java.util.*;
 import printer.PrintRegistrations;
 
-
+/**
+ * Boundary class for Managers to manager registrations
+ * This class handles the user interface for registration management
+ */
 public class RegistrationMain {
     PrintRegistrations printRegistrations = new PrintRegistrations();
 
+    /**
+     * Display the registration management menu for the manager
+     * @param manager Manager using the menu
+     * @param sc Scanner object for user input
+     */
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {
@@ -60,6 +68,9 @@ public class RegistrationMain {
         }
     }
 
+    /**
+     * Display list of all registrations from all projects in the BTOMS
+     */
     private void viewAllRegistrations() {
         Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
         if (allRegistrations == null) {
@@ -70,6 +81,11 @@ public class RegistrationMain {
         printRegistrations.printMapList(allRegistrations);
     }
 
+    /**
+     * Retrieve all registrations for manager's projects
+     * @param manager Manager of projects
+     * @return A list of all registrations under manager's projects, null if there are none
+     */
     private List<Registration> retrieveProjectRegistrations(Manager manager) {
         Map<String, BTOProject> projects = manager.getManagedProjects();
         if (projects == null) {
@@ -91,6 +107,11 @@ public class RegistrationMain {
         return allRegistrations;
     }
 
+    /**
+     * Displays and returns list of pending registrations for manager's projects
+     * @param manager Manager viewing pending registrations
+     * @return List of pending registrations under manager, null if there are none
+     */
     private List<Registration> viewPendingRegistrations(Manager manager) {
         List<Registration> projectRegistrations = retrieveProjectRegistrations(manager);
         if (projectRegistrations == null) {
@@ -106,6 +127,10 @@ public class RegistrationMain {
         return pendingRegistrations;
     }
 
+    /**
+     * Display list of approved registrations for the manager's projects
+     * @param manager Manager viewing the registrations
+     */
     private void viewApprovedRegistrations(Manager manager) {
         List<Registration> projectRegistrations = retrieveProjectRegistrations(manager);
         if (projectRegistrations == null) {
@@ -120,15 +145,18 @@ public class RegistrationMain {
         printRegistrations.printList(approvedRegistrations);
     }
 
-    
-
+    /**
+     * Allow manager to process pending registrations by approving or rejecting them
+     * @param manager Manager processing the registrations
+     * @param sc Scanner object for user input
+     * @param isApproval {@code true} to approve registration, {@code false} to reject registration
+     */
     public void processRegistrations(Manager manager, Scanner sc, boolean isApproval) {
         // Get and print pending registrations for project
         List<Registration> pendingRegistrations = viewPendingRegistrations(manager);
         if (pendingRegistrations == null) {
             return;
         }
-        BTOProject project = manager.getCurrentProject();
         // Convert list to map
         Map<Integer, Registration> pendingRegistrationsMap = new HashMap<>();
         for (Registration registration : pendingRegistrations) {

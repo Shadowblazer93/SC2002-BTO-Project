@@ -125,7 +125,7 @@ public class OfficerController {
             System.out.println("Officer is assigned to a different Project!");
         } else {
             FlatType flatType = application.getFlatType();
-            Map<FlatType,Integer> unitCounts = assignedProject.getunitCounts();
+            Map<FlatType,Integer> unitCounts = assignedProject.getUnitCounts();
             unitCounts.put(flatType, unitCounts.get(flatType) - 1); // Can use editNumUnits in BTOProjectController
         }
     }
@@ -147,7 +147,7 @@ public class OfficerController {
         String projectName = application.getProjectName();
         BTOProject project = BTOProjectController.getProjectByName(projectName);
         String neighbourhood = project.getNeighbourhood();
-        Map<FlatType,Integer> unitCounts = project.getunitCounts();
+        Map<FlatType,Integer> unitCounts = project.getUnitCounts();
         
         if (!hasAccessToApplication(officer, application)) {
             System.out.println("Officer does not have access to this application!");

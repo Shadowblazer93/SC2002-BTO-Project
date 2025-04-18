@@ -23,21 +23,36 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The {@code SaveCSV} class provides static methods to save various entities into CSV files.
+ * Each method retrieves data from the respective controllers and writes to a corresponding CSV file.
+ * CSV files are saved in the {@code src/database/} directory
+ */
 public class SaveCSV {
+
+    /**
+     * Save details of all BTOProjects as the {@code ProjectList.csv} CSV file.
+     * Columns include project name, manager NRIC, project neighbourhood, units and prices for each flat type,
+     * opening and closing dates, available officer slots, visibility, enqauiries and applications. assigned officers
+     * and registrations
+     */
     public static void saveProject() {
         Map<String, BTOProject> allProjects = BTOProjectController.getAllProjects();
         File filePath = new File("src/database/ProjectList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
-            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,3RoomCount,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations\n");
+            writer.write("ProjectName,ManagerNRIC,Neighbourhood,2RoomCount,2RoomPrice,3RoomCount,3RoomPrice,OpeningDate,ClosingDate,AvailableOfficerSlots,Visible,Enquiries,Applications,AssignedOfficers,Registrations\n");
 
             for (BTOProject project: allProjects.values()) {
                 String projectName = project.getProjectName();
                 String managerNRIC = project.getManager().getNRIC();
                 String neighbourhood = project.getNeighbourhood();
-                Map<FlatType, Integer> unitCount = project.getunitCounts();
+                Map<FlatType, Integer> unitCount = project.getUnitCounts();
                 int twoRoom = unitCount.get(FlatType.TWO_ROOM);
                 int threeRoom = unitCount.get(FlatType.THREE_ROOM);
+                Map<FlatType, Double> unitPrices = project.getUnitPrices();
+                Double twoRoomPrice = unitPrices.get(FlatType.TWO_ROOM);
+                Double threeRoomPrice = unitPrices.get(FlatType.THREE_ROOM);
                 LocalDate openingDate = project.getOpeningDate();
                 LocalDate closingDate = project.getClosingDate();
                 int availableOfficerSlots = project.getAvailableOfficerSlots();
@@ -102,8 +117,8 @@ public class SaveCSV {
                 }
                 
 
-                writer.write(String.format("\"%s\",\"%s\",\"%s\",%d,%d,\"%s\",\"%s\",%d,%b,\"%s\",\"%s\",\"%s\",\"%s\"\n",
-                    projectName, managerNRIC, neighbourhood, twoRoom, threeRoom,
+                writer.write(String.format("\"%s\",\"%s\",\"%s\",%d,%.2f,%d,%.2f,\"%s\",\"%s\",%d,%b,\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                    projectName, managerNRIC, neighbourhood, twoRoom, twoRoomPrice, threeRoom, threeRoomPrice,
                     openingDate, closingDate, availableOfficerSlots, visibile,
                     enquiries, applications, assignedOfficers, pendingRegistrations));
             }
@@ -112,6 +127,10 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all Managers as the {@code ManagerList.csv} CSV file.
+     * Columns include name, NRIC, age, marital status and password
+     */
     public static void saveManagers() {
         Map<String, Manager> allManagers = ManagerController.getAllManagers();
         File filePath = new File("src/database/ManagerList.csv");
@@ -134,6 +153,10 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all Applicants as the {@code ApplicantList.csv} CSV file.
+     * Columns include name, NRIC, age, marital status and password
+     */
     public static void saveApplicants() {
         Map<String, Applicant> allApplicants = ApplicantController.getAllApplicants();
         File filePath = new File("src/database/ApplicantList.csv");
@@ -155,6 +178,10 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all Officers as the {@code OfficerList.csv} CSV file.
+     * Columns include name, NRIC, age, marital status and password
+     */
     public static void saveOfficers() {
         Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
         File filePath = new File("src/database/OfficerList.csv");
@@ -177,6 +204,10 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all Enquiries as the {@code EnquiryList.csv} CSV file.
+     * Columns include enquiry ID, applicant NRIC, project name, message, response and the enquiry status
+     */
     public static void saveEnquiries() {
         // EnquiryController enquiryController = new EnquiryController();
         Map<Integer, Enquiry> allEnquiries = EnquiryController.getAllEnquiries();
@@ -201,6 +232,11 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all BTO Applications as the {@code ApplicationList.csv} CSV file.
+     * Columns include application ID, applicant NRIC, project name, flat type, application status and
+     * withdrawal status
+     */
     public static void saveBTOApplications() {
         Map<String, BTOApplication> allApplications = ApplicationController.getAllApplications();
         File filePath = new File("src/database/ApplicationList.csv");
@@ -224,6 +260,10 @@ public class SaveCSV {
         }
     }
 
+    /**
+     * Save details of all Registrations as the {@code RegistrationList.csv} CSV file.
+     * Columns include registration ID, officer NRIC, project name, registration date and registration status
+     */
     public static void saveRegistrations() {
         Map<String, List<Registration>> allRegistrations = RegistrationController.getAllRegistrations();
         File filePath = new File("src/database/RegistrationList.csv");

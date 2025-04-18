@@ -4,12 +4,22 @@ import entity.user.Manager;
 import enums.defColor;
 import java.util.Scanner;
 
+/**
+ * Boundary class that handles user interface for HDB Manaagers.
+ * This class allows managers to navigate to different menus for management of
+ * BTO Projects, enquiries, applications and officer registrations
+ */
 public class ManagerMain {
     BTOProjectMain btoProjectMain = new BTOProjectMain();
     RegistrationMain registrationMain = new RegistrationMain();
     EnquiryMain enquiryMain = new EnquiryMain();
     ApplicationMain applicationMain = new ApplicationMain();
 
+    /**
+     * Displays the main menu for a logged-in manager and handles navigation to various functionalities
+     * @param manager Manager currently logged-in
+     * @param sc Scanner object for user input
+     */
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {

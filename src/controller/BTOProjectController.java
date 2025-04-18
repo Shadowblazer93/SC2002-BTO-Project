@@ -50,13 +50,13 @@ public class BTOProjectController {
      * @return BTOProject object if created successfully, null if project already exists
      */
     public static BTOProject createProject(Manager manager, String projectName, String neighbourhood, 
-                                    Map<FlatType, Integer> unitCounts, LocalDate openingDate, 
-                                    LocalDate closingDate, int availableOfficerSlots) {
+                                    Map<FlatType, Integer> unitCounts, Map<FlatType, Double> unitPrices, 
+                                    LocalDate openingDate, LocalDate closingDate, int availableOfficerSlots) {
         if (allProjects.containsKey(projectName)) {
             return null;
         }
 
-        BTOProject project = new BTOProject(projectName, manager, neighbourhood, unitCounts, openingDate, 
+        BTOProject project = new BTOProject(projectName, manager, neighbourhood, unitCounts, unitPrices, openingDate, 
                                             closingDate, availableOfficerSlots);
         allProjects.put(projectName, project);
         manager.addProject(project);
@@ -132,7 +132,7 @@ public class BTOProjectController {
     // Project editing methods
 
     /**
-     * Edit project name of a given project
+     * Edit name of a given project
      * @param manager Manager in charge of the project
      * @param currentName Current name of the project
      * @param newName New name for the project
@@ -149,7 +149,7 @@ public class BTOProjectController {
     }
 
     /**
-     * Edit project neighbourhood of a given project
+     * Edit neighbourhood of a given project
      * @param neighbourhood New neighbourhood for the project
      * @param projectEdit BTOProject object to be edited
      * @return True if neighbourhood edited successfully, false otherwise
@@ -160,7 +160,7 @@ public class BTOProjectController {
     }
 
     /**
-     * Edit project unit counts of a given project
+     * Edit unit counts of a given project
      * @param flatType Type of flat to edit
      * @param numUnits New number of units for the flat type
      * @param projectEdit BTOProject object to be edited
@@ -168,6 +168,18 @@ public class BTOProjectController {
      */
     public static boolean editNumUnits(FlatType flatType, int numUnits, BTOProject projectEdit) {
         projectEdit.setNumUnits(flatType, numUnits);
+        return true;
+    }
+
+    /**
+     * Edit unit prices of a give project
+     * @param flatType Type of flat to edit
+     * @param price New price for the flat type
+     * @param projectEdit BTOProject object to be edited
+     * @return True if unit prices edited successfully, false otherwise
+     */
+    public static boolean editPrice(FlatType flatType, Double price, BTOProject projectEdit) {
+        projectEdit.setPrice(flatType, price);
         return true;
     }
 
@@ -184,7 +196,7 @@ public class BTOProjectController {
     }
 
     /**
-     * Edit project opening date of a given project
+     * Edit opening date of a given project
      * @param openingDate New opening date for the project
      * @param projectEdit BTOProject object to be edited
      * @return True if opening date edited successfully, false if it is after closing date
@@ -199,7 +211,7 @@ public class BTOProjectController {
     }
 
     /**
-     * Edit project closing date of a given project
+     * Edit closing date of a given project
      * @param closingDate New closing date for the project
      * @param projectEdit BTOProject object to be edited
      * @return True if closing date edited successfully, false if it is before opening date
@@ -214,7 +226,7 @@ public class BTOProjectController {
     }
 
     /**
-     * Edit project visibility of a given project
+     * Edit visibility of a given project
      * @param visible True if project is visible, false otherwise
      * @param projectEdit BTOProject object to be edited
      * @return True if visibility edited successfully, false otherwise
@@ -257,6 +269,5 @@ public class BTOProjectController {
                 return false;
             }
         }
-        
     }
 }

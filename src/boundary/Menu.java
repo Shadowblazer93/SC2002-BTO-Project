@@ -8,11 +8,19 @@ import entity.user.User;
 import enums.*;
 import java.util.Scanner;
 
+/**
+ * Main menu interface class for user interaction with the system
+ * Allows users to login, change their password or exit the program
+ * Upon login, users are redirecated to their respective role-specific menu
+ */
 public class Menu {
     ApplicantMain applicantMain = new ApplicantMain();
     OfficerMain officerMain = new OfficerMain();
     ManagerMain managerMain = new ManagerMain();
 
+    /**
+     * Display main meny to user and handles user input
+     */
     public void displayMenu() {
         try (Scanner sc = new Scanner(System.in)) {
             boolean running = true;
@@ -65,6 +73,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Prompt user to input NRIC and password and validates their credentials
+     * @param sc Scanner object for user input
+     * @return Authenticated {@link User} object if credentials are valid, {@code null} otherwise
+     */
     private User loginInput(Scanner sc) {
         boolean valid = false;
         String nric = null;
@@ -85,6 +98,10 @@ public class Menu {
         return user;
     }
 
+    /**
+     * Handle login flow for users and redirects authenticated users
+     * @param sc Scanner object for user input
+     */
     private void login(Scanner sc) {
         User user = loginInput(sc);
         if (user != null) {
@@ -105,6 +122,11 @@ public class Menu {
         }
     }
 
+    /**
+     * Allow user to change their password after verifying their credentials
+     * Validates new password for strength requirements
+     * @param sc Scanner object for user input
+     */
     private void changePassword(Scanner sc) {
         User user = loginInput(sc);
         if (user == null) {

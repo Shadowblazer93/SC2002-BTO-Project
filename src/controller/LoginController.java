@@ -8,7 +8,17 @@ import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
 
+/**
+ * This class handles login validation and authentication logic for users in the system
+ */
 public class LoginController {
+
+    /**
+     * Validates login credentials of a user by checking the NRIC and password
+     * @param nric NRIC of user attempting login
+     * @param password Password provided by user
+     * @return {@link User} object if credentials are valid, {@code null} otherwise
+     */
     public static User validateLogin(String nric, String password) {
         Officer officer = OfficerController.getOfficer(nric);
         if (officer != null && officer.getPassword().equals(password)) {
@@ -25,14 +35,31 @@ public class LoginController {
             return applicant;
         }
 
-        return null;    // None of the users
+        return null; 
     }
 
+    /**
+     * Check if the provided NRIC is in a valid format
+     * Valid NRIC must start with 'S' or 'T', followed by 7 digits and end with a letter
+     * @param nric NRIC string to validate
+     * @return true if NRIC format is valid, false otherwise
+     */
     public static boolean checkNRIC(String nric) {
         // Check if NRIC is valid (e.g., length, format)
         return nric != null && nric.length() == 9 && nric.matches("[ST]\\d{7}[A-Z]");
     }
 
+    /**
+     * Validates strength of new password
+     * Strong password musat 
+     *  - Be at least 8 characters long
+     *  - Contain lowercase and uppercase letters
+     *  - Include at least 1 digit
+     *  - Include one of the special characters (!, *, $, ?)
+     *  - Not conatin any other characters
+     * @param password Password string to validate
+     * @return "success" if password is strong, otherwise an error message indicating issue
+     */
     public static String strongPassword(String password) {
         if (password.length() < 8) {
             return "Password too short!";

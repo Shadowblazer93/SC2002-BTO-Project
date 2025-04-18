@@ -7,12 +7,26 @@ import enums.defColor;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implmentation of {@link Print} interface for printing {@link BTOApplication} data
+ * Provides methods to print BTO Applications data in list and map formats
+ */
 public class PrintBTOApplications implements Print<String, BTOApplication> {
+
+    /**
+     * Not supported. This method is not implemented in this class
+     * @param allApplications Map of keys to list of BTOApplication
+     * @throws UnsupportedOperationException Always thrown as this method is not supported
+     */
     @Override
     public void printMapList(Map<String, List<BTOApplication>> allApplications) {
         throw new UnsupportedOperationException("Not supported.");
     }
 
+    /**
+     * Print list of BTOApplications with details such as NRIC, Flat Type and application status
+     * @param applicationList List of BTOApplications to print
+     */
     @Override
     public void printList(List<BTOApplication> applicationList) {
         if (applicationList == null || applicationList.isEmpty()) {
@@ -34,6 +48,11 @@ public class PrintBTOApplications implements Print<String, BTOApplication> {
         System.out.print(defColor.RESET);
     }
 
+    /**
+     * Print map of BTOApplications with information including NRIC, Name, Age, Marital Status,
+     * Project name, Flat Type
+     * @param applicationList Map of applicant NRIC to their BTOApplication
+     */
     @Override
     public void printMap(Map<String, BTOApplication> applicationList) {
         if (applicationList == null || applicationList.isEmpty()) {

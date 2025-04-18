@@ -7,17 +7,37 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implmentation of {@link Print} interface for printing {@link Enquiry} data
+ * Provides methods to print enquiries in list and map formats
+ */
 public class PrintEnquiries implements Print<Integer, Enquiry> {
+    /**
+     * Not supported. This method is not implemented in this class
+     * @param enquiryList Map of keys to list of Enquiry instances
+     * @throws UnsupportedOperationException Always thrown as this method is not supported
+     */
     @Override
     public void printMapList(Map<Integer, List<Enquiry>> enquiryList) {
         throw new UnsupportedOperationException("Not supported.");
     }
 
+    /**
+     * Not supported. This method is not implemented in this class
+     * @param enquiryList List of Enquiry instances
+     * @throws UnsupportedOperationException Always thrown as this method is not supported
+     */
     @Override
     public void printList(List<Enquiry> enquiryList) {
         throw new UnsupportedOperationException("Not supported.");
     }
 
+    /**
+     * Prints formatted table of enquiries, sorted by project name and enquiry ID.
+     * Each enquiry's message and reply are wrapped into 40-character lines for
+     * readability.
+     * @param enquiryList Map of enquiry IDs to {@link Enquiry} objects
+     */
     @Override
     public void printMap(Map<Integer, Enquiry> enquiryList) {
         if (enquiryList == null || enquiryList.isEmpty()) {
@@ -53,6 +73,12 @@ public class PrintEnquiries implements Print<Integer, Enquiry> {
         System.out.println("-".repeat(116) + defColor.RESET);
     }
 
+    /**
+     * Helper method to wrap text into multiple lines with a specified width
+     * @param text Original text to be wrapped
+     * @param width Maximum number of characters per line
+     * @return List of strings where each string is a wrapped line
+     */
     private List<String> wrapText(String text, int width) {
         List<String> lines = new ArrayList<>();
         String[] words = text.split(" ");
