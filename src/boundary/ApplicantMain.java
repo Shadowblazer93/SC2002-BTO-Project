@@ -55,7 +55,7 @@ public class ApplicantMain implements IUserMain<Applicant> {
                     9. Delete Enquiry
                     10. Logout
                     """ + defColor.PURPLE + 
-                    "==============================" + defColor.RESET, applicant.getName());
+                    "==============================\n" + defColor.RESET, applicant.getName());
             int choice = 0;
             boolean validInput = false;
             while (!validInput) {
