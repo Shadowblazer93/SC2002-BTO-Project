@@ -21,19 +21,6 @@ public class EnquiryMain implements IEnquiryMain {
     }
 
     @Override
-    public void viewProjectEnquiries(Officer officer) {
-        BTOProject project = officer.getAssignedProject();
-        
-        if (project == null) {
-            System.out.println("No project assigned to the officer.");
-            return;
-        }
-        
-        System.out.println("Project Enquiries for " + project.getProjectName());
-        enquiryPrinter.printMap(project.getEnquiries());
-    }
-    
-    @Override
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
@@ -69,7 +56,7 @@ public class EnquiryMain implements IEnquiryMain {
         }
     }
     
-
+    @Override
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
         while (running) {
