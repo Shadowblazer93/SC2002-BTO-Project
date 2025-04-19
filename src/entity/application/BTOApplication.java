@@ -61,6 +61,7 @@ public class BTOApplication {
         this.withdrawal = withdrawal;
     }
 
+    @Override
     public String toString() {
         return String.format("""
                 ID: %d

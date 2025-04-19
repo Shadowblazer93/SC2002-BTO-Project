@@ -6,8 +6,12 @@ import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
 import enums.*;
+import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
+import interfaces.ILoginService;
+import interfaces.IManagerService;
+import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
 import java.util.Scanner;
@@ -22,22 +26,32 @@ public class Menu {
     private final ApplicantMain applicantMain;
     private final OfficerMain officerMain;
     private final ManagerMain managerMain;
+    private final ILoginService loginService;
 
+    private final IApplicantService applicantService;
+    private final IOfficerService officerService;
+    private final IManagerService managerService;
     private final IApplicationService applicationService;
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-    public Menu(IApplicationService applicationService, IEnquiryService enquiryService, 
-                IProjectService projectService, IRegistrationService registrationService) {
+
+    public Menu(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService, 
+                    IApplicationService applicationService, IEnquiryService enquiryService, 
+                    IProjectService projectService, IRegistrationService registrationService) {
+        this.applicantService = applicantService;
+        this.officerService = officerService;
+        this.managerService = managerService;
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
         this.registrationService = registrationService;
 
         this.applicantMain = new ApplicantMain(applicationService, enquiryService, projectService);
-        this.officerMain = new OfficerMain(applicationService, enquiryService, projectService, registrationService);
-        this.managerMain = new ManagerMain(applicationService, enquiryService, projectService, registrationService);
+        this.officerMain = new OfficerMain(applicantService, officerService, applicationService, enquiryService, projectService, registrationService);
+        this.managerMain = new ManagerMain(applicantService, applicationService, enquiryService, projectService, registrationService);
+        this.loginService = new LoginController(applicantService, officerService, managerService);
     }
 
     /**
@@ -106,7 +120,7 @@ public class Menu {
         while (!valid) {
             System.out.print("Enter NRIC: ");
             nric = sc.nextLine().trim().toUpperCase();
-            if (LoginController.checkNRIC(nric)) {
+            if (loginService.checkNRIC(nric)) {
                 valid = true;
                 break;
             }
@@ -116,7 +130,7 @@ public class Menu {
         System.out.print("Enter password: ");
         String password = sc.nextLine();
 
-        User user = LoginController.validateLogin(nric, password);
+        User user = loginService.validateLogin(nric, password);
         return user;
     }
 
@@ -165,7 +179,7 @@ public class Menu {
         while (true) {
             System.out.print("Enter new password: ");
             newPassword = sc.nextLine();
-            String msg = LoginController.strongPassword(newPassword);
+            String msg = loginService.strongPassword(newPassword);
             if (msg.equals("success")) {
                 break;
             } else {

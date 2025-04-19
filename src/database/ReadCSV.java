@@ -1,6 +1,5 @@
 package database;
 
-import controller.user.*;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
@@ -11,8 +10,11 @@ import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
 import enums.defColor;
+import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
+import interfaces.IManagerService;
+import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
 import java.io.File;
@@ -30,13 +32,21 @@ import java.util.Scanner;
  * The methods assume that the CSV files are properly formated with correct headers and columns
  */
 public class ReadCSV {
+    
+    private final IApplicantService applicantService;
+    private final IOfficerService officerService;
+    private final IManagerService managerService;
     private final IApplicationService applicationService;
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-    public ReadCSV(IApplicationService applicationService, IEnquiryService enquiryService, 
+    public ReadCSV(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService, 
+                    IApplicationService applicationService, IEnquiryService enquiryService, 
                     IProjectService projectService, IRegistrationService registrationService) {
+        this.applicantService = applicantService;
+        this.officerService = officerService;
+        this.managerService = managerService;
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
@@ -66,7 +76,7 @@ public class ReadCSV {
                 String password = managerData[4].replace("\"", "").trim();
 
                 // Create Manager
-                ManagerController.createManager(nric, name, password, age, maritalStatus);
+                managerService.createManager(nric, name, password, age, maritalStatus);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -96,7 +106,7 @@ public class ReadCSV {
                 String password = data[4].replace("\"", "").trim();
 
                 // Create Officer
-                OfficerController.createOfficer(nric, name, password, age, maritalStatus);
+                officerService.createOfficer(nric, name, password, age, maritalStatus);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -126,7 +136,7 @@ public class ReadCSV {
                 String password = data[4].replace("\"", "").trim();
 
                 // Create Applicant
-                ApplicantController.createApplicant(nric, name, age, maritalStatus, password);
+                applicantService.createApplicant(nric, name, age, maritalStatus, password);
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -172,7 +182,7 @@ public class ReadCSV {
                 String registrations = data[14].replace("\"", "").trim();
 
                 // Get manager
-                Manager manager = ManagerController.getManager(managerNRIC);
+                Manager manager = managerService.getManager(managerNRIC);
                 if (manager == null) {
                     System.out.println("Manager not found for NRIC: " + managerNRIC);
                     continue; // or throw an exception
@@ -209,7 +219,7 @@ public class ReadCSV {
 
                 // Parse assigned officers
                 String[] assignedOfficerArray = assignedOfficers.split("\\|");
-                Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
+                Map<String, Officer> allOfficers = officerService.getAllOfficers();
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();
                     if (officerNRIC.isEmpty()) continue;
@@ -278,7 +288,7 @@ public class ReadCSV {
                 EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
 
                 Enquiry enquiry = enquiryService.createEnquiry(id, applicantNRIC, projectName, message, response, status);
-                Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
+                Applicant applicant = applicantService.getApplicant(applicantNRIC);
                 if (applicant!=null) {applicant.addEnquiry(enquiry);}
             }
         } catch (FileNotFoundException e) {
@@ -309,7 +319,7 @@ public class ReadCSV {
                 ApplicationStatus status = parseApplicationStatus(data[4].replace("\"", "").trim());
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
-                Applicant applicant = ApplicantController.getApplicant(applicantNRIC);
+                Applicant applicant = applicantService.getApplicant(applicantNRIC);
                 BTOApplication application = applicationService.createApplication(id, applicant, projectName, flatType, status, withdrawal);
                 applicant.setApplication(application);
             }
@@ -340,7 +350,7 @@ public class ReadCSV {
                 LocalDate registrationDate = LocalDate.parse(data[3].replace("\"", "").trim());
                 RegistrationStatus status = parseRegistrationStatus(data[4].replace("\"", "").trim());
 
-                Officer officer = OfficerController.getOfficer(officerNRIC);
+                Officer officer = officerService.getOfficer(officerNRIC);
                 registrationService.createRegistration(id, officer, projectName, registrationDate, status);
             }
         } catch (FileNotFoundException e) {

@@ -2,6 +2,7 @@ package boundary;
 
 import entity.user.Manager;
 import enums.defColor;
+import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
 import interfaces.IProjectService;
@@ -20,19 +21,21 @@ public class ManagerMain {
     EnquiryMain enquiryMain;
     ApplicationMain applicationMain;
 
+    private final IApplicantService applicantService;
     private final IApplicationService applicationService;
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-    public ManagerMain(IApplicationService applicationService, IEnquiryService enquiryService, 
+    public ManagerMain(IApplicantService applicantService, IApplicationService applicationService, IEnquiryService enquiryService, 
                         IProjectService projectService, IRegistrationService registrationService) {
+        this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
         this.registrationService = registrationService;
 
-        this.applicationMain = new ApplicationMain(applicationService, projectService);
+        this.applicationMain = new ApplicationMain(applicantService, applicationService, projectService);
         this.enquiryMain = new EnquiryMain(enquiryService);
         this.btoProjectMain = new BTOProjectMain(projectService);
         this.registrationMain = new RegistrationMain(registrationService);
