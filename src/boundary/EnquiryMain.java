@@ -5,12 +5,13 @@ import entity.project.BTOProject;
 import entity.user.*;
 import enums.UserRole;
 import enums.defColor;
+import interfaces.IEnquiryMain;
 import interfaces.IEnquiryService;
 import java.util.Map;
 import java.util.Scanner;
 import printer.PrintEnquiries;
 
-public class EnquiryMain {
+public class EnquiryMain implements IEnquiryMain {
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     private final IEnquiryService enquiryService;
@@ -19,6 +20,7 @@ public class EnquiryMain {
         this.enquiryService = enquiryService;
     }
 
+    @Override
     public void viewProjectEnquiries(Officer officer) {
         BTOProject project = officer.getAssignedProject();
         
@@ -30,7 +32,8 @@ public class EnquiryMain {
         System.out.println("Project Enquiries for " + project.getProjectName());
         enquiryPrinter.printMap(project.getEnquiries());
     }
-
+    
+    @Override
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {

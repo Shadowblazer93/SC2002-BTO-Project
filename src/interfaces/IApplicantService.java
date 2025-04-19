@@ -10,4 +10,5 @@ public interface IApplicantService {
     Applicant getApplicant(String nric);
     
     Map<String, Applicant> getAllApplicants();
+    
 }

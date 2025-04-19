@@ -4,6 +4,7 @@ import entity.project.BTOProject;
 import entity.user.Manager;
 import enums.FlatType;
 import enums.defColor;
+import interfaces.IBTOProjectMain;
 import interfaces.IProjectService;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -16,7 +17,7 @@ import printer.PrintBTOProjects;
  * Boundary class for managing BTO projects
  * This class handles the user interface for project management
  */
-public class BTOProjectMain {
+public class BTOProjectMain implements IBTOProjectMain {
     PrintBTOProjects printer = new PrintBTOProjects();
 
     private final IProjectService projectService;
@@ -30,6 +31,7 @@ public class BTOProjectMain {
      * @param manager Manager using the menu
      * @param sc Scanner object for user input
      */
+    @Override
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) { 

@@ -7,6 +7,7 @@ import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
+import interfaces.IUserMain;
 import java.util.Scanner;
 
 /**
@@ -14,7 +15,7 @@ import java.util.Scanner;
  * This class allows managers to navigate to different menus for management of
  * BTO Projects, enquiries, applications and officer registrations
  */
-public class ManagerMain {
+public class ManagerMain implements IUserMain<Manager> {
 
     BTOProjectMain btoProjectMain;
     RegistrationMain registrationMain;
@@ -47,6 +48,7 @@ public class ManagerMain {
      * @param manager Manager currently logged-in
      * @param sc Scanner object for user input
      */
+    @Override
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {

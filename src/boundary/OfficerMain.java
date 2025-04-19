@@ -10,10 +10,11 @@ import interfaces.IEnquiryService;
 import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
+import interfaces.IUserMain;
 import java.util.*;
 import printer.PrintBTOProjects;
 
-public class OfficerMain {
+public class OfficerMain implements IUserMain<Officer> {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     EnquiryMain enquiryMain;
     ApplicationMain applicationMain;
@@ -41,6 +42,7 @@ public class OfficerMain {
         
     }
 
+    @Override
     public void displayMenu(Officer officer, Scanner sc) {
         boolean running = true;
         while (running) {
