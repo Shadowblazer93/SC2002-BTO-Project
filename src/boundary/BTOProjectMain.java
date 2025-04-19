@@ -262,9 +262,19 @@ public class BTOProjectMain implements IBTOProjectMain {
             8. Toggle Visibility
             9. Exit edit project menu
                 """ + defColor.RESET);
-            System.out.print("(Enter number) Attribute to edit: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice = 0;
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("(Enter number) Attribute to edit: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                }
+            }
             boolean edited = false;
             switch (choice) {
                 case 1 -> {
@@ -396,6 +406,7 @@ public class BTOProjectMain implements IBTOProjectMain {
             System.out.println("No projects to delete.");
             return;
         }
+        printer.printMap(manager.getManagedProjects());
         System.out.print("Delete project: ");
         String projectName = sc.nextLine();
         boolean deleted = projectService.deleteProject(manager, projectName);
