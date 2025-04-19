@@ -83,7 +83,7 @@ public class ApplicationMain implements IApplicationMain {
             5. Filter applications
             6. Exit
             """ + defColor.PURPLE + 
-            "==================================\n" + defColor.RESET);
+            "==================================" + defColor.RESET);
             System.out.print("Option: ");
             int choice = sc.nextInt();
             sc.nextLine();

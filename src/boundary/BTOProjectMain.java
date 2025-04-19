@@ -199,8 +199,9 @@ public class BTOProjectMain implements IBTOProjectMain {
             }
         }
         // Available HDB Office Slots
+        boolean valid = false;
         int slots = 0;
-        while (slots <= 0) {
+        while (!valid) {
             try {
                 System.out.printf("Available HDB Office Slots (Max 10): ");
                 slots = sc.nextInt();
@@ -208,6 +209,8 @@ public class BTOProjectMain implements IBTOProjectMain {
                     System.out.println("Number of slots must be greater than 0.");
                 } else if (slots > 10) {
                     System.out.println("Number of slots must not exceed 10.");
+                } else {
+                    valid = true;
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input. Please enter a number.");
