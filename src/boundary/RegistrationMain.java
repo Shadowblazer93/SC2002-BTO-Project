@@ -4,6 +4,7 @@ import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Manager;
 import enums.defColor;
+import interfaces.IRegistrationMain;
 import interfaces.IRegistrationService;
 import java.util.*;
 import printer.PrintRegistrations;
@@ -13,7 +14,7 @@ import util.Filter;
  * Boundary class for Managers to manager registrations
  * This class handles the user interface for registration management
  */
-public class RegistrationMain {
+public class RegistrationMain implements IRegistrationMain {
     PrintRegistrations printRegistrations = new PrintRegistrations();
 
     private final IRegistrationService registrationService;
@@ -27,6 +28,7 @@ public class RegistrationMain {
      * @param manager Manager using the menu
      * @param sc Scanner object for user input
      */
+    @Override
     public void displayMenu(Manager manager, Scanner sc) {
         boolean running = true;
         while (running) {

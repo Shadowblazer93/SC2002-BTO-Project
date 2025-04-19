@@ -11,7 +11,7 @@ import java.util.Map;
  * Implmentation of {@link PrintList} interface for printing {@link Enquiry} data
  * Provides methods to print enquiries in map format
  */
-public class PrintEnquiries implements PrintMap<Integer, Enquiry> {
+public class PrintEnquiries implements PrintMap<Integer, Enquiry>{
 
     /**
      * Prints formatted table of enquiries, sorted by project name and enquiry ID.

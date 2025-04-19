@@ -3,7 +3,7 @@ package entity.enquiry;
 import enums.EnquiryStatus;
 
 public class Enquiry {
-    public int id;
+    private int id;
     private final String applicantNRIC;
     private final String projectName;
     private String message;
@@ -62,6 +62,7 @@ public class Enquiry {
         this.message = msg;
     }
 
+    @Override
     public String toString() {
         String str = "";
         str+= "Enquiry details: \n";

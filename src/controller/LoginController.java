@@ -1,17 +1,28 @@
 package controller;
 
-import controller.user.ApplicantController;
-import controller.user.ManagerController;
-import controller.user.OfficerController;
 import entity.user.Applicant;
 import entity.user.Manager;
 import entity.user.Officer;
 import entity.user.User;
+import interfaces.IApplicantService;
+import interfaces.ILoginService;
+import interfaces.IManagerService;
+import interfaces.IOfficerService;
 
 /**
  * This class handles login validation and authentication logic for users in the system
  */
-public class LoginController {
+public class LoginController implements ILoginService {
+
+    private final IApplicantService applicantService;
+    private final IOfficerService officerService;
+    private final IManagerService managerService;
+
+    public LoginController(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService) {
+        this.applicantService = applicantService;
+        this.officerService = officerService;
+        this.managerService = managerService;
+    }
 
     /**
      * Validates login credentials of a user by checking the NRIC and password
@@ -19,18 +30,19 @@ public class LoginController {
      * @param password Password provided by user
      * @return {@link User} object if credentials are valid, {@code null} otherwise
      */
-    public static User validateLogin(String nric, String password) {
-        Officer officer = OfficerController.getOfficer(nric);
+    @Override
+    public User validateLogin(String nric, String password) {
+        Officer officer = officerService.getOfficer(nric);
         if (officer != null && officer.getPassword().equals(password)) {
             return officer;
         }
 
-        Manager manager = ManagerController.getManager(nric);
+        Manager manager = managerService.getManager(nric);
         if (manager != null && manager.getPassword().equals(password)) {
             return manager;
         }
 
-        Applicant applicant = ApplicantController.getApplicant(nric);
+        Applicant applicant = applicantService.getApplicant(nric);
         if (applicant != null && applicant.getPassword().equals(password)) {
             return applicant;
         }
@@ -44,7 +56,8 @@ public class LoginController {
      * @param nric NRIC string to validate
      * @return true if NRIC format is valid, false otherwise
      */
-    public static boolean checkNRIC(String nric) {
+    @Override
+    public boolean checkNRIC(String nric) {
         // Check if NRIC is valid (e.g., length, format)
         return nric != null && nric.length() == 9 && nric.matches("[ST]\\d{7}[A-Z]");
     }
@@ -60,7 +73,8 @@ public class LoginController {
      * @param password Password string to validate
      * @return "success" if password is strong, otherwise an error message indicating issue
      */
-    public static String strongPassword(String password) {
+    @Override
+    public String strongPassword(String password) {
         if (password.length() < 8) {
             return "Password too short!";
         }
@@ -83,4 +97,5 @@ public class LoginController {
             return "Password not strong enough!";
         }
     }
+
 }

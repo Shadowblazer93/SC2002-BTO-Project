@@ -1,8 +1,5 @@
 package database;
 
-import controller.user.ApplicantController;
-import controller.user.ManagerController;
-import controller.user.OfficerController;
 import entity.application.BTOApplication;
 import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
@@ -12,8 +9,11 @@ import entity.user.Manager;
 import entity.user.Officer;
 import enums.FlatType;
 import enums.RegistrationStatus;
+import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
+import interfaces.IManagerService;
+import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
 import java.io.File;
@@ -30,13 +30,20 @@ import java.util.Map;
  */
 public class SaveCSV {
 
+    private final IApplicantService applicantService;
+    private final IOfficerService officerService;
+    private final IManagerService managerService;
     private final IApplicationService applicationService;
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-    public SaveCSV(IApplicationService applicationService, IEnquiryService enquiryService, 
+    public SaveCSV(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService, 
+                    IApplicationService applicationService, IEnquiryService enquiryService, 
                     IProjectService projectService, IRegistrationService registrationService) {
+        this.applicantService = applicantService;
+        this.officerService = officerService;
+        this.managerService = managerService;
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
@@ -145,7 +152,7 @@ public class SaveCSV {
      * Columns include name, NRIC, age, marital status and password
      */
     public void saveManagers() {
-        Map<String, Manager> allManagers = ManagerController.getAllManagers();
+        Map<String, Manager> allManagers = managerService.getAllManagers();
         File filePath = new File("src/database/ManagerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header
@@ -171,7 +178,7 @@ public class SaveCSV {
      * Columns include name, NRIC, age, marital status and password
      */
     public void saveApplicants() {
-        Map<String, Applicant> allApplicants = ApplicantController.getAllApplicants();
+        Map<String, Applicant> allApplicants = applicantService.getAllApplicants();
         File filePath = new File("src/database/ApplicantList.csv");
 
         try (FileWriter writer = new FileWriter(filePath)) {
@@ -196,7 +203,7 @@ public class SaveCSV {
      * Columns include name, NRIC, age, marital status and password
      */
     public void saveOfficers() {
-        Map<String, Officer> allOfficers = OfficerController.getAllOfficers();
+        Map<String, Officer> allOfficers = officerService.getAllOfficers();
         File filePath = new File("src/database/OfficerList.csv");
         try (FileWriter writer = new FileWriter(filePath)) {
             // File header

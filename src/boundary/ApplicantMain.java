@@ -10,6 +10,7 @@ import enums.defColor;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
 import interfaces.IProjectService;
+import interfaces.IUserMain;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ import printer.PrintBTOProjects;
 import printer.PrintEnquiries;
 import util.Filter;
 
-public class ApplicantMain {
+public class ApplicantMain implements IUserMain<Applicant> {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
@@ -32,6 +33,7 @@ public class ApplicantMain {
         this.projectService = projectService;
     }
 
+    @Override
     public void displayMenu(Applicant applicant, Scanner sc) {
         boolean running = true;
         while (running) {

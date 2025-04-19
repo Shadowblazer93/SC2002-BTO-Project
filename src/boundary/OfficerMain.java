@@ -1,41 +1,48 @@
 package boundary;
 
-import controller.user.OfficerController;
 import entity.project.BTOProject;
 import entity.registration.Registration;
 import entity.user.Officer;
 import enums.defColor;
+import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
+import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
+import interfaces.IUserMain;
 import java.util.*;
 import printer.PrintBTOProjects;
 
-public class OfficerMain {
+public class OfficerMain implements IUserMain<Officer> {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     EnquiryMain enquiryMain;
     ApplicationMain applicationMain;
     ApplicantMain applicantMain;
 
+    private final IApplicantService applicantService;
+    private final IOfficerService officerService;
     private final IApplicationService applicationService;
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-    public OfficerMain(IApplicationService applicationService, IEnquiryService enquiryService, 
+    public OfficerMain(IApplicantService applicantService, IOfficerService officerService, IApplicationService applicationService, IEnquiryService enquiryService, 
                         IProjectService projectService, IRegistrationService registrationService) {
+        this.applicantService = applicantService;
+        this.officerService = officerService;
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
         this.registrationService = registrationService;
 
-        this.applicationMain = new ApplicationMain(applicationService, projectService);
+        this.applicationMain = new ApplicationMain(applicantService, applicationService, projectService);
         this.enquiryMain = new EnquiryMain(enquiryService);
         this.applicantMain = new ApplicantMain(applicationService, enquiryService, projectService);
         
     }
 
+    @Override
     public void displayMenu(Officer officer, Scanner sc) {
         boolean running = true;
         while (running) {
@@ -132,7 +139,7 @@ public class OfficerMain {
             return;
         }
         // 3. Check if eligible to register
-        String message = OfficerController.registerProject(officer, project);
+        String message = officerService.registerProject(officer, project);
         if (!message.equals("success")) {
             System.out.println(message);
             return;

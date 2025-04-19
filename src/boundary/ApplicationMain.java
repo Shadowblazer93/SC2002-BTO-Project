@@ -1,12 +1,13 @@
 package boundary;
 
-import controller.user.ApplicantController;
 import entity.application.BTOApplication;
 import entity.project.BTOProject;
 import entity.user.*;
 import enums.ApplicationStatus;
 import enums.FlatType;
 import enums.defColor;
+import interfaces.IApplicantService;
+import interfaces.IApplicationMain;
 import interfaces.IApplicationService;
 import interfaces.IProjectService;
 import java.util.List;
@@ -16,17 +17,20 @@ import printer.PrintBTOApplications;
 import util.Filter;
 import util.Receipt;
 
-public class ApplicationMain {
+public class ApplicationMain implements IApplicationMain {
     PrintBTOApplications printApplications = new PrintBTOApplications();
 
+    private final IApplicantService applicantService;
     private final IApplicationService applicationService;
     private final IProjectService projectService;
 
-    public ApplicationMain(IApplicationService applicationService, IProjectService projectService) {
+    public ApplicationMain(IApplicantService applicantService, IApplicationService applicationService, IProjectService projectService) {
+        this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.projectService = projectService;
     }
 
+    @Override
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
         while (running) {
@@ -62,6 +66,7 @@ public class ApplicationMain {
         }
     }
 
+    @Override
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
         while (running) {
@@ -166,7 +171,7 @@ public class ApplicationMain {
         String nric = sc.next();
         sc.nextLine();
         
-        Applicant applicant = ApplicantController.getApplicant(nric);
+        Applicant applicant = applicantService.getApplicant(nric);
         if (applicant == null) {
             System.out.println("Applicant not found.");
             return;
