@@ -1,4 +1,3 @@
-
 import boundary.Menu;
 import controller.ApplicationController;
 import controller.BTOProjectController;
@@ -39,11 +38,10 @@ public class Main {
         readCSV.loadManager();
         readCSV.loadApplicant();
         readCSV.loadOfficer();
-
+        readCSV.loadProject();       
         readCSV.loadEnquiry();
         readCSV.loadBTOApplication();
-        readCSV.loadRegistration();
-        readCSV.loadProject();
+        readCSV.loadRegistration();  
         
         // Start menu
         Menu menu = new Menu(applicantService, officerService, managerService, 

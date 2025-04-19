@@ -339,22 +339,32 @@ public class ReadCSV {
             if (Reader.hasNextLine()) {
                 Reader.nextLine();   // Skip header
             }
-
+            
             while (Reader.hasNextLine()) {
                 String line = Reader.nextLine();
-
                 String[] data = line.split(",");
-                int id = Integer.parseInt(data[0].replace("\"", "").trim());
+                
+                // Parse data
+                int id = Integer.parseInt(data[0].trim());
                 String officerNRIC = data[1].replace("\"", "").trim();
-                String projectName = (data[2].replace("\"", "").trim());
+                String projectName = data[2].replace("\"", "").trim();
                 LocalDate registrationDate = LocalDate.parse(data[3].replace("\"", "").trim());
-                RegistrationStatus status = parseRegistrationStatus(data[4].replace("\"", "").trim());
-
+                RegistrationStatus status = RegistrationStatus.valueOf(data[4].replace("\"", "").trim());
+                
+                // Create registration
                 Officer officer = officerService.getOfficer(officerNRIC);
-                registrationService.createRegistration(id, officer, projectName, registrationDate, status);
+                BTOProject project = projectService.getProjectByName(projectName);
+                Registration registration = registrationService.createRegistration(id, officer, projectName, registrationDate, status);
+                
+                // IMPORTANT: If approved, establish connections
+                if (status == RegistrationStatus.APPROVED && project != null && officer != null) {
+                    System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
+                    officer.assignProject(project);
+                    project.getAssignedOfficers().add(officer);
+                }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
+            System.out.println("Registration list not found.");
         }
     }
 
