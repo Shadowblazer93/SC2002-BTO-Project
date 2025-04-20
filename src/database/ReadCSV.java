@@ -285,7 +285,7 @@ public class ReadCSV {
                 String projectName = data[2].replace("\"", "").trim();
                 String message = data[3].replace("\"", "").trim();
                 String response = data[4].replace("\"", "").trim();
-                EnquiryStatus status = parseEnquiryStatus(data[5].replace("\"", "").trim());
+                EnquiryStatus status = EnquiryStatus.valueOf((data[5].replace("\"", "").trim()));
 
                 Enquiry enquiry = enquiryService.createEnquiry(id, applicantNRIC, projectName, message, response, status);
                 Applicant applicant = applicantService.getApplicant(applicantNRIC);
@@ -315,8 +315,8 @@ public class ReadCSV {
                 int id = Integer.parseInt(data[0].replace("\"", "").trim());
                 String applicantNRIC = data[1].replace("\"", "").trim();
                 String projectName = data[2].replace("\"", "").trim();
-                FlatType flatType = parseFlatType((data[3].replace("\"", "").trim()));
-                ApplicationStatus status = parseApplicationStatus(data[4].replace("\"", "").trim());
+                FlatType flatType = FlatType.valueOf(((data[3].replace("\"", "").trim())));
+                ApplicationStatus status = ApplicationStatus.valueOf((data[4].replace("\"", "").trim()));
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = applicantService.getApplicant(applicantNRIC);
@@ -365,86 +365,6 @@ public class ReadCSV {
             }
         } catch (FileNotFoundException e) {
             System.out.println("Registration list not found.");
-        }
-    }
-
-    /**
-     * Helper method to parse string representation of a flat type into the corresponding FlatType enum
-     * @param flatType String representation of flat type (e.g. "TWO_ROOM"or "THREE_ROOM")
-     * @return Corresponding FlatType enum value
-     */
-    private FlatType parseFlatType(String flatType) {
-        switch (flatType.toUpperCase()) {
-            case "TWO_ROOM" -> {
-                return FlatType.TWO_ROOM;
-            }
-            case "THREE_ROOM" -> {
-                return FlatType.THREE_ROOM;
-            }
-            default -> throw new IllegalArgumentException("Invalid flat type: " + flatType);
-        }
-    }
-
-    /**
-     * Helper method to parse string representation of an application status into the corresponding ApplicationStatus enum
-     * @param status String representation of application status (e.g. "PENDING", "SUCCESSFULaaa")
-     * @return ApplicationStatus enum value
-     */
-    private ApplicationStatus parseApplicationStatus(String status) {
-        switch (status.toUpperCase()) {
-            case "PENDING" -> {
-                return ApplicationStatus.PENDING;
-            }
-            case "SUCCESSFUL" -> {
-                return ApplicationStatus.SUCCESSFUL;
-            }
-            case "UNSUCCESSFUL" -> {
-                return ApplicationStatus.UNSUCCESSFUL;
-            }
-            case "BOOKED" -> {
-                return ApplicationStatus.BOOKED;
-            }
-            case "WITHDRAWN" -> {
-                return ApplicationStatus.WITHDRAWN;
-            }
-            default -> throw new IllegalArgumentException("Invalid application status: " + status);
-        }
-    }
-
-    /**
-     * Helper methoda to parse string representation of a registration status into the corresponding RegistrationStatus enum.
-     * @param status String representation of the registration status (e.g. "PENDING", "APPROVEd")
-     * @return RegistrationStatus enum value
-     */
-    private RegistrationStatus parseRegistrationStatus(String status) {
-        switch (status.toUpperCase()) {
-            case "PENDING" -> {
-                return RegistrationStatus.PENDING;
-            }
-            case "APPROVED" -> {
-                return RegistrationStatus.APPROVED;
-            }
-            case "REJECTED" -> {
-                return RegistrationStatus.REJECTED;
-            }
-            default -> throw new IllegalArgumentException("Invalid registration status: " + status);
-        }
-    }
-
-    /**
-     * Helper methoda to parse string representation of a enquiry status into the corresponding EnquiryStatus enum.
-     * @param status String representation of the enquiry status (e.g. "OPEN", "CLOSED")
-     * @return EnquiryStatus enum value
-     */
-    private EnquiryStatus parseEnquiryStatus(String status) {
-        switch (status.toUpperCase()) {
-            case "OPEN" -> {
-                return EnquiryStatus.OPEN;
-            }
-            case "CLOSED" -> {
-                return EnquiryStatus.CLOSED;
-            }
-            default -> throw new IllegalArgumentException("Invalid enquiry status: " + status);
         }
     }
 }
