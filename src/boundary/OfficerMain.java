@@ -106,22 +106,55 @@ public class OfficerMain implements IUserMain<Officer> {
     }
 
     private void viewRegistrationStatus(Officer officer) {
-        if (officer.getRegisteredProjects().isEmpty()) {
+        BTOProject assignedProject = officer.getAssignedProject();
+        boolean hasRegistrations = !officer.getRegisteredProjects().isEmpty() || assignedProject != null;
+        
+        if (!hasRegistrations) {
             System.out.println("You have not registered for any projects.");
             return;
         }
+        
         System.out.println(defColor.YELLOW + "Viewing registration status!");
-        officer.getRegisteredProjects().forEach((projectName, project) -> {
-            System.out.println("Project Name: " + projectName);
+        
+        // First check if officer is assigned to a project (which means approved)
+        if (assignedProject != null) {
+            System.out.println("Project Name: " + assignedProject.getProjectName());
+            System.out.println("Registration Status: APPROVED");
+            System.out.println("You are currently assigned to this project");
+        }
+        
+        // Check other registered projects (pending or rejected)
+        for (Map.Entry<String, BTOProject> entry : officer.getRegisteredProjects().entrySet()) {
+            String projectName = entry.getKey();
+            BTOProject project = entry.getValue();
             
-            //get the registration status of the officer
-            Registration registration = project.getRegistrations().get(officer.getNRIC());
-            if (registration != null) {
-                System.out.println("Registration Status: " + registration.getStatus());
-            } else {
+            // Skip the project the officer is already assigned to
+            if (assignedProject != null && projectName.equals(assignedProject.getProjectName())) {
+                continue;
+            }
+            
+            System.out.println("\nProject Name: " + projectName);
+            
+            // Look for registration in project's registration list
+            boolean found = false;
+            Map<String, List<Registration>> allRegistrations = registrationService.getAllRegistrations();
+            List<Registration> projectRegistrations = allRegistrations.get(projectName);
+            
+            if (projectRegistrations != null) {
+                for (Registration reg : projectRegistrations) {
+                    if (reg.getOfficer().getNRIC().equals(officer.getNRIC())) {
+                        System.out.println("Registration Status: " + reg.getStatus());
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (!found) {
                 System.out.println("Registration Status: Not Found");
             }
-        });
+        }
+        
         System.out.println(defColor.RESET);
     }
     

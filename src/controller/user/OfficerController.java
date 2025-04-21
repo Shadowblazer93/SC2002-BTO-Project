@@ -29,6 +29,12 @@ public class OfficerController implements IOfficerService {
 
     @Override
     public String registerProject(Officer officer, BTOProject project) {
+        // Rule 0: Cannot register if already assigned to a project
+        if (officer.getAssignedProject() != null) {
+            return "You are already assigned to project: " + officer.getAssignedProject().getProjectName() + 
+                   ". Cannot register for another project.";
+        }
+
         String projectName = project.getProjectName();
         // Rule 1: Cannot be applicant for project
         if (officer.getApplication() != null &&

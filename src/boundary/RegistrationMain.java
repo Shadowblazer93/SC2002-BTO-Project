@@ -44,10 +44,20 @@ public class RegistrationMain implements IRegistrationMain {
                 5. View approved registrations
                 6. Exit
                 """ + defColor.PURPLE +
-                "==============================\n" + defColor.RESET);
-            System.out.print("Option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+                "==============================" + defColor.RESET);
+            int choice = 0;
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                }
+            }
 
             switch(choice) {
                 case 1 -> {

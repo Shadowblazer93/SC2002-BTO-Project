@@ -33,7 +33,7 @@ public class EnquiryMain implements IEnquiryMain {
             2. Reply enquiries (managed project)
             3. Exit
             """ + defColor.PURPLE + 
-            "====================================\n" + defColor.RESET);
+            "====================================" + defColor.RESET);
             System.out.print("Option: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 3.");
@@ -71,7 +71,7 @@ public class EnquiryMain implements IEnquiryMain {
             3. Reply enquiries (managed project)
             4. Exit
             """ + defColor.PURPLE + 
-            "====================================\n" + defColor.RESET);
+            "====================================" + defColor.RESET);
             System.out.print("Option: ");
             if (!sc.hasNextInt()) {
                 System.out.println("Invalid input. Please enter a number between 1 and 4.");

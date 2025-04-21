@@ -56,9 +56,19 @@ public class ApplicantMain implements IUserMain<Applicant> {
                     10. Logout
                     """ + defColor.PURPLE + 
                     "==============================\n" + defColor.RESET, applicant.getName());
-            System.out.print("Option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            int choice = 0;
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                }
+            }
 
             switch (choice) {
                 case 1 -> viewProjectList(applicant);

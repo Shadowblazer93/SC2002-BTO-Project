@@ -43,10 +43,20 @@ public class ApplicationMain implements IApplicationMain {
             2. Generate receipt for bookings
             3. Exit
             """ + defColor.PURPLE + 
-            "========================\n" + defColor.RESET);
-            System.out.print("Option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            "========================" + defColor.RESET);
+            int choice = 0;
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                }
+            }
 
             switch (choice) {
                 case 1 -> {
@@ -83,10 +93,20 @@ public class ApplicationMain implements IApplicationMain {
             5. Filter applications
             6. Exit
             """ + defColor.PURPLE + 
-            "==================================\n" + defColor.RESET);
-            System.out.print("Option: ");
-            int choice = sc.nextInt();
-            sc.nextLine();
+            "==================================" + defColor.RESET);
+            int choice = 0;
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Option: ");
+                    choice = sc.nextInt();
+                    sc.nextLine();
+                    validInput = true;
+                } catch (Exception e) {
+                    System.out.println("Invalid input. Please enter a number.");
+                    sc.nextLine(); 
+                }
+            }
 
             switch (choice) {
                 case 1 -> {
