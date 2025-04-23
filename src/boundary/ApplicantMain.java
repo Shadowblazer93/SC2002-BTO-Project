@@ -363,6 +363,7 @@ public class ApplicantMain implements IUserMain<Applicant> {
         }
         else {
             applicationService.requestWithdrawal(applicant);
+            System.out.printf("Successfully requested for withdrawal from %s!\n", application.getProjectName());
         }
     }
 
