@@ -1,3 +1,4 @@
+package main;
 import boundary.Menu;
 import controller.ApplicationController;
 import controller.BTOProjectController;
