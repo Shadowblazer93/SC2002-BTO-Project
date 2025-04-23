@@ -27,7 +27,7 @@ public class PrintBTOApplications implements PrintList<BTOApplication>, PrintMap
         System.out.printf("| %-9s | %-9s | %-15s |\n",
             "NRIC", "Flat Type", "Status");
         for (BTOApplication application : applicationList) {
-            System.out.println(defColor.YELLOW + "-".repeat(95));
+            System.out.println(defColor.YELLOW + "-".repeat(43));
             Applicant applicant = application.getApplicant();
             String flatType = application.getFlatType().getNumRooms() + "-Room";
             ApplicationStatus status = application.getStatus();
