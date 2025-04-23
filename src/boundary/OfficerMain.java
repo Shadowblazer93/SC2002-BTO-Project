@@ -14,6 +14,11 @@ import interfaces.IUserMain;
 import java.util.*;
 import printer.PrintBTOProjects;
 
+/**
+ * The {@code OfficerMain} class provides the main menu and interactions
+ * for an HDB officer user. It allows officers to view project details,
+ * manage applications and enquiries, register for projects, and view registration statuses.
+ */
 public class OfficerMain implements IUserMain<Officer> {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     EnquiryMain enquiryMain;
@@ -27,6 +32,16 @@ public class OfficerMain implements IUserMain<Officer> {
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
+    /**
+     * Constructs an {@code OfficerMain} object and initializes dependencies.
+     *
+     * @param applicantService Service for applicant-related operations
+     * @param officerService Service for officer-related operations
+     * @param applicationService Service for application handling
+     * @param enquiryService Service for enquiry processing
+     * @param projectService Service for managing BTO projects
+     * @param registrationService Service for officer-project registrations
+     */
     public OfficerMain(IApplicantService applicantService, IOfficerService officerService, IApplicationService applicationService, IEnquiryService enquiryService, 
                         IProjectService projectService, IRegistrationService registrationService) {
         this.applicantService = applicantService;
@@ -39,9 +54,14 @@ public class OfficerMain implements IUserMain<Officer> {
         this.applicationMain = new ApplicationMain(applicantService, applicationService, projectService);
         this.enquiryMain = new EnquiryMain(enquiryService);
         this.applicantMain = new ApplicantMain(applicationService, enquiryService, projectService);
-        
     }
 
+    /**
+     * Displays the main menu for an officer and handles input-based navigation.
+     *
+     * @param officer The currently logged-in officer
+     * @param sc Scanner for reading user input
+     */
     @Override
     public void displayMenu(Officer officer, Scanner sc) {
         boolean running = true;
@@ -73,16 +93,13 @@ public class OfficerMain implements IUserMain<Officer> {
                     validInput = true;
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a number.");
-                    // Clear the invalid input
                     sc.next();
                 }
             }
 
             switch (choice) {
                 case 1 -> viewProjectDetails(officer);
-                // Book flat, Generate receipt,
                 case 2 -> applicationMain.displayMenuOfficer(sc, officer);
-                // View enquiries, reply enquiries
                 case 3 -> enquiryMain.displayMenuOfficer(sc, officer);
                 case 4 -> viewRegistrationStatus(officer);
                 case 5 -> registerProject(sc, officer);
@@ -96,6 +113,11 @@ public class OfficerMain implements IUserMain<Officer> {
         }
     }
 
+    /**
+     * Displays the project details of the project assigned to the officer.
+     *
+     * @param officer The officer whose assigned project is to be viewed
+     */
     private void viewProjectDetails(Officer officer) {
         BTOProject project = officer.getAssignedProject();
         if (project == null) {
@@ -105,6 +127,11 @@ public class OfficerMain implements IUserMain<Officer> {
         System.out.println(project);
     }
 
+    /**
+     * Displays the registration status of the officer across all BTO projects.
+     *
+     * @param officer The officer whose registration statuses are to be viewed
+     */
     private void viewRegistrationStatus(Officer officer) {
         BTOProject assignedProject = officer.getAssignedProject();
         boolean hasRegistrations = !officer.getRegisteredProjects().isEmpty() || assignedProject != null;
@@ -115,31 +142,27 @@ public class OfficerMain implements IUserMain<Officer> {
         }
         
         System.out.println(defColor.YELLOW + "Viewing registration status!");
-        
-        // First check if officer is assigned to a project (which means approved)
+
         if (assignedProject != null) {
             System.out.println("Project Name: " + assignedProject.getProjectName());
             System.out.println("Registration Status: APPROVED");
             System.out.println("You are currently assigned to this project");
         }
-        
-        // Check other registered projects (pending or rejected)
+
         for (Map.Entry<String, BTOProject> entry : officer.getRegisteredProjects().entrySet()) {
             String projectName = entry.getKey();
             BTOProject project = entry.getValue();
             
-            // Skip the project the officer is already assigned to
             if (assignedProject != null && projectName.equals(assignedProject.getProjectName())) {
                 continue;
             }
-            
+
             System.out.println("\nProject Name: " + projectName);
-            
-            // Look for registration in project's registration list
+
             boolean found = false;
             Map<String, List<Registration>> allRegistrations = registrationService.getAllRegistrations();
             List<Registration> projectRegistrations = allRegistrations.get(projectName);
-            
+
             if (projectRegistrations != null) {
                 for (Registration reg : projectRegistrations) {
                     if (reg.getOfficer().getNRIC().equals(officer.getNRIC())) {
@@ -149,20 +172,24 @@ public class OfficerMain implements IUserMain<Officer> {
                     }
                 }
             }
-            
+
             if (!found) {
                 System.out.println("Registration Status: Not Found");
             }
         }
-        
+
         System.out.println(defColor.RESET);
     }
-    
+
+    /**
+     * Allows the officer to register for a BTO project if eligible.
+     *
+     * @param sc Scanner for user input
+     * @param officer The officer attempting to register
+     */
     private void registerProject(Scanner sc, Officer officer) {
-        // 1. View list of projects
         System.out.println("Available projects you can register for:");
         projectPrinter.printMap(projectService.getAllProjects());
-        // 2. Get selected project
         sc.nextLine();
         System.out.print("Enter project name to register: ");
         String projectName = sc.nextLine();
@@ -171,63 +198,16 @@ public class OfficerMain implements IUserMain<Officer> {
             System.out.println("Project not found.");
             return;
         }
-        // 3. Check if eligible to register
+
         String message = officerService.registerProject(officer, project);
         if (!message.equals("success")) {
             System.out.println(message);
             return;
         }
-        // 4. Create registration
+
         registrationService.registerProject(officer, project);
-    
+
         System.out.println("Registration submitted to project: " + project.getProjectName());
         System.out.println("Awaiting manager approval.");
     }
-    
-
-    /*private void bookFlat(Scanner sc, Officer officer) {
-        // View applications to approve booking
-        BTOProject project = officer.getAssignedProject();
-        if (project == null) {
-            System.out.println("You are not assigned to any project.");
-            return;
-        }
-        Map<String, BTOApplication> applications = project.getApplications();
-        if (applications.isEmpty()) {
-            System.out.println("No applications to approve booking for.");
-            return;
-        }
-
-        System.out.print("Enter the NRIC of the applicant: ");
-        String nric = sc.next();
-
-        Applicant applicant = ApplicantController.getApplicant(nric);
-        if (applicant == null) {
-            System.out.println("Applicant not found.");
-            return;
-        }
-        
-        System.out.println("Available flat types:");
-        for (FlatType type : FlatType.values()) {
-            System.out.println(type.getNumRooms() + "-Room");
-        }
-        
-        System.out.print("Enter flat type (2 or 3): ");
-        int roomNumber = sc.nextInt();
-        // Clear buffer
-        sc.nextLine();
-        
-        FlatType flatType = FlatType.getFlatType(roomNumber);
-        if (flatType == null) {
-            System.out.println("Invalid flat type.");
-            return;
-        }
-        
-        OfficerController.bookFlat(officer, applicant, flatType);
-    }*/
 }
-
-
-
-
-
