@@ -1,6 +1,4 @@
 ID,Officer,Project,RegistrationDate,Status
-4,"T1234567J","Anchorvale Fields","2025-04-23","PENDING"
-5,"T2109876H","Anchorvale Fields","2025-04-23","PENDING"
-6,"S1234567D","Boon Lay Grove","2025-04-23","PENDING"
-7,"T1234567J","Acacia Breeze","2025-04-23","PENDING"
-8,"S1234567D","Boon Lay Fields","2025-04-23","PENDING"
+1,"T1234567J","Anchorvale Cove","2025-04-23","APPROVED"
+2,"S9876543A","Anchorvale Cove","2025-04-23","PENDING"
+3,"S1234567D","Boon Lay Fields","2025-04-23","APPROVED"
