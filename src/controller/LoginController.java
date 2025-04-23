@@ -18,6 +18,12 @@ public class LoginController implements ILoginService {
     private final IOfficerService officerService;
     private final IManagerService managerService;
 
+    /**
+     * Construct LoginController with the services for applicant, officer and manager
+     * @param applicantService Service handling applicant-related operations
+     * @param officerService Service handling officer-related operations
+     * @param managerService Service handling manager-related operations
+     */
     public LoginController(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService) {
         this.applicantService = applicantService;
         this.officerService = officerService;
