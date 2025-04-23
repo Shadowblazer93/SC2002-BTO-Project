@@ -307,8 +307,13 @@ public class ApplicantMain implements IUserMain<Applicant> {
             return;
         }
 
-        applicationService.applyProject(applicant, project, flatType);
-        System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
+        BTOApplication application = applicationService.applyProject(applicant, project, flatType);
+        if (application != null) {
+            System.out.printf("You have successfully applied to %s for a %d-Room flat", 
+                             project.getProjectName(), flatType.getNumRooms());
+        } else {
+            System.out.println("You cannot apply to a project you're already managing as an officer.");
+        }
     }
 
     /**

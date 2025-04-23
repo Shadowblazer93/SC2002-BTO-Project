@@ -114,8 +114,17 @@ public class ApplicationController implements IApplicationService {
      */
     @Override
     public BTOApplication applyProject(Applicant applicant, BTOProject project, FlatType flatType) {
-        // Create application
-        BTOApplication application = createApplication(0,applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
+        // Check if applicant is an officer managing this project
+        if (applicant instanceof Officer) {
+            Officer officer = (Officer) applicant;
+            if (officer.getAssignedProject() != null && 
+                officer.getAssignedProject().getProjectName().equals(project.getProjectName())) {
+                return null; // Or throw exception "Cannot apply to a project you're managing"
+            }
+        }
+        
+        // Existing code
+        BTOApplication application = createApplication(0, applicant, project.getProjectName(), flatType, ApplicationStatus.PENDING, false);
         applicant.setApplication(application);
         project.addApplication(application); 
         return application;
