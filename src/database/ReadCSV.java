@@ -9,7 +9,6 @@ import enums.ApplicationStatus;
 import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.RegistrationStatus;
-import enums.defColor;
 import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
@@ -230,7 +229,7 @@ public class ReadCSV {
                     if (LocalDate.now().isAfter(project.getOpeningDate()) && LocalDate.now().isBefore(project.getClosingDate())) {
                         officer.assignProject(project);
                     }
-                    System.out.printf(defColor.RED + "%s: %s\n" + defColor.RESET, officer.getName(), projectName);
+                    //System.out.printf(defColor.RED + "%s: %s\n" + defColor.RESET, officer.getName(), projectName);
                 }
 
                 // Parse registrations
@@ -244,7 +243,6 @@ public class ReadCSV {
                     }
                     // Go thorugh nric in registrations
                     for (String nric : registrationsArray) {
-                        System.out.println(projectName + " : " + nric);
                         if (nric.isEmpty()) continue;
                         Registration registration = registrationMap.get(nric);
                         if (registration == null) {
@@ -258,7 +256,7 @@ public class ReadCSV {
 
                         // IMPORTANT: If approved, establish connections
                         if (registration.getStatus().equals(RegistrationStatus.APPROVED)) {
-                            System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
+                            //System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
                             officer.assignProject(project);
                             project.getAssignedOfficers().add(officer);
                         }
@@ -366,12 +364,6 @@ public class ReadCSV {
                 BTOProject project = projectService.getProjectByName(projectName);
                 Registration registration = registrationService.createRegistration(id, officer, projectName, registrationDate, status);
                 
-                // IMPORTANT: If approved, establish connections
-                /*if (status.equals(RegistrationStatus.APPROVED) && project != null && officer != null) {
-                    System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
-                    officer.assignProject(project);
-                    project.getAssignedOfficers().add(officer);
-                }*/
             }
         } catch (FileNotFoundException e) {
             System.out.println("Registration list not found.");
