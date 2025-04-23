@@ -5,6 +5,7 @@ import entity.enquiry.Enquiry;
 import entity.project.BTOProject;
 import entity.user.Applicant;
 import enums.ApplicationStatus;
+import enums.EnquiryStatus;
 import enums.FlatType;
 import enums.defColor;
 import interfaces.IApplicationService;
@@ -159,6 +160,10 @@ public class ApplicantMain implements IUserMain<Applicant> {
             System.out.println("Could not find an enquiry with that ID!");
             return;
         }
+        if (enquiry.getStatus()==EnquiryStatus.CLOSED) {
+            System.out.println("Closed enquiries cannot be deleted.");
+            return;
+        }
         enquiryService.deleteEnquiry(applicant, enquiry);
     }
 
@@ -175,6 +180,11 @@ public class ApplicantMain implements IUserMain<Applicant> {
         Enquiry enquiry = enquiryService.getEnquiryByID(enqId);
         if (enquiry == null) {
             System.out.println("Could not find an enquiry with that ID!");
+            return;
+        }
+        // Check if enquiry is closed
+        if (enquiry.getStatus()==EnquiryStatus.CLOSED) {
+            System.out.println("Closed enquiries cannot be edited.");
             return;
         }
         // Edit enquiry message
