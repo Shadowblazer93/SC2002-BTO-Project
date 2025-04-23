@@ -11,15 +11,30 @@ import java.util.Map;
 import java.util.Scanner;
 import printer.PrintEnquiries;
 
+/**
+ * EnquiryMain class provides the interface for managing enquiries in the BTO system.
+ * Allows officers and managers to view and reply to enquiries for their assigned or managed projects.
+ */
 public class EnquiryMain implements IEnquiryMain {
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
 
     private final IEnquiryService enquiryService;
 
+    /**
+     * Constructs an EnquiryMain object with the specified enquiry service.
+     *
+     * @param enquiryService Service for managing enquiries.
+     */
     public EnquiryMain(IEnquiryService enquiryService) {
         this.enquiryService = enquiryService;
     }
 
+    /**
+     * Displays the enquiry menu for officers and handles user input.
+     *
+     * @param sc      Scanner for reading user input.
+     * @param officer Officer interacting with the system.
+     */
     @Override
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
@@ -55,7 +70,13 @@ public class EnquiryMain implements IEnquiryMain {
             }
         }
     }
-    
+
+    /**
+     * Displays the enquiry menu for managers and handles user input.
+     *
+     * @param sc      Scanner for reading user input.
+     * @param manager Manager interacting with the system.
+     */
     @Override
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
@@ -94,14 +115,22 @@ public class EnquiryMain implements IEnquiryMain {
             }
         }
     }
-    
 
+    /**
+     * Displays all enquiries in the system.
+     */
     private void viewAllEnquiries() {
         Map<Integer, Enquiry> allEnquiries = enquiryService.getAllEnquiries();
         System.out.println("All Enquiries:");
         enquiryPrinter.printMap(allEnquiries);
     }
 
+    /**
+     * Displays enquiries for the project managed by the specified user.
+     *
+     * @param user User managing the project (officer or manager).
+     * @return The project being managed, or null if no project is assigned.
+     */
     private BTOProject viewManagedEnquiries(User user) {
         UserRole role = user.getUserRole();
         BTOProject project = null;
@@ -134,6 +163,12 @@ public class EnquiryMain implements IEnquiryMain {
         return project;
     }
 
+    /**
+     * Allows the user to reply to an enquiry for their managed project.
+     *
+     * @param sc   Scanner for reading user input.
+     * @param user User managing the project (officer or manager).
+     */
     private void replyEnquiry(Scanner sc, User user) {
         // Show all enquiries
         BTOProject project = viewManagedEnquiries(user);
