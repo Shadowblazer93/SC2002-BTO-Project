@@ -17,19 +17,43 @@ import printer.PrintBTOApplications;
 import util.Filter;
 import util.Receipt;
 
+/**
+ * Provides the user interface for application-related tasks such as:
+ * - Officer: booking flats, generating receipts
+ * - Manager: approving/rejecting applications and withdrawals, filtering
+ *
+ * Implements {@code IApplicationMain}.
+ */
 public class ApplicationMain implements IApplicationMain {
+
+    /** Handles printing of application lists to console. */
     PrintBTOApplications printApplications = new PrintBTOApplications();
 
     private final IApplicantService applicantService;
     private final IApplicationService applicationService;
     private final IProjectService projectService;
 
+    /**
+     * Constructs the application main UI handler with required services.
+     *
+     * @param applicantService    Service for applicant-related operations
+     * @param applicationService  Service for application-related operations
+     * @param projectService      Service for project-related operations
+     */
     public ApplicationMain(IApplicantService applicantService, IApplicationService applicationService, IProjectService projectService) {
         this.applicantService = applicantService;
         this.applicationService = applicationService;
         this.projectService = projectService;
     }
 
+    /**
+     * Displays the officer-facing application menu, allowing them to:
+     * 1. Book a flat for a successful applicant
+     * 2. Generate a receipt for a booking
+     *
+     * @param sc      The {@code Scanner} for user input
+     * @param officer The logged-in officer
+     */
     @Override
     public void displayMenuOfficer(Scanner sc, Officer officer) {
         boolean running = true;
@@ -76,6 +100,15 @@ public class ApplicationMain implements IApplicationMain {
         }
     }
 
+    /**
+     * Displays the manager-facing application menu, allowing them to:
+     * 1. Approve or reject applications
+     * 2. Approve or reject withdrawals
+     * 3. Filter applications by marital status and flat type
+     *
+     * @param sc      The {@code Scanner} for user input
+     * @param manager The logged-in manager
+     */
     @Override
     public void displayMenuManager(Scanner sc, Manager manager) {
         boolean running = true;
@@ -135,6 +168,13 @@ public class ApplicationMain implements IApplicationMain {
         }
     }
 
+    /**
+     * Books a flat for a successful applicant, selected by NRIC.
+     * Verifies officer’s access to project and flat availability.
+     *
+     * @param sc      {@code Scanner} for user input
+     * @param officer Officer booking the flat
+     */
     private void bookFlat(Scanner sc, Officer officer) {
         // 1. Get project applications
         Map<String, BTOApplication> applications = retrieveApplications(officer);
@@ -173,6 +213,12 @@ public class ApplicationMain implements IApplicationMain {
         }
     }
 
+    /**
+     * Generates a booking receipt for a selected applicant, if the booking was successful.
+     *
+     * @param sc      {@code Scanner} for input
+     * @param officer Officer generating the receipt
+     */
     private void generateReceipt(Scanner sc, Officer officer) {
         // Print applications
         Map<String, BTOApplication> applications = retrieveApplications(officer);
@@ -209,6 +255,12 @@ public class ApplicationMain implements IApplicationMain {
         }
     }
 
+    /**
+     * Retrieves applications for the currently active project of a manager or officer.
+     *
+     * @param user The manager or officer user
+     * @return Map of NRIC to {@code BTOApplication}, or {@code null} if invalid
+     */
     private Map<String, BTOApplication> retrieveApplications(User user) {
         BTOProject project;
         switch(user.getUserRole()) {
@@ -239,6 +291,14 @@ public class ApplicationMain implements IApplicationMain {
         return applications;
     }
 
+    /**
+     * Allows a manager to approve or reject applications.
+     * Only works on applications with status {@code PENDING}.
+     *
+     * @param sc         Scanner for input
+     * @param manager    Manager processing applications
+     * @param isApproval {@code true} to approve, {@code false} to reject
+     */
     private void processApplication(Scanner sc, Manager manager, boolean isApproval) {
         Map<String, BTOApplication> applications = retrieveApplications(manager);
         if (applications == null) {
@@ -276,6 +336,13 @@ public class ApplicationMain implements IApplicationMain {
         }
     }
 
+    /**
+     * Allows a manager to approve or reject withdrawal requests from applicants.
+     *
+     * @param sc         Scanner for input
+     * @param manager    Manager processing withdrawals
+     * @param isApproval {@code true} to approve, {@code false} to reject
+     */
     private void processWithdrawals(Scanner sc, Manager manager, boolean isApproval) {
         Map<String, BTOApplication> applications = retrieveApplications(manager);
         if (applications == null) {
@@ -324,6 +391,13 @@ public class ApplicationMain implements IApplicationMain {
         
     }
 
+    /**
+     * Allows a manager to filter applications based on marital status and flat type.
+     * Results are printed using {@code PrintBTOApplications}.
+     *
+     * @param sc      Scanner for input
+     * @param manager The manager using the filter feature
+     */
     private void filterApplication(Scanner sc, Manager manager) {
         if (manager.getCurrentProject() == null) {
             System.out.println("You are not managing any project.");
