@@ -255,6 +255,13 @@ public class ReadCSV {
                         // Add to officer's list of registrations
                         Officer officer = allOfficers.get(nric);
                         officer.addRegisteredProject(project);
+
+                        // IMPORTANT: If approved, establish connections
+                        if (registration.getStatus().equals(RegistrationStatus.APPROVED)) {
+                            System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
+                            officer.assignProject(project);
+                            project.getAssignedOfficers().add(officer);
+                        }
                     }
                 }
             }
@@ -360,11 +367,11 @@ public class ReadCSV {
                 Registration registration = registrationService.createRegistration(id, officer, projectName, registrationDate, status);
                 
                 // IMPORTANT: If approved, establish connections
-                if (status == RegistrationStatus.APPROVED && project != null && officer != null) {
+                /*if (status.equals(RegistrationStatus.APPROVED) && project != null && officer != null) {
                     System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
                     officer.assignProject(project);
                     project.getAssignedOfficers().add(officer);
-                }
+                }*/
             }
         } catch (FileNotFoundException e) {
             System.out.println("Registration list not found.");
