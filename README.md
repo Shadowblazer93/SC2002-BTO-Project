@@ -42,4 +42,4 @@ Run `src/main/Main.java` using a Java Runtime Environment.
 ___
 ## Appendix
 - [JavaDocs](https://shadowblazer93.github.io/index.html)
-- [UML Class Diagram](https://i.imgur.com/L0mUMek.jpeg)
+- [UML Class Diagram]([https://i.imgur.com/L0mUMek.jpeg](https://raw.githubusercontent.com/Shadowblazer93/SC2002-BTO-Project/refs/heads/main/SC2002%20UML%20Class%20Diagram.jpg))
