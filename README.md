@@ -38,7 +38,7 @@ Download the project from GitHub.
 ```shell
 git clone https://github.com/Shadowblazer93/SC2002-BTO-Project
 ```
-Run `src/Main.java` using a Java Runtime Environment.
+Run `src/main/Main.java` using a Java Runtime Environment.
 ___
 ## UML Class Diagram
 Image link for [UML Class Diagram](https://i.imgur.com/L0mUMek.jpeg)
