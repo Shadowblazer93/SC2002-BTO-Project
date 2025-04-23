@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implmentation of {@link PrintList} interface for printing {@link BTOProject} data
+ * Implementation of {@link PrintList} interface for printing {@link BTOProject} data
  * Provides methods to print BTOProject data in list and map formats
  */
 public class PrintBTOProjects implements PrintMap<String, BTOProject> {
