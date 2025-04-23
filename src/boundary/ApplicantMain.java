@@ -18,6 +18,7 @@ import java.util.Scanner;
 import printer.PrintBTOProjects;
 import printer.PrintEnquiries;
 import util.Filter;
+import util.Receipt;
 
 /**
  * The ApplicantMain class provides the main interface for applicants to interact with the BTO system.
@@ -344,6 +345,7 @@ public class ApplicantMain implements IUserMain<Applicant> {
         boolean success = projectService.bookFlat(application, project, flatType, applicant);
         if (success) {
             System.out.println("Flat booked successfully!");
+            Receipt.applicantReceipt(applicant,application,projectService.getAllProjects());
         } else {
             System.out.printf("No more units available for %d-Room flats in %s.", flatType.getNumRooms(), projectName);
         }

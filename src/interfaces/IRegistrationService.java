@@ -70,12 +70,11 @@ public interface IRegistrationService {
     String approveRegistration(Manager manager, Registration registration);
     
     /**
-     * Rejects a registration by a manager.
-     *
-     * @param manager     The manager rejecting the registration.
-     * @param registration The registration to reject.
-     * @return A message indicating success or failure of rejection.
+     * Rejects a registration, preventing the officer from being assigned.
+     * 
+     * @param manager Manager rejecting the registration
+     * @param registration Registration to reject
+     * @return Result message indicating success or reason for failure
      */
     String rejectRegistration(Manager manager, Registration registration);
-
 }

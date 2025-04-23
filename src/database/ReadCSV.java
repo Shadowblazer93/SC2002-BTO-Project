@@ -320,6 +320,9 @@ public class ReadCSV {
                 boolean withdrawal = Boolean.parseBoolean(data[5].replace("\"", "").trim());
 
                 Applicant applicant = applicantService.getApplicant(applicantNRIC);
+                if (applicant == null) {
+                    applicant = officerService.getOfficer(applicantNRIC);
+                }
                 BTOApplication application = applicationService.createApplication(id, applicant, projectName, flatType, status, withdrawal);
                 applicant.setApplication(application);
             }

@@ -16,10 +16,19 @@ import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
 
-
+/**
+ * Main class is initalizes controllers, and saveas and writes data to the CSV files for the BTO Management System.
+ */
 public class Main {
+
+    /**
+     * Main method initializes services, loads data, and starts the application.
+     *
+     * @param args Command-line arguments (not used in this application).
+     */
     public static void main(String[] args) {
 
+        // Initialize services
         IApplicantService applicantService = new ApplicantController();
         IOfficerService officerService = new OfficerController();
         IManagerService managerService = new ManagerController();
@@ -28,12 +37,13 @@ public class Main {
         IProjectService projectService = new BTOProjectController();
         IRegistrationService registrationService = new RegistrationController();
 
+        // Initialize CSV readers and writers
         ReadCSV readCSV = new ReadCSV(applicantService, officerService, managerService, 
                                         applicationService, enquiryService, projectService, registrationService);
         SaveCSV saveCSV = new SaveCSV(applicantService, officerService, managerService,
                                         applicationService, enquiryService, projectService, registrationService);
 
-        // Read save files
+        // Load data from CSV files
         readCSV.loadManager();
         readCSV.loadApplicant();
         readCSV.loadOfficer();
@@ -42,16 +52,15 @@ public class Main {
         readCSV.loadRegistration();  
         readCSV.loadProject(); 
         
-        // Start menu
+        // Start main menu
         Menu menu = new Menu(applicantService, officerService, managerService, 
                             applicationService, enquiryService, projectService, registrationService);
         menu.displayMenu();
 
-        // Save CSV files
+        // Save data to CSV files
         saveCSV.saveManagers();
         saveCSV.saveApplicants();
         saveCSV.saveOfficers();
-
         saveCSV.saveProject();
         saveCSV.saveEnquiries();
         saveCSV.saveBTOApplications();

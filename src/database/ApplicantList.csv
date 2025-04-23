@@ -1,7 +1,12 @@
 Name,NRIC,Age,Marital Status,Password
+"Michele","S1111113A",45,"Single","password"
+"Britney","S1111114A",27,"Married","password"
+"Susan","S1111111A",60,"Single","password"
 "Rachel","T1234567A",25,"Single","password"
+"Peter","S1111112A",20,"Married","password"
 "John","S2345678A",35,"Single","password"
 "James","T3456789A",30,"Married","password"
-"Sarah","T2345678A",40,"Married","Password123*"
+"Sarah","T2345678A",40,"Married","password*"
 "Grace","S1234567A",37,"Married","password"
 "Jack","S3456789A",30,"Married","password"
+"Henry","S1111115A",36,"Single","password"
