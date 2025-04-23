@@ -73,7 +73,8 @@ public class Filter {
                 p.isOpen() &&
                 flatTypes.stream().anyMatch((flatType) -> 
                     p.getUnitCounts().containsKey(flatType) && p.getUnitCounts().get(flatType) > 0
-                )
+                ) &&
+                p.getVisibility()
             )
             .sorted(Comparator.comparing(BTOProject::getProjectName))
             .collect(Collectors.toList());

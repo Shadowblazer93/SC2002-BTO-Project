@@ -1,1 +1,3 @@
 ID,Applicant,Project,FlatType(Rooms),Status,Withdrawal
+1,"S3456789A","Anchorvale Fields","TWO_ROOM","PENDING",false
+2,"S1234567A","Anchorvale Cove","THREE_ROOM","PENDING",false
