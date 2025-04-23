@@ -7,14 +7,27 @@ import enums.FlatType;
 import interfaces.IProjectService;
 import java.util.Map;
 
+/**
+ * Utility class for generating booking receipts for BTO Application
+ */
 public class Receipt {
 
     private final IProjectService projectService;
 
+    /**
+     * Construct Receipt utility object with the specified projectService
+     * @param projectService Service used to access BTOProject-related data
+     */
     public Receipt(IProjectService projectService) {
         this.projectService = projectService;
     }
 
+    /**
+     * Prints booking receipt to console for a given applicant and their application
+     * @param applicant
+     * @param application
+     * @param allProjects
+     */
     public static void applicantReceipt(Applicant applicant, BTOApplication application, Map<String, BTOProject> allProjects) {
         String NRIC = applicant.getNRIC();
         String name = applicant.getName();
@@ -43,4 +56,5 @@ public class Receipt {
             System.out.println("===========================");
         }
     }
+    
 }

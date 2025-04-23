@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implmentation of {@link PrintList} interface for printing {@link BTOApplication} data
+ * Implementation of {@link PrintList} interface for printing {@link BTOApplication} data
  * Provides methods to print BTO Applications data in list and map formats
  */
 public class PrintBTOApplications implements PrintList<BTOApplication>, PrintMap<String, BTOApplication> {

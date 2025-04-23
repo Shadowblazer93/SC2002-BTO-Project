@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Implmentation of {@link PrintList} interface for printing {@link Registration} data
+ * Implementation of {@link PrintList} interface for printing {@link Registration} data
  * Provides methods to print registrations in list and map formats
  */
 public class PrintRegistrations implements PrintList<Registration>, PrintMapList<String, Registration> {
