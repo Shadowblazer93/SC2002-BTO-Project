@@ -17,7 +17,6 @@ import interfaces.IProjectService;
 import interfaces.IRegistrationService;
 
 
-
 public class Main {
     public static void main(String[] args) {
 
@@ -38,10 +37,10 @@ public class Main {
         readCSV.loadManager();
         readCSV.loadApplicant();
         readCSV.loadOfficer();
-        readCSV.loadProject();       
         readCSV.loadEnquiry();
         readCSV.loadBTOApplication();
         readCSV.loadRegistration();  
+        readCSV.loadProject(); 
         
         // Start menu
         Menu menu = new Menu(applicantService, officerService, managerService, 

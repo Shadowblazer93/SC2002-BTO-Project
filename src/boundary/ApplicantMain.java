@@ -111,7 +111,7 @@ public class ApplicantMain implements IUserMain<Applicant> {
             System.out.println("Project details are no longer visible.");
         }
         System.out.println("Details of your application:");
-        System.out.println(application);
+        System.out.println(defColor.YELLOW + application);
     }
 
     private void submitEnquiry(Scanner sc, Applicant applicant) {
