@@ -8,15 +8,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * Implementation of {@link PrintList} interface for printing {@link Registration} data
- * Provides methods to print registrations in list and map formats
+ * Implementation of PrintList and PrintMapList interfaces for printing Registration data.
+ * Provides methods to print registration information in various formats.
  */
 public class PrintRegistrations implements PrintList<Registration>, PrintMapList<String, Registration> {
     
     /**
-     * Print formatted table of registrations.
-     * Each entry displays the project name, registration ID, officer NRIC and registration status
-     * @param allRegistrations Map where key is the project name and the value is a list of {@link Registration} objects
+     * Prints a formatted table of registrations from a map structure.
+     * Each entry displays the project name, registration ID, officer NRIC and registration status.
+     * 
+     * @param allRegistrations Map where key is the project name and value is list of Registration objects
      */
     @Override
     public void printMapList(Map<String, List<Registration>> allRegistrations) {
@@ -42,9 +43,10 @@ public class PrintRegistrations implements PrintList<Registration>, PrintMapList
     }
 
     /**
-     * Print formatted table of registrations.
-     * Each entry displays the project name, registration ID, officer NRIC and registration status
-     * @param registrationList List of {@link Registration} objects
+     * Prints a formatted table of registrations from a list structure.
+     * Each entry displays the project name, registration ID, officer NRIC and registration status.
+     * 
+     * @param registrationList List of Registration objects
      */
     @Override
     public void printList(List<Registration> registrationList) {
