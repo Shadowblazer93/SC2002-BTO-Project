@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"util"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"boundary"},{"l":"controller"},{"l":"controller.user"},{"l":"database"},{"l":"entity.application"},{"l":"entity.enquiry"},{"l":"entity.project"},{"l":"entity.registration"},{"l":"entity.user"},{"l":"enums"},{"l":"interfaces"},{"l":"main"},{"l":"printer"},{"l":"util"}];updateSearchResults();
