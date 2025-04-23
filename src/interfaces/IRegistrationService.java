@@ -10,63 +10,62 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Interface defining services for Registration entity operations.
- * Provides methods for creating, retrieving, and managing registrations
- * of officers to BTO projects.
+ * Interface for managing the registration logic between officers and BTO projects.
+ * Includes methods for creating, approving, rejecting, and retrieving registrations.
  */
 public interface IRegistrationService {
 
     /**
-     * Retrieves all registrations in the system, organized by project.
-     * 
-     * @return Map where key is project name and value is list of registrations
+     * Retrieves all officer registrations grouped by project name.
+     *
+     * @return A map where the key is the project name and the value is a list of registrations.
      */
     Map<String, List<Registration>> getAllRegistrations();
     
     /**
-     * Retrieves all registrations for a specific project.
-     * 
-     * @param projectName Name of the project
-     * @return List of registrations for the specified project
+     * Retrieves all officer registrations associated with a specific project.
+     *
+     * @param projectName The name of the BTO project.
+     * @return A list of {@code Registration} objects for the given project.
      */
     List<Registration> getRegistrationsByProject(String projectName);
     
     /**
-     * Adds a registration to a specific project.
-     * 
-     * @param project Name of project
-     * @param registration Registration to add
+     * Adds a new registration entry under the specified project.
+     *
+     * @param project      The name of the project.
+     * @param registration The registration object to add.
      */
     void addRegistration(String project, Registration registration);
 
     /**
-     * Creates a new registration with specified details.
-     * 
-     * @param id Registration ID (use 0 for auto-generation)
-     * @param officer Officer making the registration
-     * @param projectName Project being registered for
-     * @param registrationDate Date of registration
-     * @param status Initial status of registration
-     * @return The newly created Registration object
+     * Creates a new {@code Registration} object with the specified details.
+     *
+     * @param id               The ID of the registration.
+     * @param officer          The officer being registered.
+     * @param projectName      The name of the project.
+     * @param registrationDate The date of registration.
+     * @param status           The current registration status.
+     * @return A new {@code Registration} object.
      */
     Registration createRegistration(int id, Officer officer, String projectName, 
                                     LocalDate registrationDate, RegistrationStatus status);
-    
+               
     /**
-     * Registers an officer for a project, creating a registration with PENDING status.
-     * 
-     * @param officer Officer to register
-     * @param project Project to register for
-     * @return The created Registration object
+     * Registers an officer to a specific BTO project.
+     *
+     * @param officer The officer attempting to register.
+     * @param project The BTO project to register for.
+     * @return A {@code Registration} object representing the registration.
      */
     Registration registerProject(Officer officer, BTOProject project);
 
     /**
-     * Approves a registration, assigning the officer to the project.
-     * 
-     * @param manager Manager approving the registration
-     * @param registration Registration to approve
-     * @return Result message indicating success or reason for failure
+     * Approves a registration by a manager.
+     *
+     * @param manager     The manager approving the registration.
+     * @param registration The registration to approve.
+     * @return A message indicating success or failure of approval.
      */
     String approveRegistration(Manager manager, Registration registration);
     
