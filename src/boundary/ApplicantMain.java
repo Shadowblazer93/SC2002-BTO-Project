@@ -19,6 +19,10 @@ import printer.PrintBTOProjects;
 import printer.PrintEnquiries;
 import util.Filter;
 
+/**
+ * The ApplicantMain class provides the main interface for applicants to interact with the BTO system.
+ * It allows applicants to view projects, apply for projects, manage enquiries, and book flats.
+ */
 public class ApplicantMain implements IUserMain<Applicant> {
     PrintBTOProjects projectPrinter = new PrintBTOProjects();
     PrintEnquiries enquiryPrinter = new PrintEnquiries();
@@ -27,13 +31,26 @@ public class ApplicantMain implements IUserMain<Applicant> {
     private final IEnquiryService enquiryService;
     private final IProjectService projectService;
 
+    /**
+     * Constructs an ApplicantMain object with the specified services.
+     *
+     * @param applicationService The service for managing applications.
+     * @param enquiryService     The service for managing enquiries.
+     * @param projectService     The service for managing projects.
+     */
     public ApplicantMain(IApplicationService applicationService, IEnquiryService enquiryService, 
-                IProjectService projectService) {
+                         IProjectService projectService) {
         this.applicationService = applicationService;
         this.enquiryService = enquiryService;
         this.projectService = projectService;
     }
 
+    /**
+     * Display  main menu for the applicant and handles user input.
+     *
+     * @param applicant The applicant interacting with the system.
+     * @param sc        The scanner for reading user input.
+     */
     @Override
     public void displayMenu(Applicant applicant, Scanner sc) {
         boolean running = true;
@@ -90,6 +107,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         }
     }
 
+    /**
+     * Displays a list of projects available to the applicant.
+     *
+     * @param applicant The applicant viewing the project list.
+     * @return True if projects are available, false otherwise.
+     */
     private boolean viewProjectList(Applicant applicant) {
         List<BTOProject> visibleProjects = Filter.filterUserGroupProjects(projectService.getAllProjects(), applicant);
         if (visibleProjects == null || visibleProjects.isEmpty()) {
@@ -100,6 +123,11 @@ public class ApplicantMain implements IUserMain<Applicant> {
         return true;
     }
 
+    /**
+     * Displays the details of the applicant's current application.
+     *
+     * @param applicant The applicant viewing their application.
+     */
     private void viewAppliedProject(Applicant applicant) {
         BTOApplication application = applicant.getApplication();
         if (application==null) {
@@ -114,6 +142,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         System.out.println(defColor.YELLOW + application);
     }
 
+    /**
+     * Allows the applicant to submit an enquiry about a project.
+     *
+     * @param sc        The scanner for reading user input.
+     * @param applicant The applicant submitting the enquiry.
+     */
     private void submitEnquiry(Scanner sc, Applicant applicant) {
         // select project to enquire about
         if (!viewProjectList(applicant)) {
@@ -134,6 +168,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         System.out.println("Enquiry submitted successfully!");
     }
 
+    /**
+     * Displays all enquiries submitted by the applicant.
+     *
+     * @param applicant The applicant viewing their enquiries.
+     * @return A map of enquiries submitted by the applicant, or null if no enquiries exist.
+     */
     private Map<Integer, Enquiry> viewEnquiries(Applicant applicant) {
         Map<Integer, Enquiry> enquiries = applicant.getEnquiries();
         if (enquiries.isEmpty()) {
@@ -144,6 +184,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         return enquiries;
     }
 
+    /**
+     * Allows the applicant to delete an enquiry they have submitted.
+     *
+     * @param sc        The scanner for reading user input.
+     * @param applicant The applicant deleting the enquiry.
+     */
     private void deleteEnquiry(Scanner sc, Applicant applicant) {
         // Print enquiries submitted
         if (viewEnquiries(applicant) == null) {
@@ -167,6 +213,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         enquiryService.deleteEnquiry(applicant, enquiry);
     }
 
+    /**
+     * Allows the applicant to edit an enquiry they have submitted.
+     *
+     * @param sc        The scanner for reading user input.
+     * @param applicant The applicant editing the enquiry.
+     */
     private void editEnquiry(Scanner sc, Applicant applicant) {
         // Print enquiries submitted
         if (viewEnquiries(applicant) == null) {
@@ -194,6 +246,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         System.out.println("Enquiry message updated successfully!");
     }
 
+    /**
+     * Allows the applicant to apply for a project.
+     *
+     * @param sc        The scanner for reading user input.
+     * @param applicant The applicant applying for the project.
+     */
     private void applyProject(Scanner sc, Applicant applicant) {
         if (applicant.getApplication()!=null) {
             System.out.println("You have already applied to a project.");
@@ -252,6 +310,11 @@ public class ApplicantMain implements IUserMain<Applicant> {
         System.out.printf("You have successfully applied to %s for a %d-Room flat", project.getProjectName(), flatType.getNumRooms());
     }
 
+    /**
+     * Allows the applicant to book a flat after their application is approved.
+     *
+     * @param applicant The applicant booking the flat.
+     */
     private void bookFlat(Applicant applicant) {
         BTOApplication application = applicant.getApplication();
 
@@ -286,6 +349,11 @@ public class ApplicantMain implements IUserMain<Applicant> {
         }
     }
 
+    /**
+     * Allows the applicant to withdraw their application from a project.
+     *
+     * @param applicant The applicant withdrawing their application.
+     */
     private void withdrawProject(Applicant applicant) {
         BTOApplication application = applicant.getApplication();
         if (application == null) {
@@ -296,6 +364,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         }
     }
 
+    /**
+     * Reads a valid integer input from the user.
+     *
+     * @param sc The scanner for reading user input.
+     * @return A valid integer input.
+     */
     private int getValidIntegerInput(Scanner sc) {
         while (true) {
             try {return sc.nextInt();}
@@ -306,6 +380,12 @@ public class ApplicantMain implements IUserMain<Applicant> {
         }
     }
 
+    /**
+     * Reads a valid non-empty string input from the user.
+     *
+     * @param sc The scanner for reading user input.
+     * @return A valid non-empty string input.
+     */
     private String getValidStringInput(Scanner sc) {
         String input = sc.nextLine().trim();
         while (input.isEmpty()) {
