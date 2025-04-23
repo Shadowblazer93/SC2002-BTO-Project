@@ -221,6 +221,7 @@ public class ReadCSV {
                 Map<String, Officer> allOfficers = officerService.getAllOfficers();
                 for (String officerNRIC : assignedOfficerArray) {
                     officerNRIC = officerNRIC.trim();
+                    // Assign officer to project
                     if (officerNRIC.isEmpty()) continue;
                     project.addOfficer(allOfficers.get(officerNRIC));
                     
@@ -258,7 +259,6 @@ public class ReadCSV {
                         if (registration.getStatus().equals(RegistrationStatus.APPROVED)) {
                             //System.out.println("CSV: Assigning officer " + officer.getName() + " to project " + projectName);
                             officer.assignProject(project);
-                            project.getAssignedOfficers().add(officer);
                         }
                     }
                 }

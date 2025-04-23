@@ -33,15 +33,15 @@ public class PrintBTOProjects implements PrintMap<String, BTOProject> {
             .comparing((BTOProject p) -> p.getProjectName()));
 
         System.out.println(defColor.YELLOW + "BTO Project List:");
-        System.out.println("-".repeat(68));
-        System.out.printf("| %-20s | %-15s | %-10s | %-10s |\n", 
-            "Project Name", "Available Slots", "Opening", "Closing");	
+        System.out.println("-".repeat(81));
+        System.out.printf("| %-20s | %-15s | %-10s | %-10s | %-10s |\n", 
+            "Project Name", "Available Slots", "Opening", "Closing", "Visibility");	
         for (BTOProject project : sortedProjects) {
-            System.out.println("-".repeat(68));
-            System.out.printf("| %-20s | %-15s | %-10s | %-10s |\n", 
-                project.getProjectName(), project.getAvailableOfficerSlots(), project.getOpeningDate(), project.getClosingDate());
+            System.out.println("-".repeat(81));
+            System.out.printf("| %-20s | %-15s | %-10s | %-10s | %-10s |\n", 
+                project.getProjectName(), project.getAvailableOfficerSlots(), project.getOpeningDate(), project.getClosingDate(), project.getVisibility());
         }
-        System.out.println("-".repeat(68) + defColor.RESET);
+        System.out.println("-".repeat(81) + defColor.RESET);
     }
 
     /**

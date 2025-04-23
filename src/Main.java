@@ -8,6 +8,7 @@ import controller.user.ManagerController;
 import controller.user.OfficerController;
 import database.ReadCSV;
 import database.SaveCSV;
+import entity.project.BTOProject;
 import interfaces.IApplicantService;
 import interfaces.IApplicationService;
 import interfaces.IEnquiryService;
@@ -15,6 +16,7 @@ import interfaces.IManagerService;
 import interfaces.IOfficerService;
 import interfaces.IProjectService;
 import interfaces.IRegistrationService;
+import java.util.Map;
 
 /**
  * Main class is initalizes controllers, and saveas and writes data to the CSV files for the BTO Management System.
@@ -51,6 +53,12 @@ public class Main {
         readCSV.loadBTOApplication();
         readCSV.loadRegistration();  
         readCSV.loadProject(); 
+        Map<String, BTOProject> allprojects = projectService.getAllProjects();
+        for (BTOProject project : allprojects.values()) {
+            System.out.print(project.getProjectName());
+            System.out.print(project.getAssignedOfficers());
+            System.out.println();
+        }
         
         // Start main menu
         Menu menu = new Menu(applicantService, officerService, managerService, 
