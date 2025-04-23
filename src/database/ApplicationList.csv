@@ -3,9 +3,10 @@ ID,Applicant,Project,FlatType(Rooms),Status,Withdrawal
 7,"S1111114A","Anchorvale Cove","THREE_ROOM","PENDING",false
 8,"S1111111A","Anchorvale Cove","TWO_ROOM","PENDING",true
 21,"T1234567A","Anchorvale Cove","THREE_ROOM","PENDING_BOOKING",false
-22,"S2345678C","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
-23,"S1111119A","Anchorvale Cove","TWO_ROOM","PENDING",true
-24,"S3456789A","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
-25,"S1111118A","Anchorvale Cove","THREE_ROOM","PENDING",false
-26,"S1111115A","Anchorvale Cove","TWO_ROOM","PENDING",false
-27,"S1111116A","Anchorvale Cove","THREE_ROOM","PENDING",false
+28,"S2345678A","Alexandra Vale","TWO_ROOM","SUCCESSFUL",false
+29,"S2345678C","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
+30,"S1111119A","Anchorvale Cove","TWO_ROOM","PENDING",true
+31,"S3456789A","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
+32,"S1111118A","Anchorvale Cove","THREE_ROOM","PENDING",false
+33,"S1111115A","Anchorvale Cove","TWO_ROOM","PENDING",false
+34,"S1111116A","Anchorvale Cove","THREE_ROOM","PENDING",false
