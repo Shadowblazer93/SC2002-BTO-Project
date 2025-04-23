@@ -36,7 +36,16 @@ public class Menu {
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
-
+    /**
+     * Constructs Menu object with the specified services
+     * @param applicantService Service for managing applicants
+     * @param officerService Service for managing officers
+     * @param managerService Service for managing managers
+     * @param applicationService Service for managing BTOApplications
+     * @param enquiryService Service for managing enquiries
+     * @param projectService Service for managing BTOProjects
+     * @param registrationService Service for managing registrations
+     */
     public Menu(IApplicantService applicantService, IOfficerService officerService, IManagerService managerService, 
                     IApplicationService applicationService, IEnquiryService enquiryService, 
                     IProjectService projectService, IRegistrationService registrationService) {

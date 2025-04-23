@@ -22,6 +22,10 @@ public class BTOProjectMain implements IBTOProjectMain {
 
     private final IProjectService projectService;
 
+    /**
+     * Constructs BTOProjectMain object with the specified services
+     * @param projectService Service for managing BTOProjects
+     */
     public BTOProjectMain(IProjectService projectService) {
         this.projectService = projectService;
     }

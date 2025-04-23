@@ -19,6 +19,10 @@ public class RegistrationMain implements IRegistrationMain {
 
     private final IRegistrationService registrationService;
 
+    /**
+     * Constructs an RegistrationMain object with the specified services.
+     * @param registrationService The service for managing registrations.
+     */
     public RegistrationMain(IRegistrationService registrationService) {
         this.registrationService = registrationService;
     }

@@ -28,6 +28,13 @@ public class ManagerMain implements IUserMain<Manager> {
     private final IProjectService projectService;
     private final IRegistrationService registrationService;
 
+    /**
+     * Constructs ManagerMain object with the specified services
+     * @param applicantService Service for managing applicants
+     * @param managerService Service for managing managers
+     * @param projectService Service for managing BTOProjects
+     * @param registrationService Service for managing registrations
+     */
     public ManagerMain(IApplicantService applicantService, IApplicationService applicationService, IEnquiryService enquiryService, 
                         IProjectService projectService, IRegistrationService registrationService) {
         this.applicantService = applicantService;
