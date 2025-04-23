@@ -9,6 +9,12 @@ import interfaces.IApplicationService;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles application-related operations such as applying for BTO, 
+ * requesting withdrawals, and viewing application status.
+ * Implements the IApplicationService interface.
+ */
+
 public class ApplicationController implements IApplicationService {
     private static Map<String, BTOApplication> applicationDatabase = new HashMap<>();   // NRIC + Application
     private static int applicationCount = 1;
