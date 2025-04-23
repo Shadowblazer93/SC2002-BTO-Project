@@ -3,6 +3,8 @@ package interfaces;
 import entity.user.Manager;
 import java.util.Scanner;
 
-/**
- * Interface for Registration boundary class.
- * Defines
+public interface IRegistrationMain {
+
+    void displayMenu(Manager manager, Scanner sc);
+    
+}
