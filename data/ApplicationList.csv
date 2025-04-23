@@ -1,0 +1,7 @@
+ID,Applicant,Project,FlatType(Rooms),Status,Withdrawal
+6,"S1111113A","Anchorvale Cove","TWO_ROOM","PENDING",false
+7,"S1111114A","Anchorvale Cove","THREE_ROOM","PENDING",false
+8,"S1111111A","Anchorvale Cove","TWO_ROOM","PENDING",false
+9,"S2345678C","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
+10,"S3456789A","Anchorvale Fields","TWO_ROOM","SUCCESSFUL",false
+11,"S1111115A","Anchorvale Cove","TWO_ROOM","PENDING",false
