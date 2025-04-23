@@ -64,7 +64,7 @@ public class BTOProjectController implements IProjectService {
                                             closingDate, availableOfficerSlots);
         allProjects.put(projectName, project);
         manager.addProject(project);
-        if (project.getOpeningDate().isAfter(LocalDate.now()) && project.getClosingDate().isAfter(LocalDate.now())) {
+        if (project.getOpeningDate().isBefore(LocalDate.now()) && project.getClosingDate().isAfter(LocalDate.now())) {
             manager.setCurrentProject(project); // Set current project if ongoing
         }
         return project;
